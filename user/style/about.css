@@ -1,0 +1,415 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+body {
+    margin: 0;
+    background-color: #FFFFFF;
+}
+
+/* ===== HERO ===== */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    overflow: hidden;
+    border-bottom: none;
+}
+
+.hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.header-text {
+    position: absolute;
+    bottom: 170px;
+    left: 50px;
+    z-index: 10;
+    margin-left: 50px;
+}
+
+.header-text h1 {
+    font-size: 4em;
+    color: #FF9D00;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    margin: 0;
+}
+
+/* ===== WAVE ===== */
+.custom-shape-divider-bottom-1764076735 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    margin-bottom: -2px;
+}
+
+.custom-shape-divider-bottom-1764076735 svg {
+    position: relative;
+    display: block;
+    width: 250%;
+    height: 400px;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    animation: waveMove 5s linear infinite;
+}
+
+.custom-shape-divider-bottom-1764076735 .shape-fill {
+    fill: #FFFFFF;
+}
+
+@keyframes waveMove {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.profil-lab {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 100px 20px;
+    background: #FFFFFF;
+}
+
+.profil {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    max-width: 1100px;
+    width: 100%;
+}
+
+.profil-img {
+    width: 500px;
+    height: auto;
+    object-fit: contain;
+}
+
+.profil-text {
+    flex: 1;
+}
+
+.profil-text h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #0A192F;
+    font-weight: 700;
+}
+
+.profil-text p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #444;
+}
+
+/* ======== VISI BANNER ======== */
+.visi-banner {
+    width: 100%;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #0A0F2D, #25406F, #4C75C3);
+    color: white;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.visi-container {
+    max-width: 900px;
+}
+
+.visi-banner h1 {
+    font-size: 48px;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+.visi-banner p {
+    font-size: 19px;
+    line-height: 1.8;
+    opacity: 0.95;
+}
+
+/* ======== MISI SECTION ======== */
+.misi-section {
+    padding: 80px 20px;
+    background: #F6F8FA;
+}
+
+.misi-title {
+    text-align: center;
+    font-size: 38px;
+    margin-bottom: 40px;
+    color: #0A2D4A;
+}
+
+.misi-grid {
+    display: flex;
+    justify-content: center;
+}
+
+.misi-card {
+    max-width: 1000px;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.misi-card ul {
+    padding-left: 20px;
+}
+
+.misi-card li {
+    margin-bottom: 15px;
+    line-height: 1.7;
+    color: #333;
+    font-size: 17px;
+}
+
+/**FOKUS RISET**/
+.fokus-riset {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.fokus-riset h1 {
+    font-size: 28px;
+    color: #11226A;
+    font-weight: 800;
+    margin-bottom: 35px;
+}
+
+.riset-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.riset-card {
+    width: 260px;
+    padding: 25px;
+    border-radius: 14px;
+    border: 2px solid #008CFF;
+    background: white;
+    transition: 0.3s;
+}
+
+.riset-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.icon {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+
+.riset-card h3 {
+    font-size: 18px;
+    color: #0D2B7E;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.riset-card p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* ===== GALERI ===== */
+.galeri {
+    padding: 40px 40px 70px;
+    text-align: center;
+}
+
+.galeri h1 {
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 25px;
+    width: 100%;
+    color: #0a2b6b;
+}
+
+.gallery-wrapper {
+    width: 100%;
+    overflow-x: hidden;
+    padding: 0;
+}
+
+.gallery-container {
+    display: flex;
+    gap: 0;
+    transition: transform 0.4s ease;
+}
+
+.gallery-item {
+    flex: 0 0 33.333333%;
+    padding: 0 10px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.gallery-controls {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.gallery-btn {
+    background: #0A192F;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.gallery-btn:hover {
+    background: #FF9D00;
+}
+
+/* ===== FASILITIES SECTION ===== */
+.facilities-section {
+    width: 100%;
+    padding: 40px 60px;
+}
+
+.facilities-header-wrapper {
+    display: flex;
+    position: relative;
+    align-items: center;
+    margin-bottom: 35px;
+
+}
+
+.facilities-title {
+    font-size: 32px;
+    color: #003366;
+    font-weight: 700;
+}
+
+.find-more-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #0A192F;
+    font-weight: 700;
+    font-size: 18px;
+
+    /* Tambahan untuk pindah ke kanan */
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.find-more-btn .circle {
+    width: 42px;
+    height: 42px;
+    border: 2px solid #0A192F;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.find-more-btn .arrow {
+    font-size: 20px;
+}
+
+.find-more-btn .text {
+    letter-spacing: 0.5px;
+}
+
+
+/* ===== FACILITIES CARDS ===== */
+
+.facilities-container {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(3, 300px);
+    gap: 110px;
+    align-items: flex-start;
+}
+
+.facility-card {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.facility-icon {
+    width: 300px;
+    height: 180px;
+    background: #0A192F;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.facility-icon img {
+    width: 90px;
+    height: 90px;
+    filter: brightness(0) invert(1);
+    object-fit: contain;
+    display: block;
+    transition: 0.3s ease;
+}
+
+.facility-card:hover .facility-icon img {
+    filter: invert(57%) sepia(93%) saturate(457%) hue-rotate(-1deg) brightness(103%) contrast(104%);
+}
+
+.facility-box {
+    width: 100%;
+    margin-top: 20px;
+    padding: 18px 25px;
+    border: 2px solid #0A192F;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.facility-box span {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0A192F;
+}
+
+.facility-arrow {
+    font-size: 20px;
+    color: #0A0F2D;
+    text-decoration: none;
+    font-weight: bold;
+}

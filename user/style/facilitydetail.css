@@ -1,0 +1,108 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #FFFFFF;
+}
+
+/* ===== HERO ===== */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    overflow: hidden;
+    border-bottom: none;
+}
+
+.hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.header-text {
+    position: absolute;
+    bottom: 170px;
+    left: 50px;
+    z-index: 10;
+    margin-left: 50px;
+}
+
+.header-text h1 {
+    font-size: 4em;
+    color: #FF9D00;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    margin: 0;
+}
+
+/* ===== WAVE ===== */
+.custom-shape-divider-bottom-1764076735 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    margin-bottom: -2px;
+}
+
+.custom-shape-divider-bottom-1764076735 svg {
+    position: relative;
+    display: block;
+    width: 250%;
+    height: 400px;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    animation: waveMove 5s linear infinite;
+}
+
+.custom-shape-divider-bottom-1764076735 .shape-fill {
+    fill: #FFFFFF;
+}
+
+@keyframes waveMove {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    margin-top: 60px;
+    margin-left: 120px;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #1d4c8b;
+    font-weight: 500;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .active {
+    font-weight: 600;
+    color: #022e6e;
+}
+
+.breadcrumb .dot {
+    width: 7px;
+    height: 7px;
+    background: #c4c4c4;
+    border-radius: 50%;
+    display: inline-block;
+}
