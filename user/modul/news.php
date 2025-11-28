@@ -41,6 +41,7 @@ $rows = $result ? $result->fetchAll() : [];
         <a href="members.php">Members</a>
     </nav>
 </header>
+
 <div class="hero">
     <img src="../img/about.jpg" alt="gambar gedung lab">
 
@@ -58,6 +59,7 @@ $rows = $result ? $result->fetchAll() : [];
         </svg>
     </div>
 </div>
+
 <div class="news-section">
     <div class="news-container">
     
@@ -66,7 +68,7 @@ $rows = $result ? $result->fetchAll() : [];
 
                 <div class="news-card">
                     <div class="card-image">
-                        <img src="../../admin-berita/assets/img/thumbnails/<?= htmlspecialchars($row['thumbnail']); ?>">alt="<?= htmlspecialchars($row['judul']); ?>">
+                        <img src="../../admin-berita/assets/img/thumbnails/<?= htmlspecialchars($row['thumbnail']); ?>" alt="<?= htmlspecialchars($row['judul']); ?>">
                     </div>
 
                     <div class="card-content">
@@ -75,25 +77,20 @@ $rows = $result ? $result->fetchAll() : [];
                             <?= date("M d, Y", strtotime($row['created_at'])); ?>
                         </p>
 
-                        <h3><?= htmlspecialchars($row['judul']); ?></h3>
+                        <h3 class="card-title"><?= htmlspecialchars($row['judul']); ?></h3>
 
-                        <p class="card-description">
+                        <div class="card-description">
                             <a href="<?= htmlspecialchars($row['link_berita']); ?>" 
                             target="_blank"
-                            style="color: inherit; text-decoration: underline;"><?= htmlspecialchars($row['link_berita']); ?>
+                            class="card-link">
+                                Baca Selengkapnya →
                             </a>
-                        </p>
-
-
-                        <p class="card-meta-detail">
-                            oleh <?= htmlspecialchars($row['author_name'] ?? 'Admin'); ?> 
-                            | ARTIKEL, BERITA
-                        </p>
+                        </div>
 
                         <p class="card-meta">
-                            oleh <?= htmlspecialchars($row['author_name'] ?? 'Admin'); ?> |
-                            <?= date("M d, Y", strtotime($row['created_at'])); ?> 
-                            | ARTIKEL, BERITA
+                            <span class="author">oleh <?= htmlspecialchars($row['author_name'] ?? 'Admin'); ?></span>
+                            <span class="separator">•</span>
+                            <span class="category">ARTIKEL, BERITA</span>
                         </p>
 
                     </div>
@@ -102,18 +99,19 @@ $rows = $result ? $result->fetchAll() : [];
             <?php endforeach; ?>
 
         <?php else: ?>
-            <p style="text-align:center; margin:20px 0; ">Belum ada berita untuk ditampilkan.</p>
+            <div class="empty-state">
+                <p>Belum ada berita untuk ditampilkan.</p>
+            </div>
         <?php endif; ?>
 
     </div>
-<<<<<<< Updated upstream
-
+    
+    <?php if (!empty($rows)): ?>
     <div class="load-more-wrapper">
-        <button id="loadMoreBtn">Lihat Fasilitas Lainnya</button>
+        <button id="loadMoreBtn">Lihat Berita Lainnya</button>
     </div>
+    <?php endif; ?>
 </div>
+
 </body>
 </html>
-=======
-</div>
->>>>>>> Stashed changes
