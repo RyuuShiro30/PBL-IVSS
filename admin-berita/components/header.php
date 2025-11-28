@@ -151,7 +151,7 @@ $admin_foto = $_SESSION['foto'] ?? 'default-avatar.png';
                             Administrator
                         </span>
                     </div>
-                    <img class="img-profile rounded-circle" 
+                    <img class="img-profile rounded-circle"
                         src="../assets/img/<?php echo htmlspecialchars($admin_foto); ?>"
                         onerror="this.src='../assets/img/default-avatar.png'"
                         alt="Profile">

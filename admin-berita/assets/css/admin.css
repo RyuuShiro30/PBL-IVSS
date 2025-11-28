@@ -1,214 +1,211 @@
-/**
- * Admin Panel Styles
- * File: assets/css/admin.css
- */
-
-:root {
-    --primary-color: #4e73df;
-    --secondary-color: #858796;
-    --success-color: #1cc88a;
-    --danger-color: #e74a3b;
-    --warning-color: #f6c23e;
-    --info-color: #36b9cc;
-    --light-color: #f8f9fc;
-    --dark-color: #5a5c69;
-    --sidebar-width: 14rem;
-}
-
-/* Base Styles */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--light-color);
-}
-
-#wrapper {
-    display: flex;
-}
-
-#content-wrapper {
-    background-color: var(--light-color);
-    width: 100%;
-    overflow-x: hidden;
-}
-
-#content {
-    flex: 1 0 auto;
-}
-/* Topbar Styles */
-.topbar {
-    height: 4.375rem;
-}
-
-.topbar .navbar-nav .nav-item .nav-link {
-    height: 4.375rem;
-    display: flex;
-    align-items: center;
-    padding: 0 0.75rem;
-}
-
-.topbar .navbar-nav .nav-item .nav-link:focus {
-    outline: none;
-}
-
-.topbar .navbar-nav .nav-item .nav-link:hover {
-    background-color: var(--light-color);
-}
-
-.topbar .dropdown {
-    position: static;
-}
-
-.topbar .dropdown-menu {
-    width: calc(100% - 1.5rem);
-    right: 0.75rem;
-}
-
-.topbar .dropdown-list {
-    padding: 0;
+/* Stats Cards dengan Gradient Colorful */
+.card.border-left-primary {
     border: none;
-    overflow: hidden;
-}
-
-.topbar .dropdown-list .dropdown-header {
-    background-color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
-.topbar .dropdown-list .dropdown-item {
-    white-space: normal;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-left: 1px solid #e3e6f0;
-    border-right: 1px solid #e3e6f0;
-    border-bottom: 1px solid #e3e6f0;
-    line-height: 1.3rem;
+.card.border-left-primary::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    transition: all 0.5s ease;
 }
 
-.topbar .icon-circle {
-    height: 2.5rem;
-    width: 2.5rem;
-    border-radius: 100%;
-    display: flex;
+.card.border-left-primary:hover::before {
+    transform: scale(1.2);
+}
+
+.card.border-left-primary:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+}
+
+.card.border-left-primary .text-primary,
+.card.border-left-primary .text-gray-800 {
+    color: white !important;
+}
+
+.card.border-left-primary .text-xs {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Success Card - Green Gradient */
+.card.border-left-success {
+    border: none;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(17, 153, 142, 0.4);
+}
+
+.card.border-left-success::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    transition: all 0.5s ease;
+}
+
+.card.border-left-success:hover::before {
+    transform: scale(1.2);
+}
+
+.card.border-left-success:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(17, 153, 142, 0.5);
+}
+
+.card.border-left-success .text-success,
+.card.border-left-success .text-gray-800 {
+    color: white !important;
+}
+
+.card.border-left-success .text-xs {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Warning Card - Pink/Red Gradient */
+.card.border-left-warning {
+    border: none;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+}
+
+.card.border-left-warning::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    transition: all 0.5s ease;
+}
+
+.card.border-left-warning:hover::before {
+    transform: scale(1.2);
+}
+
+.card.border-left-warning:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(240, 147, 251, 0.5);
+}
+
+.card.border-left-warning .text-warning,
+.card.border-left-warning .text-gray-800 {
+    color: white !important;
+}
+
+.card.border-left-warning .text-xs {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Info Card - Blue/Cyan Gradient */
+.card.border-left-info {
+    border: none;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+}
+
+.card.border-left-info::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    transition: all 0.5s ease;
+}
+
+.card.border-left-info:hover::before {
+    transform: scale(1.2);
+}
+
+.card.border-left-info:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(79, 172, 254, 0.5);
+}
+
+.card.border-left-info .text-info,
+.card.border-left-info .text-gray-800 {
+    color: white !important;
+}
+
+.card.border-left-info .text-xs {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Card Body dengan Z-Index */
+.card-body {
+    position: relative;
+    z-index: 1;
+}
+
+/* Icon Style dengan Background Circle yang Lebih Modern */
+.card .col-auto {
+    position: relative;
+    z-index: 1;
+}
+
+.card .fa-2x {
+    background: rgba(255, 255, 255, 0.25);
+    width: 64px;
+    height: 64px;
+    display: flex !important;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.topbar .badge-counter {
-    position: absolute;
-    transform: scale(0.7);
-    transform-origin: top right;
-    right: 0.25rem;
-    margin-top: -0.25rem;
+.card:hover .fa-2x {
+    transform: scale(1.2) rotate(360deg);
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-.topbar-divider {
-    width: 0;
-    border-right: 1px solid #e3e6f0;
-    height: calc(4.375rem - 2rem);
-    margin: auto 1rem;
+.card .text-gray-300 {
+    color: rgba(255, 255, 255, 0.95) !important;
 }
 
-.img-profile {
-    height: 2rem;
-    width: 2rem;
+/* Transition untuk card */
+.card.border-left-primary,
+.card.border-left-success,
+.card.border-left-warning,
+.card.border-left-info {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Card Styles */
-.card {
-    border: none;
-    border-radius: 0.35rem;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+/* Font Weight untuk angka statistik */
+.card .h5.mb-0 {
+    font-size: 2rem;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.card-header {
-    background-color: var(--light-color);
-    border-bottom: 1px solid #e3e6f0;
-    font-weight: 700;
-}
-
-/* Button Styles */
-.btn {
-    border-radius: 0.35rem;
-    font-size: 0.85rem;
-}
-
-.btn-sm {
-    font-size: 0.75rem;
-}
-
-/* Table Styles */
-.table {
-    font-size: 0.9rem;
-}
-
-.table thead th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #e3e6f0;
-    font-weight: 700;
-}
-
-/* Badge Styles */
-.badge {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 0;
-        position: fixed;
-        z-index: 1000;
-    }
-    
-    .sidebar.show {
-        width: var(--sidebar-width);
-    }
-    
-    #sidebarToggleTop {
-        display: block;
-    }
-    
-    .topbar .navbar-nav .nav-item .nav-link span {
-        display: none !important;
-    }
-}
-
-/* Animation */
-@keyframes growIn {
-    0% {
-        transform: scale(0.9);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.animated--grow-in {
-    animation-name: growIn;
-    animation-duration: 0.2s;
-    animation-timing-function: transform cubic-bezier(0.18, 1.25, 0.4, 1), opacity cubic-bezier(0, 1, 0.4, 1);
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
+/* Uppercase text style */
+.card .text-uppercase {
+    letter-spacing: 0.5px;
+    font-weight: 600;
 }
