@@ -56,12 +56,66 @@
     </div>
 
     <div class="load-more-wrapper">
-        <button id="loadMoreBtn">Lihat Fasilitas Lainnya</button>
+        <button id="loadMoreBtn">Lihat Riset Lainnya</button>
     </div>
 </section>
 
+<!-- ================= FOOTER SECTION ================= -->
+<footer class="footer">
 
+    <div class="footer-content">
 
+        <!-- Logo + Deskripsi -->
+        <div class="footer-col">
+            <div class="footer-logos">
+                <img src="../img/IVSS.png" class="footer-logo">
+                <img src="../img/polinema.png" class="footer-logo">
+                <img src="../img/jti.webp" class="footer-logo">
+            </div>
+
+            <p>
+                Intelligent Vision & Smart System Laboratory<br>
+                Politeknik Negeri Malang<br>
+                Jurusan Teknologi Informasi
+            </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-col">
+            <h3>Quick Links</h3>
+            <a href="about.php">About</a>
+            <a href="research.php">Research</a>
+            <a href="members.php">Members</a>
+            <a href="news.php">News</a>
+        </div>
+
+        <!-- Contact -->
+        <div class="footer-col">
+            <h3>Contact</h3>
+            <p>Email: ivss@polinema.ac.id</p>
+            <p>Telp: (0341) 404424</p>
+            <p>Jl. Soekarno-Hatta No. 9, Malang</p>
+        </div>
+
+        <!-- Follow Us -->
+        <div class="footer-col">
+            <h3>Follow Us</h3>
+            <div class="social-icons">
+                <a href="https://www.tiktok.com/@polinema_campus?_r=1&_t=ZS-91qpSTjlNpJ" target="_blank" class="social-icon"><img src="../icon/tiktok.svg" alt="TikTok"></a>
+                <a href="https://www.instagram.com/jtipolinema?igsh=YTFpdGtrdXdqeTZ4" target="_blank" class="social-icon"><img src="../icon/instagram.svg" alt="Instagram"></a>
+                <a href="https://youtube.com/@politekniknegerimalangofficial?si=SyxJ1hhDib9aLjzx" target="_blank" class="social-icon"><img src="../icon/youtube.svg" alt="YouTube"></a>
+            </div>
+            <h3 class="operating-hours-title">Jam Operasional</h3>
+            <p>07.00 - 15.00</p>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2025 IVSS Laboratory – All Rights Reserved.
+    </div>
+
+</footer>
 <style>
     * {
     margin: 0;
@@ -257,4 +311,100 @@ body {
 #loadMoreBtn:hover {
     background-color: #0A192F;
 }
+
+/* === FOOTER === */
+.footer {
+    width: 100%;
+    background: #0A192F;
+    color: white;
+    padding: 60px 80px 30px;
+    margin-top: 50px;
+}
+
+/* GRID 3 KOLOM SIMETRIS */
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 60px;
+    align-items: start;
+    margin-bottom: 35px;
+}
+
+/* KOLOM KIRI AGAR TIDAK MELEBAR */
+.footer-col:first-child {
+    max-width: 300px;
+}
+
+/* LOGO-LOGO LAB */
+.footer-logos {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 15px;
+}
+
+.footer-logos img {
+    max-height: 65px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* TEKS DI KOLOM KIRI */
+.footer-col p {
+    font-size: 15px;
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+/* JUDUL KOLOM */
+.footer-col h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #FF9D00;
+}
+
+/* LINK */
+.footer-col a {
+    display: block;
+    color: #dcdcdc;
+    margin-bottom: 8px;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.footer-col a:hover {
+    color: #FF9D00;
+}
+
+/* FOOTER BOTTOM */
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    text-align: center;
+    padding: 12px 0;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.social-icons {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.social-icon img {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+    /* jadi putih */
+    transition: 0.2s ease;
+}
+
+.social-icon img:hover {
+    transform: scale(1.15);
+    filter: brightness(0) invert(1) drop-shadow(0 0 4px #FF9D00);
+}
+    .footer-col .operating-hours-title {
+        margin-top: 25px;
+    }
 </style>
