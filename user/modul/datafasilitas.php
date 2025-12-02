@@ -1,57 +1,101 @@
 <?php
+
 $facilities = [
     "ac" => [
-        "title" => "Air Conditioner",
-        "image" => "../fasilitas//ac.jpg",
-        "description" => "AC di ruangan ini menjaga suhu tetap stabil dan nyaman. Perawatan dilakukan berkala agar udara tetap bersih dan performa tetap maksimal."
+        "name" => "Air Conditioner",
+        "icon" => "../icon/ac-furniture-home-svgrepo-com.svg",
+        "description" => "Air conditioner merupakan salah satu fasilitas yang cukup penting 
+        yang dimana untuk kenyamanan aktivitas di dalam laboratorium.  ",
+        "images" => ["../fasilitas/ac.png"]
     ],
-    
+
     "computer" => [
-        "title" => "Computer & Monitor",
-        "image" => "../img/facilities/computer.jpg",
-        "description" => "Fasilitas komputer dilengkapi monitor Full HD untuk kebutuhan pembelajaran, presentasi, dan aktivitas digital lainnya."
+        "name" => "Computer & Monitor",
+        "icon" => "../icon/computer-and-monitor-svgrepo-com.svg",
+        "description" => "Perangkat komputer lengkap dengan monitor yang dimana fasilitas ini digunakan
+        untuk menunjang kegiatan praktikum, penelitian, dan pengembangan selama berada di laboratorium.",
+        "images" => ["../fasilitas/KOMPUTER.png"]
     ],
-    
+
     "mushola" => [
-        "title" => "Mushola",
-        "image" => "../img/facilities/mushola.jpg",
-        "description" => "Mushola disediakan sebagai fasilitas ibadah dengan lingkungan yang bersih, nyaman, dan terpisah dari area utama."
+        "name" => "Mushola",
+        "icon" => "../icon/mosque-svgrepo-com.svg",
+        "description" => "Salah satu kelebihan dari laboratorium IVSS adalah tersedianya fasilitas mushola. 
+        Fasilitas ini digunakan untuk beribadah bagi mahasiswa, dosen, dan asisten yang berada laboratorium.",
+        "images" => ["../fasilitas/mushola.png"]
     ],
 
     "lcd" => [
-        "title" => "LCD Projector",
-        "image" => "../img/facilities/lcd.jpg",
-        "description" => "LCD Projector digunakan untuk presentasi materi, meeting, dan kegiatan pembelajaran visual lainnya."
+        "name" => "LCD Projector",
+        "icon" => "../icon/projector-svgrepo-com.svg",
+        "description" => "Fasilitas LCD Projector yang digunakan untuk presentasi, 
+        pelatihan, dan kegiatan akademik lainnya di laboratorium.",
+        "images" => ["../fasilitas/lcd.png"]
+    ],
+
+    "locker" => [
+        "name" => "Loker",
+        "icon" => "../icon/lockers-storage-svgrepo-com.svg",
+        "description" => "Loker penyimpanan aman untuk barang pribadi mahasiswa, dosen, asisten, atau 
+        orang yang berada di laboratorium.",
+        "images" => ["../fasilitas/LOKER.png"]
     ],
 
     "cctv" => [
-        "title" => "CCTV Security",
-        "image" => "../img/facilities/cctv.jpg",
-        "description" => "CCTV dipasang untuk menjaga keamanan ruangan dan memantau aktivitas lingkungan secara real-time 24 jam."
+        "name" => "CCTV",
+        "icon" => "../icon/cctv-svgrepo-com.svg",
+        "description" => "Fasiitas CCTV juga merupakan salah satu fasilitas yang penting di laboratorium. 
+        CCTV ini digunakan untuk memantau keamanan dan aktivitas di dalam laboratorium dan mencegah hal-hal yang tidak diinginkan.",
+        "images" => ["../fasilitas/cctv.png"]
     ],
 
-    "depthcamera" => [
-        "title" => "Depth Camera",
-        "image" => "../img/facilities/depthcamera.jpg",
-        "description" => "Depth camera digunakan untuk pengukuran 3D, tracking gerakan, dan penelitian berbasis sensor kedalaman."
+    "sony" => [
+        "name" => "Sony Alpha A600",
+        "icon" => "../icon/camera-svgrepo-com.svg",
+        "description" => "Fasilitas ini digunakan untuk mengumpulkan dataset gambar/foto resolusi tinggi, 
+        yang membuat proses training model CV (Object Detection, Classification, Segmentation) jauh lebih akurat.",
+        "images" => ["../fasilitas/sony.png"]
     ],
 
-    "speaker" => [
-        "title" => "Multimedia Speaker",
-        "image" => "../img/facilities/speaker.jpg",
-        "description" => "Speaker multimedia digunakan untuk kebutuhan audio presentasi, video, dan sesi pembelajaran."
+    "lemari" => [
+        "name" => "Lemari",
+        "icon" => "../icon/cupboard-two-doors-svgrepo-com.svg",
+        "description" => "Fasilitas ini digunakan sebagai tempat penyimpanan 
+        alat dan dokumen laboratorium agar tertata rapi dan aman.",
+        "images" => ["../fasilitas/LEMARI.png"]
     ],
 
-    "lamp" => [
-        "title" => "Smart Lamp",
-        "image" => "../img/facilities/lamp.jpg",
-        "description" => "Lampu pintar memberikan pencahayaan optimal dengan konsumsi daya rendah dan kontrol otomatis."
+    "usb" => [
+        "name" => "USB Cable",
+        "icon" => "../icon/usb-cable-usb-svgrepo-com.svg",
+        "description" => "Fasilitas kabel USB untuk konektivitas berbagai perangkat
+        seperti kamera, monitor, dan perangkat lainnya.",
+        "images" => ["../fasilitas/usb-connector-kamera.png"]
     ],
 
-    "tv" => [
-        "title" => "LED TV Multimedia",
-        "image" => "../img/facilities/tv.jpg",
-        "description" => "LED TV mendukung pemutaran video, mirroring layar laptop, dan presentasi multimedia."
+    "machinecamera" => [
+        "name" => "Machine Vision Camera",
+        "icon" => "../icon/video-camera-video-cameras-svgrepo-com.svg",
+        "description" => "Kamera industri berpresisi tinggi yang digunakan untuk riset Computer Vision, 
+        menyediakan gambar stabil dan akurat untuk kebutuhan deteksi, pemantauan, dan analisis visual.",
+        "images" => ["../fasilitas/kamera-machine-vision.png"]
+    ],
+
+    "lens" => [
+        "name" => "Lensa Kamera",
+        "icon" => "../icon/lens-camera-lens-svgrepo-com.svg",
+        "description" => "Lensa kamera digunakan sebagai komponen optik utama yang mengatur fokus, sudut pandang, dan kualitas cahaya 
+        yang masuk ke sensor kamera. Dalam penelitian Computer Vision, lensa berperan penting untuk 
+        menghasilkan citra yang tajam, minim distorsi, dan sesuai dengan kebutuhan eksperimen",
+        "images" => ["../fasilitas/lensa-kamera.png"]
+    ],
+
+    "depth" => [
+        "name" => "Depth Camera",
+        "icon" => "../icon/cameradepth-svgrepo-com.svg",
+        "description" => "Depth Camera digunakan untuk menangkap informasi kedalaman objek dan menghasilkan data 3D. 
+        Kamera ini mendukung penelitian seperti 3D reconstruction, gesture tracking, robot vision,
+        dan berbagai eksperimen Computer Vision yang membutuhkan pemetaan ruang secara akurat.",
+        "images" => ["../fasilitas/depth-kamera.png"]
     ],
 ];
-?>
