@@ -1,6 +1,4 @@
 <?php
-
-
 session_start();
 require_once '../config/database.php';
 
@@ -10,16 +8,50 @@ if (!isset($_SESSION['admin_id'])) {
     exit();
 }
 
+// Set timezone Indonesia
+date_default_timezone_set('Asia/Jakarta');
+
+// Fungsi untuk format tanggal Indonesia
+function formatTanggalIndo($tanggal) {
+    $bulan = array(
+        1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    );
+    
+    $split = explode('-', date('Y-m-d', strtotime($tanggal)));
+    return $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
+}
+
+// Fungsi untuk format waktu relatif
+function waktuRelative($tanggal) {
+    $waktu = strtotime($tanggal);
+    $sekarang = time();
+    $selisih = $sekarang - $waktu;
+    
+    if ($selisih < 60) {
+        return 'Baru saja';
+    } elseif ($selisih < 3600) {
+        $menit = floor($selisih / 60);
+        return $menit . ' menit yang lalu';
+    } elseif ($selisih < 86400) {
+        $jam = floor($selisih / 3600);
+        return $jam . ' jam yang lalu';
+    } elseif ($selisih < 604800) {
+        $hari = floor($selisih / 86400);
+        return $hari . ' hari yang lalu';
+    } else {
+        return date('d/m/Y H:i', $waktu);
+    }
+}
+
 // Ambil data statistik
 $pdo = getDBConnection();
 
 // --- OPTIMASI DENGAN MATERIALIZED VIEW ---
-// Mengambil semua data statistik dalam 1 kali query
 try {
     $stmt = $pdo->query("SELECT * FROM mv_dashboard_berita");
     $stats = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Jika MV belum ada isinya (baru dibuat), set default 0
     $total_berita     = $stats['total_berita'] ?? 0;
     $berita_published = $stats['total_published'] ?? 0;
     $berita_draft     = $stats['total_draft'] ?? 0;
@@ -27,7 +59,8 @@ try {
     $total_berita = 0; $berita_published = 0; $berita_draft = 0;
     error_log("Error MV: " . $e->getMessage());
 }
-// Berita terbaru (5)
+
+// Berita terbaru (10)
 $stmt = $pdo->query("
     SELECT b.*, a.nama_lengkap as author_name 
     FROM berita b 
@@ -37,12 +70,11 @@ $stmt = $pdo->query("
 ");
 $berita_terbaru = $stmt->fetchAll();
 
-// Log aktivitas terbaru (10)
+// Log aktivitas terbaru
 $admin_id = $_SESSION['admin_id'];
 $role = $_SESSION['role'];
 
 if ($role === 'superadmin') {
-    // Super admin lihat semua log
     $stmt = $pdo->query("
         SELECT l.*, a.nama_lengkap as admin_name 
         FROM logs l 
@@ -51,7 +83,6 @@ if ($role === 'superadmin') {
         LIMIT 5
     ");
 } else {
-    // Admin biasa hanya lihat log sendiri
     $stmt = $pdo->prepare("
         SELECT l.*, a.nama_lengkap as admin_name 
         FROM logs l 
@@ -100,12 +131,16 @@ $logs_terbaru = $stmt->fetchAll();
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">
-                            <i class="fas fa-tachometer-alt me-2 mt-1 "></i>Dashboard
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                         </h1>
-                        <div>
+                        <div class="text-end">
+                            <small class="text-muted d-block">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                <?php echo formatTanggalIndo(date('Y-m-d')); ?>
+                            </small>
                             <small class="text-muted">
                                 <i class="fas fa-clock me-1"></i>
-                                <?php echo date('d F Y, H:i'); ?>
+                                <span id="jam-realtime"><?php echo date('H:i:s'); ?> WIB</span>
                             </small>
                         </div>
                     </div>
@@ -249,8 +284,9 @@ $logs_terbaru = $stmt->fetchAll();
                                                             <?php endif; ?>
                                                         </td>
                                                         <td>
-                                                            <small class="text-muted">
-                                                                <?php echo date('d/m/Y H:i', strtotime($berita['created_at'])); ?>
+                                                            <small class="text-muted" title="<?php echo date('d F Y H:i:s', strtotime($berita['created_at'])); ?>">
+                                                                <i class="fas fa-clock me-1"></i>
+                                                                <?php echo waktuRelative($berita['created_at']); ?>
                                                             </small>
                                                         </td>
                                                     </tr>
@@ -258,6 +294,7 @@ $logs_terbaru = $stmt->fetchAll();
                                                 <?php else: ?>
                                                     <tr>
                                                         <td colspan="4" class="text-center text-muted">
+                                                            <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
                                                             Belum ada berita
                                                         </td>
                                                     </tr>
@@ -290,23 +327,28 @@ $logs_terbaru = $stmt->fetchAll();
                                                         <i class="fas fa-circle text-primary" style="font-size: 0.5rem;"></i>
                                                     </div>
                                                     <div class="flex-grow-1 ms-3">
-                                                        <small class="text-muted d-block">
+                                                        <small class="text-primary fw-bold d-block">
                                                             <?php echo htmlspecialchars($log['admin_name'] ?? 'System'); ?>
                                                         </small>
                                                         <strong class="d-block"><?php echo htmlspecialchars($log['aksi']); ?></strong>
-                                                        <small class="text-muted">
-                                                            <?php echo htmlspecialchars($log['detail'] ?? ''); ?>
+                                                        <?php if (!empty($log['detail'])): ?>
+                                                        <small class="text-muted d-block">
+                                                            <?php echo htmlspecialchars($log['detail']); ?>
                                                         </small>
+                                                        <?php endif; ?>
                                                         <div class="text-muted mt-1" style="font-size: 0.75rem;">
                                                             <i class="fas fa-clock me-1"></i>
-                                                            <?php echo date('d/m/Y H:i', strtotime($log['created_at'])); ?>
+                                                            <?php echo waktuRelative($log['created_at']); ?>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <?php endforeach; ?>
                                         <?php else: ?>
-                                            <p class="text-center text-muted">Belum ada aktivitas</p>
+                                            <p class="text-center text-muted">
+                                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                                Belum ada aktivitas
+                                            </p>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -342,5 +384,24 @@ $logs_terbaru = $stmt->fetchAll();
     
     <!-- Custom JS -->
     <script src="../assets/js/admin.js"></script>
+    
+    <!-- Real-time Clock Script -->
+    <script>
+        // Update jam setiap detik
+        function updateJam() {
+            const now = new Date();
+            const jam = String(now.getHours()).padStart(2, '0');
+            const menit = String(now.getMinutes()).padStart(2, '0');
+            const detik = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('jam-realtime').textContent = `${jam}:${menit}:${detik} WIB`;
+        }
+        
+        // Update setiap detik
+        setInterval(updateJam, 1000);
+        
+        // Update saat halaman load
+        updateJam();
+    </script>
 </body>
 </html>
