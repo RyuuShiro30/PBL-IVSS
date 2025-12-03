@@ -7,7 +7,8 @@ $sql = "SELECT b.*,
         FROM berita b
         LEFT JOIN admin_berita a ON a.id = b.author_id
         WHERE b.status = 'published'
-        ORDER BY b.created_at DESC";
+        ORDER BY b.created_at DESC
+        $limit 6";
 
 // Jalankan query menggunakan executeQuery() bawaan PDO
 $result = executeQuery($sql);

@@ -13,18 +13,20 @@ if (!isset($_SESSION['admin_id'])) {
 // Ambil data statistik
 $pdo = getDBConnection();
 
-// Total berita
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM berita");
-$total_berita = $stmt->fetch()['total'];
+// --- OPTIMASI DENGAN MATERIALIZED VIEW ---
+// Mengambil semua data statistik dalam 1 kali query
+try {
+    $stmt = $pdo->query("SELECT * FROM mv_dashboard_berita");
+    $stats = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Berita published
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM berita WHERE status = 'published'");
-$berita_published = $stmt->fetch()['total'];
-
-// Berita draft
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM berita WHERE status = 'draft'");
-$berita_draft = $stmt->fetch()['total'];
-
+    // Jika MV belum ada isinya (baru dibuat), set default 0
+    $total_berita     = $stats['total_berita'] ?? 0;
+    $berita_published = $stats['total_published'] ?? 0;
+    $berita_draft     = $stats['total_draft'] ?? 0;
+} catch (PDOException $e) {
+    $total_berita = 0; $berita_published = 0; $berita_draft = 0;
+    error_log("Error MV: " . $e->getMessage());
+}
 // Berita terbaru (5)
 $stmt = $pdo->query("
     SELECT b.*, a.nama_lengkap as author_name 
