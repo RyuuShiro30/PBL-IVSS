@@ -36,6 +36,7 @@ $admin_foto = $_SESSION['foto'] ?? 'default-avatar.png';
     padding: 8px 16px;
     border-radius: 50px;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .user-info-wrapper:hover {
@@ -75,11 +76,27 @@ $admin_foto = $_SESSION['foto'] ?? 'default-avatar.png';
     border-color: #2e59d9;
 }
 
+/* Perbaikan untuk dropdown positioning */
+.nav-item.dropdown {
+    position: relative;
+}
+
 .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    left: auto !important;
     border: none;
     box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
     border-radius: 10px;
-    margin-top: 10px;
+    margin-top: 10px !important;
+    min-width: 220px;
+    transform-origin: top right;
+}
+
+.dropdown-menu-right {
+    right: 0 !important;
+    left: auto !important;
 }
 
 .dropdown-item {
@@ -106,11 +123,40 @@ $admin_foto = $_SESSION['foto'] ?? 'default-avatar.png';
 #sidebarToggleTop {
     color: #4e73df;
     transition: all 0.3s ease;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
 }
 
 #sidebarToggleTop:hover {
     color: #2e59d9;
-    transform: rotate(90deg);
+    background: #f8f9fc !important;
+    transform: scale(1.1);
+}
+
+#sidebarToggleTop:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#sidebarToggleTop:active {
+    transform: scale(0.95);
+}
+
+/* Animasi dropdown */
+.dropdown-menu.show {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 768px) {
@@ -121,15 +167,20 @@ $admin_foto = $_SESSION['foto'] ?? 'default-avatar.png';
     .user-info-wrapper {
         padding: 8px;
     }
+    
+    .dropdown-menu {
+        min-width: 200px;
+    }
 }
 </style>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow-sm">
     
-    <!-- Sidebar Toggle (Topbar) -->
-    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-        <i class="fa fa-bars"></i>
+    <!-- Sidebar Toggle (Topbar) - Hamburger Menu -->
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" 
+            style="width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-bars" style="font-size: 1.2rem;"></i>
     </button>
 
     <!-- Spacer -->
@@ -159,8 +210,7 @@ $admin_foto = $_SESSION['foto'] ?? 'default-avatar.png';
             </a>
             
             <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow-lg animated--grow-in"
-                aria-labelledby="userDropdown">
+            <div class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="profile.php">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-primary"></i>
                     Profil Saya

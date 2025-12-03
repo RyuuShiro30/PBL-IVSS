@@ -3,64 +3,154 @@
  * File: assets/js/admin.js
  */
 
-(function($) {
-    "use strict";
+// ===== SIDEBAR TOGGLE FUNCTIONALITY (Vanilla JS) =====
 
-    // Toggle Sidebar
-    $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
-        $("body").toggleClass("sidebar-toggled");
-        $(".sidebar").toggleClass("toggled");
-        if ($(".sidebar").hasClass("toggled")) {
-            $('.sidebar .collapse').collapse('hide');
-        }
-    });
-
-    // Close any open menu accordions when window is resized below 768px
-    $(window).resize(function() {
-        if ($(window).width() < 768) {
-            $('.sidebar .collapse').collapse('hide');
-        }
-        
-        // Toggle the side navigation when window is resized below 480px
-        if ($(window).width() < 480 && !$(".sidebar").hasClass("toggled")) {
-            $("body").addClass("sidebar-toggled");
-            $(".sidebar").addClass("toggled");
-            $('.sidebar .collapse').collapse('hide');
-        }
-    });
-
-    // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
-    $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {
-        if ($(window).width() > 768) {
-            var e0 = e.originalEvent,
-                delta = e0.wheelDelta || -e0.detail;
-            this.scrollTop += (delta < 0 ? 1 : -1) * 30;
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const sidebarToggleTop = document.getElementById('sidebarToggleTop');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    
+    // Toggle sidebar on mobile (hamburger button)
+    if (sidebarToggleTop) {
+        sidebarToggleTop.addEventListener('click', function(e) {
             e.preventDefault();
-        }
+            console.log('Hamburger clicked!'); // Debug
+            
+            if (window.innerWidth <= 768) {
+                // Mobile behavior
+                sidebar.classList.toggle('show');
+                sidebarOverlay.classList.toggle('show');
+                
+                // Prevent body scroll when sidebar is open
+                if (sidebar.classList.contains('show')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+    }
+    
+    // Toggle sidebar on desktop
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            if (window.innerWidth > 768) {
+                document.body.classList.toggle('sidebar-toggled');
+                sidebar.classList.toggle('toggled');
+                
+                // Close collapse menus when sidebar is collapsed
+                if (sidebar.classList.contains('toggled')) {
+                    const collapseElements = sidebar.querySelectorAll('.collapse.show');
+                    collapseElements.forEach(function(collapse) {
+                        const bsCollapse = bootstrap.Collapse.getInstance(collapse);
+                        if (bsCollapse) {
+                            bsCollapse.hide();
+                        }
+                    });
+                }
+            }
+        });
+    }
+    
+    // Close sidebar when clicking overlay (mobile only)
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+    
+    // Close sidebar when clicking a link on mobile
+    const sidebarLinks = sidebar.querySelectorAll('.nav-link');
+    sidebarLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            // Don't close if it's a collapse toggle
+            if (!this.getAttribute('data-bs-toggle') && window.innerWidth <= 768) {
+                setTimeout(function() {
+                    sidebar.classList.remove('show');
+                    sidebarOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }, 300);
+            }
+        });
     });
-
-    // Scroll to top button appear
-    $(document).on('scroll', function() {
-        var scrollDistance = $(this).scrollTop();
-        if (scrollDistance > 100) {
-            $('.scroll-to-top').fadeIn();
-        } else {
-            $('.scroll-to-top').fadeOut();
-        }
+    
+    // ===== WINDOW RESIZE HANDLER =====
+    
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            const windowWidth = window.innerWidth;
+            
+            if (windowWidth <= 768) {
+                // Mobile: Reset desktop classes
+                document.body.classList.remove('sidebar-toggled');
+                sidebar.classList.remove('toggled');
+                
+                // Close sidebar if it's open
+                if (!sidebar.classList.contains('show')) {
+                    document.body.style.overflow = '';
+                }
+            } else {
+                // Desktop: Remove mobile classes and overlay
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+                
+                // Close collapse menus if sidebar is toggled
+                if (sidebar.classList.contains('toggled')) {
+                    const collapseElements = sidebar.querySelectorAll('.collapse.show');
+                    collapseElements.forEach(function(collapse) {
+                        const bsCollapse = bootstrap.Collapse.getInstance(collapse);
+                        if (bsCollapse) {
+                            bsCollapse.hide();
+                        }
+                    });
+                }
+            }
+        }, 250);
     });
+    
+});
 
-    // Smooth scrolling using jQuery easing
-    $(document).on('click', 'a.scroll-to-top', function(e) {
-        var $anchor = $(this);
-        $('html, body').stop().animate({
-            scrollTop: ($($anchor.attr('href')).offset().top)
-        }, 1000, 'easeInOutExpo');
-        e.preventDefault();
-    });
+// ===== JQUERY FUNCTIONS (if jQuery is loaded) =====
 
-})(jQuery);
+if (typeof jQuery !== 'undefined') {
+    (function($) {
+        "use strict";
 
-// Auto hide alerts after 5 seconds
+        // ===== SCROLL TO TOP FUNCTIONALITY =====
+        
+        $(document).on('scroll', function() {
+            var scrollDistance = $(this).scrollTop();
+            if (scrollDistance > 100) {
+                $('.scroll-to-top').fadeIn();
+            } else {
+                $('.scroll-to-top').fadeOut();
+            }
+        });
+
+        $(document).on('click', 'a.scroll-to-top', function(e) {
+            var $anchor = $(this);
+            $('html, body').stop().animate({
+                scrollTop: ($($anchor.attr('href')).offset().top)
+            }, 1000, 'easeInOutExpo');
+            e.preventDefault();
+        });
+
+    })(jQuery);
+}
+
+// ===== AUTO HIDE ALERTS =====
+
 document.addEventListener('DOMContentLoaded', function() {
     const alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
     alerts.forEach(function(alert) {
@@ -73,7 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Confirm before leaving page if form has changes
+// ===== FORM CHANGE DETECTION =====
+
 let formChanged = false;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -101,6 +192,8 @@ window.addEventListener('beforeunload', function(e) {
         return e.returnValue;
     }
 });
+
+// ===== UTILITY FUNCTIONS =====
 
 // Format number with thousand separator
 function formatNumber(num) {
@@ -139,3 +232,21 @@ function hideLoading() {
         overlay.remove();
     }
 }
+
+// ===== PREVENT DOUBLE CLICK ON SUBMIT BUTTONS =====
+
+document.addEventListener('DOMContentLoaded', function() {
+    const submitButtons = document.querySelectorAll('button[type="submit"], input[type="submit"]');
+    
+    submitButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            const form = button.closest('form');
+            if (form && form.checkValidity()) {
+                button.disabled = true;
+                setTimeout(function() {
+                    button.disabled = false;
+                }, 3000);
+            }
+        });
+    });
+});
