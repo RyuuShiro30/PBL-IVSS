@@ -6,9 +6,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
 $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
 ?>
 
-
 <style>
-/* Sidebar tetap fixed saat scroll */
+/* ===== BASE SIDEBAR STYLES ===== */
 .sidebar {
     position: fixed;
     top: 0;
@@ -17,11 +16,12 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     width: 14rem;
     overflow-y: auto;
     overflow-x: hidden;
-    z-index: 1000;
+    z-index: 1050;
     background: linear-gradient(180deg, #5a67d8 0%, #4c51bf 100%) !important;
     box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+    transition: all 0.3s ease;
 }
 
 /* Content wrapper adjustment untuk fixed sidebar */
@@ -29,16 +29,7 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     margin-left: 14rem;
     width: calc(100% - 14rem);
     transition: all 0.3s ease;
-}
-
-/* Ketika sidebar collapsed */
-.sidebar.toggled {
-    width: 6.5rem;
-}
-
-.sidebar.toggled ~ #content-wrapper {
-    margin-left: 6.5rem;
-    width: calc(100% - 6.5rem);
+    min-height: 100vh;
 }
 
 /* ===== SIDEBAR INTERNAL LAYOUT ===== */
@@ -90,7 +81,7 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     flex-shrink: 0;
 }
 
-/* Nav items container - scrollable area */
+/* Nav items container */
 .sidebar .nav-item {
     margin: 0.25rem 0.75rem;
 }
@@ -106,7 +97,7 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
 
 .sidebar .nav-item .nav-link:hover {
     background: rgba(255, 255, 255, 0.15);
-    color: #0f0f0fff;
+    color: #ffffff;
     transform: translateX(3px);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
@@ -125,7 +116,7 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     text-align: center;
 }
 
-/* Sidebar footer - tetap di bawah */
+/* Sidebar footer */
 .sidebar-footer {
     margin-top: auto;
     padding: 1rem 0;
@@ -147,9 +138,8 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     background: rgba(255, 255, 255, 0.15);
     color: #ffffff;
     transform: translateX(3px);
-    box-shadow:0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
-
 
 .sidebar-footer i {
     margin-right: 0.65rem;
@@ -228,59 +218,97 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* ===== SIDEBAR TOGGLE BUTTON ===== */
-
-#sidebarToggle {
-    width: 2.5rem;
-    height: 2.5rem;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-#sidebarToggle:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-#sidebarToggle::after {
-    content: '\f104';
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-#sidebarToggle:hover::after {
-    color: white;
-}
-
 /* ===== ANIMATION ===== */
 
 .collapse {
     transition: all 0.3s ease;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== MOBILE OVERLAY ===== */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1045;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
 
+.sidebar-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+
+/* Tablet & Mobile */
 @media (max-width: 768px) {
+    /* Hide sidebar by default on mobile */
     .sidebar {
-        width: 0;
-        margin-left: -14rem;
+        left: -14rem;
     }
     
-    .sidebar.toggled {
-        width: 14rem;
-        margin-left: 0;
+    /* Show sidebar when toggled */
+    .sidebar.show {
+        left: 0;
     }
     
+    /* Content takes full width on mobile */
     #content-wrapper {
         margin-left: 0;
         width: 100%;
     }
     
+    /* Topbar adjustments */
+    .topbar {
+        padding: 0.5rem 1rem;
+    }
+    
+    #sidebarToggleTop {
+        display: inline-block !important;
+    }
+}
+
+/* Desktop */
+@media (min-width: 769px) {
+    .sidebar-overlay {
+        display: none !important;
+    }
+    
+    #sidebarToggleTop {
+        display: none;
+    }
+    
+    /* Collapsed sidebar on desktop */
+    .sidebar.toggled {
+        width: 6.5rem;
+    }
+    
     .sidebar.toggled ~ #content-wrapper {
-        margin-left: 0;
-        width: 100%;
+        margin-left: 6.5rem;
+        width: calc(100% - 6.5rem);
+    }
+    
+    .sidebar.toggled .sidebar-brand-text,
+    .sidebar.toggled .sidebar-heading,
+    .sidebar.toggled .nav-item .nav-link span {
+        display: none;
+    }
+    
+    .sidebar.toggled .nav-item .nav-link {
+        text-align: center;
+        padding: 0.75rem;
+    }
+    
+    .sidebar.toggled .nav-item .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
     }
 }
 
@@ -291,7 +319,6 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     min-height: 100vh;
 }
 
-/* Ensure body doesn't have overflow issues */
 body {
     overflow-x: hidden;
 }
@@ -410,19 +437,27 @@ body {
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
     
-    
-    <!-- Sidebar Toggler (Sidebar) -->
-    
-        <!-- Logout in sidebar footer -->
-        <div class="sidebar-footer px-3 pb-3">
-    <a class="nav-link d-flex align-items-center justify-content-start" 
-        href="#" 
-        data-bs-toggle="modal" 
-        data-bs-target="#logoutModal" 
-        title="Logout">
-        <i class="fas fa-fw fa-sign-out-alt me-2" style="width:20px;text-align:center;"></i>
-        <span>Logout</span>
-    </a>
-</div>
+    <!-- Logout in sidebar footer -->
+    <div class="sidebar-footer px-3 pb-3">
+        <a class="nav-link d-flex align-items-center justify-content-start" 
+            href="#" 
+            data-bs-toggle="modal" 
+            data-bs-target="#logoutModal" 
+            title="Logout">
+            <i class="fas fa-fw fa-sign-out-alt me-2" style="width:20px;text-align:center;"></i>
+            <span>Logout</span>
+        </a>
+    </div>
 </ul>
+
 <!-- End of Sidebar -->
+
+<!-- Sidebar Overlay for Mobile (harus di luar sidebar) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<script>
+// Quick debug - pastikan elemen ada
+console.log('Sidebar:', document.querySelector('.sidebar'));
+console.log('Overlay:', document.getElementById('sidebarOverlay'));
+console.log('Hamburger:', document.getElementById('sidebarToggleTop'));
+</script>
