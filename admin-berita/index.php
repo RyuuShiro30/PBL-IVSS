@@ -37,15 +37,15 @@ unset($_SESSION['success']);
                     <div class="login-box">
                         <div class="row g-0">
                             <!-- Logo Section (Left Side) -->
-                            <div class="col-md-5">
-                                <div class="logo-section">
-                                    <div class="logo-container">
-                                        <img src="assets/img/Logo-lab.png" alt="Logo Lab Kampus">
+                                <div class="col-md-5">
+                                    <div class="logo-section">
+                                        <div class="logo-container">
+                                            <img src="assets/img/Logo-lab.png" alt="Logo Lab Kampus">
+                                        </div>
+                                        <h1>IVSS</h1>
+                                        <p>Intelligence Vision and Smart System</p>
                                     </div>
-                                    <h1><strong>IVSS</strong></h1>
-                                    <p2>Intelligence Vision and Smart System</p2>
                                 </div>
-                            </div>
 
                             <!-- Form Section (Right Side) -->
                             <div class="col-md-7">
@@ -137,33 +137,7 @@ unset($_SESSION['success']);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JS -->
-    <script>
-        // Toggle password visibility
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
-            const icon = this.querySelector('i');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
-
-        // Form validation
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value;
-            
-            if (username === '' || password === '') {
-                e.preventDefault();
-                alert('Username dan password harus diisi!');
-            }
-        });
-    </script>
+    <script src="../assets/js/admin.js"></script>
+    
 </body>
 </html>

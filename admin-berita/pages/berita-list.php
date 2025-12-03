@@ -287,12 +287,6 @@ $berita_list = $stmt->fetchAll();
     <!-- Custom JS -->
     <script src="../assets/js/admin.js"></script>
     
-    <script>
-    function confirmDelete(id, judul) {
-        if (confirm('Apakah Anda yakin ingin menghapus berita "' + judul + '"?')) {
-            window.location.href = '../actions/berita_delete.php?id=' + id;
-        }
-    }
-    </script>
+    
 </body>
 </html>

@@ -232,6 +232,101 @@ function hideLoading() {
         overlay.remove();
     }
 }
+function confirmDelete(id, judul) {
+        if (confirm('Apakah Anda yakin ingin menghapus berita "' + judul + '"?')) {
+            window.location.href = '../actions/berita_delete.php?id=' + id;
+        }
+    }
+
+    // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Form validation
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (username === '' || password === '') {
+                e.preventDefault();
+                alert('Username dan password harus diisi!');
+            }
+        });
+
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const icon = this.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+
+    // Preview image before upload
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            if (file.size > 1 * 1024 * 1024) {
+                alert('Ukuran file terlalu besar! Maksimal 1MB');
+                event.target.value = '';
+                document.getElementById('imagePreview').style.display = 'none';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+    }
+
+    // Form validation
+    document.getElementById('formProfile').addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirm = document.getElementById('confirm_password').value;
+
+        // Jika password diisi, validasi
+        if (password !== '') {
+            if (password.length < 6) {
+                e.preventDefault();
+                alert('Password minimal 6 karakter!');
+                return false;
+            }
+
+            if (password !== confirm) {
+                e.preventDefault();
+                alert('Password dan konfirmasi password tidak sama!');
+                return false;
+            }
+        }
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...';
+    });
 
 // ===== PREVENT DOUBLE CLICK ON SUBMIT BUTTONS =====
 
