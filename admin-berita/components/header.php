@@ -191,7 +191,7 @@ $admin_foto = $_SESSION['foto'] ?? 'default-avatar.png';
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle p-0" href="#" id="userDropdown" role="button"
+            <a class="nav-link " href="#" id="userDropdown" role="button"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="user-info-wrapper">
                     <div class="user-text-info d-none d-lg-flex">
