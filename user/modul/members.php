@@ -34,12 +34,11 @@
     <h2 class="members-title">Laboratorium Members</h2>    
     <div class="members-container">
 
-        <div class="member-card">
+        <a class="member-card" href="../modul/profil_dosen.php">
             <img src="../img-dosen/Ulla-Delfana-Rosiani.jpg" alt="foto bu ulla">
             <h3>Dr. Ulla Delfana Rosiani, ST., MT.</h3>
             <p>Kepala Laboratorium</p>
-        </div>
-
+        </a>
         <div class="member-card">
             <img src="../img-dosen/Vivi-Nur-Wijayaningrum.jpg" alt="foto bu vivi">
             <h3>Vivi Nur Wijayaningrum, S.Kom, M.Kom</h3>
@@ -82,11 +81,11 @@
     <h2 class="members-title">Active Members (Mahasiswa/Asisten)</h2>
     <div class="members-container active-members-container">
 
-        <div class="member-card active-member-card">
+        <a class="member-card active-member-card" href="../modul/members-profile.php">
             <img src="../img/ranger-biru.jpg" alt="foto member aktif 1">
             <h3>Maul</h3>
             <p>Asisten Lab (2025)</p>
-        </div>
+        </a>
 
         <div class="member-card active-member-card">
             <img src="../img/ranger-merah.jpg" alt="foto member aktif 2">
@@ -140,8 +139,6 @@
         <h1 class="shiny-title">Daftar Jadi Anggota?</h1>
         <a href="#" class="join-link">Daftar Sekarang</a>
     </div>
-
-
 </section>
 
 
@@ -198,7 +195,6 @@
     <div class="footer-bottom">
         © 2025 IVSS Laboratory - All Rights Reserved.
     </div>
-
 </footer>
 
 <style>
@@ -309,6 +305,7 @@ body {
     transition: 0.3s;
     margin-bottom: 20px;
     margin-top: 40px;
+    text-decoration: none;
 }
 
 
@@ -323,6 +320,7 @@ body {
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 15px;
+    place-content: center;
 }
 
 .member-card h3 {

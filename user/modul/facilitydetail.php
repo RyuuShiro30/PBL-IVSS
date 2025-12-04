@@ -230,7 +230,7 @@ body {
     gap: 12px;
     font-size: 15px;
     margin-top: 100px;
-    margin-left: 240px;
+    margin-left: 140px;
 }
 
 .breadcrumb a {
@@ -296,7 +296,7 @@ body {
     height: 240px;
     object-fit: cover;
     border-radius: 12px;
-    margin-left: -190px;
+    margin-left: -70px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
