@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../config.php'; // naik 1 folder ke project-lab
+require __DIR__ . '/../config.php'; 
 
 try {
     $sql = "SELECT COUNT(*) AS total FROM members WHERE LOWER(status) = 'pending'";
