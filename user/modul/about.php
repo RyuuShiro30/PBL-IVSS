@@ -571,7 +571,8 @@ include "../modul/datafasilitas.php";
         right: 0;
         top: 50%;
         transform: translateY(-50%);
-        margin-right: 220px;
+        margin-right: 60px;
+        
     }
 
     .find-more-btn .circle {

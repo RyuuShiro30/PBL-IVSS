@@ -335,7 +335,7 @@ body {
     gap: 12px;
     font-size: 15px;
     margin-top: 60px;
-    margin-left: 250px;
+    margin-left: 120px;
 
 }
 

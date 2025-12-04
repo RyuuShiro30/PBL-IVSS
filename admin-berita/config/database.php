@@ -9,7 +9,7 @@ define('DB_HOST', 'localhost');
 define('DB_PORT', '5432');
 define('DB_NAME', 'IVSS');
 define('DB_USER', 'postgres');
-define('DB_PASS', 'mboh1234');
+define('DB_PASS', '113005');
 
 // Fungsi untuk membuat koneksi database
 function getDBConnection() {

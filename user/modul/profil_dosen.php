@@ -274,8 +274,8 @@ body {
     <!-- FOTO + NAMA (TENGAH) -->
     <div class="center-header">
         <div class="card header-card">
-            <img src="../img/ranger-merah.jpg" class="photo" alt="Foto Dosen">
-            <h1 class="nama">Maul</h1>
+            <img src="../img-dosen/Ulla-Delfana-Rosiani.jpg" class="photo" alt="Foto Dosen">
+            <h1 class="nama">Ulla Delfana Rosiani ST., MT</h1>
             <p class="instansi">Sistem Informasi Bisnis • Politeknik Negeri Malang</p>
         </div>
     </div>
@@ -284,17 +284,20 @@ body {
     <div class="grid-2">
 
         <div class="card identitas-card">
-            <h2 class="judul-card">Identitas Anggota</h2>
+            <h2 class="judul-card">Identitas Dosen</h2>
             <div class="data-grid">
-                <p><strong>NIM:</strong> 244107060133</p>
-                <p><strong>Email:</strong> maulanahb@gmail.com</p>
-                <p><strong>Program Studi:</strong> Sistem Informasi Bisnis</p>
+                <p><strong>NIP:</strong> 19780327200312200</p>
+                <p><strong>NIDN:</strong> 4314058001</p>
+                <p><strong>Email:</strong> rosiani@polinema.ac.id</p>
+                <p><strong>Program Studi:</strong> Rekayasa Teknologi Informasi</p>
             </div>
         </div>
 
         <div class="card">
             <h2 class="judul-card">Profil Akademik & Profesional</h2>
             <div class="link-list">
+                <a href="#">Google Scholar</a>
+                <a href="#">Sinta</a>
                 <a href="#">LinkedIn</a>
                 <a href="#">Email</a>
             </div>
@@ -305,6 +308,7 @@ body {
     <div class="tabs-container">
         <div class="tabs">
             <button class="tab-button active" onclick="openTab('publikasi')">Publikasi</button>
+            <button class="tab-button" onclick="openTab('bimbingan')">Mahasiswa Bimbingan</button>
             <button class="tab-button" onclick="openTab('pendidikan')">Pendidikan</button>
             <button class="tab-button" onclick="openTab('sertifikasi')">Sertifikasi</button>
         </div>
@@ -315,12 +319,20 @@ body {
             <div class="list-card">Judul Publikasi 3 — 2021</div>
         </div>
 
+        <div class="tab-content" id="bimbingan">
+            <div class="list-card">Mahasiswa 1 — Judul Skripsi</div>
+            <div class="list-card">Mahasiswa 2 — Judul Skripsi</div>
+            <div class="list-card">Mahasiswa 3 — Judul Skripsi</div>
+        </div>
+
         <div class="tab-content" id="pendidikan">
-            <div class="list-card">-</div>
+            <div class="list-card">S3 - Doktor</div>
+            <div class="list-card">S2 - Magister Teknik</div>
+            <div class="list-card">S1 - Sarjana Teknik</div>
         </div>
 
         <div class="tab-content" id="sertifikasi">
-            <div class="list-card">Dicoding - Belajar Dasar AI</div>
+            <div class="list-card">-</div>
         </div>
     </div>
 </div>
