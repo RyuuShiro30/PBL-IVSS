@@ -1,8 +1,8 @@
 <?php
-require __DIR__ . '../pages/config.php'; // menghasilkan $pdo
+require __DIR__ . '/../config.php'; 
 
 try {
-    $sql = "SELECT COUNT(*) AS total FROM members WHERE status = 'pending'";
+    $sql = "SELECT COUNT(*) AS total FROM members WHERE LOWER(status) = 'pending'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
 
@@ -19,4 +19,3 @@ try {
         "error" => $e->getMessage()
     ]);
 }
-?>
