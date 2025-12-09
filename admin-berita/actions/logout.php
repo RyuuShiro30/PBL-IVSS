@@ -14,7 +14,7 @@ if (isset($_SESSION['admin_id'])) {
         $ip_address = $_SERVER['REMOTE_ADDR'];
         
         $stmt = $pdo->prepare("
-            INSERT INTO logs (admin_id, aksi, detail, ip_address) 
+            INSERT INTO logs_berita (admin_id, aksi, detail, ip_address) 
             VALUES (?, 'Logout', 'Admin keluar dari sistem', ?)
         ");
         $stmt->execute([$_SESSION['admin_id'], $ip_address]);

@@ -340,15 +340,15 @@ include $root . "../components/header.php";
                     approvedDataGlobal.forEach(d => {
                         tbody.innerHTML += `
                             <tr>
-                                <td>${d.nama || '-'}</td>
-                                <td>${d.nim || '-'}</td>
-                                <td>${d.jurusan || '-'}</td>
-                                <td>${d.prodi || '-'}</td>
-                                <td>${d.email || '-'}</td>
-                                <td>${d.tanggal_daftar || '-'}</td>
-                                <td>${d.alasan || '-'}</td>
-                                <td>${d.dosen_pengampu || '-'}</td>
-                                <td>${d.tanggal_update || '-'}</td>
+                                <td>${d.nama_new_member || '-'}</td>
+                                <td>${d.nim_new_member || '-'}</td>
+                                <td>${d.jurusan_new_member || '-'}</td>
+                                <td>${d.prodi_new_member || '-'}</td>
+                                <td>${d.email_new_member || '-'}</td>
+                                <td>${d.tanggal_daftar_new_member || '-'}</td>
+                                <td>${d.alasan_new_member || '-'}</td>
+                                <td>${d.nama_dosen || '-'}</td>
+                                <td>${d.tanggal_update_member || '-'}</td>
                             </tr>
                         `;
                     });
@@ -404,15 +404,15 @@ include $root . "../components/header.php";
                     rejectedDataGlobal.forEach(d => {
                         tbody.innerHTML += `
                             <tr>
-                                <td>${d.nama || '-'}</td>
-                                <td>${d.nim || '-'}</td>
-                                <td>${d.jurusan || '-'}</td>
-                                <td>${d.prodi || '-'}</td>
-                                <td>${d.email || '-'}</td>
-                                <td>${d.tanggal_daftar || '-'}</td>
-                                <td>${d.alasan || '-'}</td>
-                                <td>${d.dosen_pengampu || '-'}</td>
-                                <td>${d.tanggal_update || '-'}</td>
+                                <td>${d.nama_new_member || '-'}</td>
+                                <td>${d.nim_new_member || '-'}</td>
+                                <td>${d.jurusan_new_member || '-'}</td>
+                                <td>${d.prodi_new_member || '-'}</td>
+                                <td>${d.email_new_member || '-'}</td>
+                                <td>${d.tanggal_daftar_new_member || '-'}</td>
+                                <td>${d.alasan_new_member || '-'}</td>
+                                <td>${d.nama_dosen || '-'}</td>
+                                <td>${d.tanggal_update_member || '-'}</td>
                             </tr>
                         `;
                     });

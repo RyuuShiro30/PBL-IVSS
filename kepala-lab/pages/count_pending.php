@@ -2,7 +2,7 @@
 require __DIR__ . '/../config.php'; 
 
 try {
-    $sql = "SELECT COUNT(*) AS total FROM members WHERE LOWER(status) = 'pending'";
+    $sql = "SELECT COUNT(*) AS total FROM new_member WHERE LOWER(status_new_member) = 'pending'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
 

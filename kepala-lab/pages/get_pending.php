@@ -12,12 +12,12 @@ if (!isset($_SESSION['admin_id'])) {
 try {
     $query = "
         SELECT 
-            m.*, 
+            nm.*, 
             d.nama AS dosen_pengampu
-        FROM members m
-        LEFT JOIN dosen d ON m.dosen_id = d.id
-        WHERE LOWER(m.status) = 'pending'
-        ORDER BY m.tanggal_daftar DESC
+        FROM new_member nm
+        LEFT JOIN dosen d ON nm.dosen_id = d.id
+        WHERE LOWER(nm.status_new_member) = 'pending'
+        ORDER BY nm.tanggal_daftar_new_member DESC
     ";
 
     $stmt = $pdo->prepare($query);

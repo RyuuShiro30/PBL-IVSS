@@ -22,25 +22,25 @@ $role = $_SESSION['role'];
 
 // Super admin lihat semua log, admin biasa hanya lihat log sendiri
 if ($role === 'superadmin') {
-    $count_stmt = $pdo->query("SELECT COUNT(*) as total FROM logs");
+    $count_stmt = $pdo->query("SELECT COUNT(*) as total FROM logs_berita");
     $total_logs = $count_stmt->fetch()['total'];
     
     $stmt = $pdo->prepare("
         SELECT l.*, a.nama_lengkap as admin_name, a.username
-        FROM logs l 
+        FROM logs_berita l 
         LEFT JOIN admin_berita a ON l.admin_id = a.id 
         ORDER BY l.created_at DESC 
         LIMIT ? OFFSET ?
     ");
     $stmt->execute([$limit, $offset]);
 } else {
-    $count_stmt = $pdo->prepare("SELECT COUNT(*) as total FROM logs WHERE admin_id = ?");
+    $count_stmt = $pdo->prepare("SELECT COUNT(*) as total FROM logs_berita WHERE admin_id = ?");
     $count_stmt->execute([$admin_id]);
     $total_logs = $count_stmt->fetch()['total'];
     
     $stmt = $pdo->prepare("
         SELECT l.*, a.nama_lengkap as admin_name, a.username
-        FROM logs l 
+        FROM logs_berita l 
         LEFT JOIN admin_berita a ON l.admin_id = a.id 
         WHERE l.admin_id = ?
         ORDER BY l.created_at DESC 

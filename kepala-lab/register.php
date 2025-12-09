@@ -5,33 +5,33 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     die("Akses tidak valid. Silakan daftar melalui form.");
 }
 
-$nama    = $_POST['nama'] ?? null;
-$nim     = $_POST['nim'] ?? null;
-$jurusan = $_POST['jurusan'] ?? null;
-$prodi   = $_POST['prodi'] ?? null;
-$email   = $_POST['email'] ?? null;
-$dosen   = $_POST['dosen'] ?? null;
-$alasan  = $_POST['alasan'] ?? null;
+$nama    = $_POST['nama_new_member'] ?? null;
+$nim     = $_POST['nim_new_member'] ?? null;
+$jurusan = $_POST['jurusan_new_member'] ?? null;
+$prodi   = $_POST['prodi_new_member'] ?? null;
+$email   = $_POST['email_new_member'] ?? null;
+$dosen_id   = $_POST['dosen_id'] ?? null;
+$alasan  = $_POST['alasan_new_member'] ?? null;
 
-if (!$nama || !$nim || !$jurusan || !$prodi || !$email || !$dosen || !$alasan) {
+if (!$nama || !$nim || !$jurusan || !$prodi || !$email || !$dosen_id || !$alasan) {
     die("Semua data harus diisi dengan benar.");
 }
 
 try {
-    $query = "INSERT INTO members 
-        (nama, nim, jurusan, prodi, email, dosen_id, alasan, status, tanggal_daftar)
-        VALUES (:nama, :nim, :jurusan, :prodi, :email, :dosen, :alasan, 'pending', NOW())";
-
+    $query = "INSERT INTO new_member
+        (nama_new_member, nim_new_member, jurusan_new_member, prodi_new_member, email_new_member, dosen_id, alasan_new_member, status_new_member, tanggal_daftar_new_member)
+        VALUES (:nama_new_member, :nim_new_member, :jurusan_new_member, :prodi_new_member, :email_new_member, :dosen_id, :alasan_new_member,  'pending', NOW())";
+    
     $stmt = $pdo->prepare($query);   // gunakan $pdo, bukan $conn
 
     $stmt->execute([
-        ':nama'    => $nama,
-        ':nim'     => $nim,
-        ':jurusan' => $jurusan,
-        ':prodi'   => $prodi,
-        ':email'   => $email,
-        ':dosen'   => $dosen,
-        ':alasan'  => $alasan
+        ':nama_new_member'    => $nama,
+        ':nim_new_member'     => $nim,
+        ':prodi_new_member'   => $prodi,
+        ':jurusan_new_member' => $jurusan,
+        ':email_new_member'   => $email,
+        ':dosen_id'   => $dosen_id,
+        ':alasan_new_member'  => $alasan,
     ]);
 
 } catch (PDOException $e) {

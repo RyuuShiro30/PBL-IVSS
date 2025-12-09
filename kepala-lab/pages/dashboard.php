@@ -78,7 +78,7 @@ include $root . "../components/header.php";
                                     Pendaftar Baru
                                 </p>
                                 <h2 id="notif" class="fw-bold text-dark mb-0">
-                                    <span class="spinner-border spinner-border-sm" role="status"></span>
+                                    <span class="spinner-border spinner-border-sm" role="status_new_member"></span>
                                 </h2>
                             </div>
                             <div>
@@ -116,7 +116,7 @@ include $root . "../components/header.php";
                         <tbody>
                             <tr>
                                 <td colspan="9" class="text-center py-4">
-                                    <div class="spinner-border text-primary" role="status">
+                                    <div class="spinner-border text-primary" role="status_new_member">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
                                     <p class="mt-2 mb-0 text-muted">Memuat data...</p>
@@ -128,7 +128,7 @@ include $root . "../components/header.php";
             </div>
         </div>
     </div>
-
+    
     <?php include $root . "/components/footer.php"; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -183,20 +183,20 @@ include $root . "../components/header.php";
                 data.forEach(d => {
                     tbody.innerHTML += `
                         <tr>
-                            <td>${d.nama || '-'}</td>
-                            <td>${d.nim || '-'}</td>
-                            <td>${d.jurusan || '-'}</td>
-                            <td>${d.prodi || '-'}</td>
-                            <td>${d.email || '-'}</td>
-                            <td>${d.tanggal_daftar || '-'}</td>
-                            <td>${d.alasan || '-'}</td>
+                            <td>${d.nama_new_member || '-'}</td>
+                            <td>${d.nim_new_member || '-'}</td>
+                            <td>${d.jurusan_new_member || '-'}</td>
+                            <td>${d.prodi_new_member || '-'}</td>
+                            <td>${d.email_new_member || '-'}</td>
+                            <td>${d.tanggal_daftar_new_member || '-'}</td>
+                            <td>${d.alasan_new_member || '-'}</td>
                             <td>${d.dosen_pengampu || '-'}</td>
                             <td class="text-center">
                                 <div class="d-flex gap-2 justify-content-center">
-                                    <button class="btn btn-success btn-sm" onclick="updateStatus(${d.id}, 'approved')" style="min-width: 90px;">
+                                    <button class="btn btn-success btn-sm" onclick="updateStatus(${d.id_new_member}, 'diterima')" style="min-width: 90px;">
                                         <i class="fas fa-check me-1"></i>Approve
                                     </button>
-                                    <button class="btn btn-danger btn-sm" onclick="updateStatus(${d.id}, 'rejected')" style="min-width: 90px;">
+                                    <button class="btn btn-danger btn-sm" onclick="updateStatus(${d.id_new_member}, 'ditolak')" style="min-width: 90px;">
                                         <i class="fas fa-times me-1"></i>Reject
                                     </button>
                                 </div>
@@ -220,19 +220,45 @@ include $root . "../components/header.php";
         }
 
         /* UPDATE STATUS */
-        async function updateStatus(id, status) {
-            await fetch("../approve.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: `id=${id}&status=${status}`
-            });
+async function updateStatus(id, status) {
+    try {
+        console.log('Updating status:', { id, status });
+        
+        // Tampilkan loading/konfirmasi
+        const action = status === 'diterima' ? 'menyetujui' : 'menolak';
+        if (!confirm(`Apakah Anda yakin ingin ${action} pendaftaran ini?`)) {
+            return;
+        }
+        
+        const res = await fetch("../approve.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `id=${id}&status_new_member=${status}`
+        });
+        
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        
+        const result = await res.json();
+        console.log('Update result:', result);
+        
+        if (result.success) {
+            alert(`Pendaftaran berhasil ${status}!`);
+            // Reload data
             loadNotif();
             loadTable();
-            loadApproved();
-            loadRejected();
+        } else {
+            alert(`Gagal: ${result.error || 'Unknown error'}`);
         }
+        
+    } catch (error) {
+        console.error('Error updating status:', error);
+        alert(`Terjadi kesalahan: ${error.message}`);
+    }
+}
        
         /* LOAD AWAL */
         console.log('Initializing dashboard...');
