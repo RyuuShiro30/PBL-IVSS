@@ -46,7 +46,7 @@ try {
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
         
         $log_stmt = $pdo->prepare("
-            INSERT INTO logs (admin_id, aksi, detail, ip_address, user_agent) 
+            INSERT INTO logs_berita (admin_id, aksi, detail, ip_address, user_agent) 
             VALUES (?, 'Login', 'Admin berhasil login ke sistem', ?, ?)
         ");
         $log_stmt->execute([$admin['id'], $ip_address, $user_agent]);

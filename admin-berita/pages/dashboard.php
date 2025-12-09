@@ -77,7 +77,7 @@ $role = $_SESSION['role'];
 if ($role === 'superadmin') {
     $stmt = $pdo->query("
         SELECT l.*, a.nama_lengkap as admin_name 
-        FROM logs l 
+        FROM logs_berita l 
         LEFT JOIN admin_berita a ON l.admin_id = a.id 
         ORDER BY l.created_at DESC 
         LIMIT 5
@@ -85,7 +85,7 @@ if ($role === 'superadmin') {
 } else {
     $stmt = $pdo->prepare("
         SELECT l.*, a.nama_lengkap as admin_name 
-        FROM logs l 
+        FROM logs_berita l 
         LEFT JOIN admin_berita a ON l.admin_id = a.id 
         WHERE l.admin_id = ?
         ORDER BY l.created_at DESC 

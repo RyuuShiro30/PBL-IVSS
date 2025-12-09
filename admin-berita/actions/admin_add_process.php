@@ -144,7 +144,7 @@ try {
     if ($result) {
         // Catat log aktivitas
         $log_stmt = $pdo->prepare("
-            INSERT INTO logs (admin_id, aksi, detail, ip_address) 
+            INSERT INTO logs_berita (admin_id, aksi, detail, ip_address) 
             VALUES (?, 'Tambah Admin', ?, ?)
         ");
         $log_stmt->execute([

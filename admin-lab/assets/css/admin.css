@@ -1,0 +1,211 @@
+
+.card.border-left-primary {
+    border: none;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.card.border-left-primary::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    transition: all 0.5s ease;
+}
+
+.card.border-left-primary:hover::before {
+    transform: scale(1.2);
+}
+
+.card.border-left-primary:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+}
+
+.card.border-left-primary .text-primary,
+.card.border-left-primary .text-gray-800 {
+    color: white !important;
+}
+
+.card.border-left-primary .text-xs {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Success Card - Green Gradient */
+.card.border-left-success {
+    border: none;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(17, 153, 142, 0.4);
+}
+
+.card.border-left-success::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    transition: all 0.5s ease;
+}
+
+.card.border-left-success:hover::before {
+    transform: scale(1.2);
+}
+
+.card.border-left-success:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(17, 153, 142, 0.5);
+}
+
+.card.border-left-success .text-success,
+.card.border-left-success .text-gray-800 {
+    color: white !important;
+}
+
+.card.border-left-success .text-xs {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Warning Card - Pink/Red Gradient */
+.card.border-left-warning {
+    border: none;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+}
+
+.card.border-left-warning::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    transition: all 0.5s ease;
+}
+
+.card.border-left-warning:hover::before {
+    transform: scale(1.2);
+}
+
+.card.border-left-warning:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(240, 147, 251, 0.5);
+}
+
+.card.border-left-warning .text-warning,
+.card.border-left-warning .text-gray-800 {
+    color: white !important;
+}
+
+.card.border-left-warning .text-xs {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Info Card - Blue/Cyan Gradient */
+.card.border-left-info {
+    border: none;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+}
+
+.card.border-left-info::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    transition: all 0.5s ease;
+}
+
+.card.border-left-info:hover::before {
+    transform: scale(1.2);
+}
+
+.card.border-left-info:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(79, 172, 254, 0.5);
+}
+
+.card.border-left-info .text-info,
+.card.border-left-info .text-gray-800 {
+    color: white !important;
+}
+
+.card.border-left-info .text-xs {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Card Body dengan Z-Index */
+.card-body {
+    position: relative;
+    z-index: 1;
+}
+
+/* Icon Style dengan Background Circle yang Lebih Modern */
+.card .col-auto {
+    position: relative;
+    z-index: 1;
+}
+
+.card .fa-2x {
+    background: rgba(255, 255, 255, 0.25);
+    width: 64px;
+    height: 64px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card:hover .fa-2x {
+    transform: scale(1.2) rotate(360deg);
+    background: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.card .text-gray-300 {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Transition untuk card */
+.card.border-left-primary,
+.card.border-left-success,
+.card.border-left-warning,
+.card.border-left-info {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Font Weight untuk angka statistik */
+.card .h5.mb-0 {
+    font-size: 2rem;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Uppercase text style */
+.card .text-uppercase {
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}

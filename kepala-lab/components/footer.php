@@ -6,11 +6,11 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="text-center mt-3">
-        <small class="text-muted">
-            &copy; 2025 Lab Kampus - IVSS. All rights reserved.
-        </small>
-    </div>
+    <div style="margin-left:250px; width:calc(100% - 250px);" class="text-center mt-3">
+    <small class="text-muted">
+        &copy; 2025 Lab Kampus - IVSS. All rights reserved.
+    </small>
+</div>
 </body>
 </html>
 

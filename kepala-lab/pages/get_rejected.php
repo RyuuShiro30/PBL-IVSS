@@ -9,12 +9,11 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 try {
-    $sql = "SELECT m.*, d.nama AS dosen_pengampu
-            FROM members m
-            LEFT JOIN dosen d ON m.dosen_id = d.id
-            WHERE m.status = 'rejected'
-            ORDER BY m.tanggal_update DESC";
-
+    $sql = "SELECT nm.*, d.nama AS nama_dosen
+            FROM new_member nm
+            LEFT JOIN dosen d ON nm.dosen_id = d.id
+            WHERE nm.status_new_member = 'ditolak'
+            ORDER BY nm.tanggal_update_member DESC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
 

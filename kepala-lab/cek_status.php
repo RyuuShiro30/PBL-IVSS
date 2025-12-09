@@ -6,17 +6,17 @@ $status = "";
 $data = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nim = trim($_POST['nim'] ?? '');
+    $nim = trim($_POST['nim_new_member'] ?? '');
     
     if (empty($nim)) {
         $status = "NIM tidak boleh kosong!";
     } else {
         try {
-            $stmt = $pdo->prepare("SELECT m.*, d.nama as dosen_nama 
-                                   FROM members m 
-                                   LEFT JOIN dosen d ON m.dosen_id = d.id 
-                                   WHERE m.nim = :nim");
-            $stmt->execute(['nim' => $nim]);
+            $stmt = $pdo->prepare("SELECT nm.*, d.nama as dosen_nama 
+                                   FROM new_member nm 
+                                   LEFT JOIN dosen d ON nm.dosen_id = d.id 
+                                   WHERE nm.nim_new_member = :nim_new_member");
+            $stmt->execute(['nim_new_member' => $nim]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if (!$data) {
@@ -278,7 +278,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <span class="input-group-text">
                             <i class="fas fa-id-card"></i>
                         </span>
-                        <input type="text" class="form-control" name="nim" 
+                        <input type="text" class="form-control" name="nim_new_member" 
                                placeholder="Masukkan NIM Anda" required>
                     </div>
                 </div>
@@ -309,22 +309,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <div class="result-item">
                     <div class="result-label">Nama Lengkap</div>
-                    <div class="result-value"><?= htmlspecialchars($data['nama']) ?></div>
+                    <div class="result-value"><?= htmlspecialchars($data['nama_new_member']) ?></div>
                 </div>
 
                 <div class="result-item">
                     <div class="result-label">NIM</div>
-                    <div class="result-value"><?= htmlspecialchars($data['nim']) ?></div>
+                    <div class="result-value"><?= htmlspecialchars($data['nim_new_member']) ?></div>
                 </div>
 
                 <div class="result-item">
                     <div class="result-label">Status Pendaftaran</div>
                     <div>
-                        <?php if ($data['status'] === 'pending'): ?>
+                        <?php if ($data['status_new_member'] === 'pending'): ?>
                             <span class="status-badge status-pending">
                                 <i class="fas fa-clock me-1"></i>MENUNGGU PERSETUJUAN
                             </span>
-                        <?php elseif ($data['status'] === 'approved'): ?>
+                        <?php elseif ($data['status_new_member'] === 'approved'): ?>
                             <span class="status-badge status-approved">
                                 <i class="fas fa-check-circle me-1"></i>DITERIMA
                             </span>
@@ -336,12 +336,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-                <?php if ($data['status'] === 'pending'): ?>
+                <?php if ($data['status_new_member'] === 'pending'): ?>
                 <p style="color: #92400e; margin-top: 15px; margin-bottom: 0; font-size: 0.9rem;">
                     <i class="fas fa-info-circle me-1"></i>
                     Pendaftaran Anda sedang dalam proses verifikasi. Harap bersabar.
                 </p>
-                <?php elseif ($data['status'] === 'approved'): ?>
+                <?php elseif ($data['status_new_member'] === 'approved'): ?>
                 <p style="color: #065f46; margin-top: 15px; margin-bottom: 0; font-size: 0.9rem;">
                     <i class="fas fa-check-circle me-1"></i>
                     Selamat! Anda telah diterima sebagai member lab IVSS.
@@ -356,6 +356,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
 
             <!-- Back Button -->
+            <a href="#" class="btn-back">
+                <i class="fas fa-home me-2"></i>Login
+            </a>
             <a href="index.php" class="btn-back">
                 <i class="fas fa-home me-2"></i>Kembali ke Beranda
             </a>

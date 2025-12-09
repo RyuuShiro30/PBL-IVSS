@@ -66,7 +66,7 @@ $rows = $result ? $result->fetchAll() : [];
         <?php if (!empty($rows)): ?>
             <?php foreach ($rows as $row): ?>
 
-                <div class="news-card">
+                <div class="news-card hidden-card">
                     <div class="card-image">
                         <img src="../../admin-berita/assets/img/thumbnails/<?= htmlspecialchars($row['thumbnail']); ?>" alt="<?= htmlspecialchars($row['judul']); ?>">
                     </div>
@@ -169,6 +169,7 @@ $rows = $result ? $result->fetchAll() : [];
 
 </footer>
 
+<script src="../JS/news.js"></script>
 </body>
 </html>
 <style>
@@ -383,6 +384,9 @@ body {
 .empty-state p {
     font-size: 1.1rem;
     color: #666;
+}
+.hidden-card {
+    display: none;
 }
 
 /* Load more button */
