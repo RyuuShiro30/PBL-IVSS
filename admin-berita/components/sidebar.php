@@ -17,7 +17,7 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 1050;
-    background: linear-gradient(180deg, #5a67d8 0%, #4c51bf 100%) !important;
+    background: linear-gradient(180deg, #0a192f 0%, #0a192f 100%) !important;
     box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;

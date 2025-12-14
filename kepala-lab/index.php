@@ -160,77 +160,105 @@ unset($_SESSION['success'], $_SESSION['error']);
                         <?php endif; ?>
 
                         <!-- FORM -->
-                        <form action="register.php" method="POST" id="registerForm">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Nama Lengkap</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                        <input type="text" class="form-control" name="nama_new_member" required autofocus>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">NIM</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
-                                        <input type="text" class="form-control" name="nim_new_member" required>
-                                    </div>
-                                </div>
-                            </div>
+<form action="register.php" method="POST" enctype="multipart/form-data" id="registerForm">
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Jurusan</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
-                                        <input type="text" class="form-control" name="jurusan_new_member" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Program Studi</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-book"></i></span>
-                                        <input type="text" class="form-control" name="prodi_new_member" required>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Nama Lengkap</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                <input type="text" class="form-control" name="nama_new_member" required>
+            </div>
+        </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Email Aktif</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                    <input type="email" class="form-control" name="email_new_member" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Dosen Pengampu</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-chalkboard-teacher"></i></span>
-                                    <select class="form-select" name="dosen_id" id="dosen_id" required>
-                                        <?php foreach ($dosenList as $row): ?>
-                                            <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['nama']) ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
+        <div class="col-md-6 mb-3">
+            <label class="form-label">NIM</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                <input type="text" class="form-control" name="nim_new_member" required>
+            </div>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Jurusan</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
+                <input type="text" class="form-control" name="jurusan_new_member" required>
+            </div>
+        </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Alasan Bergabung</label>
-                                <textarea class="form-control" name="alasan_new_member" required></textarea>
-                            </div>
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Program Studi</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-book"></i></span>
+                <input type="text" class="form-control" name="prodi_new_member" required>
+            </div>
+        </div>
+    </div>
 
-                            <button type="submit" class="btn btn-register d-grid w-100">
-                                <i class="fas fa-user-plus me-2"></i>
-                                Daftar Sekarang
-                            </button>
-                        </form>
+    <div class="mb-3">
+        <label class="form-label">Email Aktif</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input type="email" class="form-control" name="email_new_member" required>
+        </div>
+    </div>
+
+    <!-- ✅ JUDUL RISET (FIX) -->
+    <div class="mb-3">
+        <label class="form-label">Judul Riset</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-flask"></i></span>
+            <input type="text" class="form-control" name="judul_riset_new_member" required>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Dosen Pengampu</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-chalkboard-teacher"></i></span>
+            <select class="form-select" name="dosen_id" required>
+                <?php foreach ($dosenList as $row): ?>
+                    <option value="<?= $row['id'] ?>">
+                        <?= htmlspecialchars($row['nama']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Alasan Bergabung</label>
+        <textarea class="form-control" name="alasan_new_member" required></textarea>
+    </div>
+
+    <!-- ✅ FOTO (FIX NAME) -->
+    <div class="mb-3">
+        <label class="form-label">Foto Pendaftar (Opsional)</label>
+        <input type="file"
+               class="form-control"
+               name="new_member_profile"
+               accept="image/*">
+        <small class="text-muted">
+            JPG / PNG, maksimal 1MB
+        </small>
+    </div>
+
+    <button type="submit" class="btn btn-register w-100">
+        <i class="fas fa-user-plus me-2"></i>
+        Daftar Sekarang
+    </button>
+
+</form>
+
 
                         <!-- Login Info -->
                         <div class="text-center mt-3">
                             <small style="font-size: .85rem; color: var(--secondary-color);">
-                                Sudah Disetujui jadi anggota?
-                                <a href="../anggota/index.php" style="color: var(--primary-color); font-weight: 600;">Login</a>
+                                Cek Status Daftar?
+                                <a href="../kepala-lab/cek_status.php" style="color: var(--primary-color); font-weight: 600;">Cek Sekarang</a>
                             </small>
                         </div>
                     </div>

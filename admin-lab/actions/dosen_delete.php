@@ -42,10 +42,10 @@ try {
         unlink($upload_dir . $dosen['dosen_profile']);
     }
 
-    $pdo->prepare("DELETE FROM riset_member WHERE id_dosen = ?")
+    $pdo->prepare("DELETE FROM riset_dosen WHERE id_dosen = ?")
         ->execute([$id]);
 
-    $pdo->prepare("DELETE FROM publikasi_member WHERE id_dosen = ?")
+    $pdo->prepare("DELETE FROM publikasi_dosen WHERE id_dosen = ?")
         ->execute([$id]);
 
     $pdo->prepare("DELETE FROM pendidikan WHERE dosen_id = ?")

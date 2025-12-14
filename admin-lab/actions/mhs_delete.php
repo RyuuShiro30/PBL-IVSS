@@ -7,13 +7,13 @@
 session_start();
 require_once '../config/database.php';
 
-// Cek apakah sudah login
+// Cek login
 if (!isset($_SESSION['admin_id'])) {
     header('Location: ../index.php');
     exit();
 }
 
-// Ambil ID Mahasiswa
+// Ambil ID
 $id = $_GET['id'] ?? 0;
 
 if (!$id || !is_numeric($id)) {
@@ -22,64 +22,57 @@ if (!$id || !is_numeric($id)) {
     exit();
 }
 
-
 try {
     $pdo = getDBConnection();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Ambil data mahasiswa terlebih dahulu
-    //$stmt = $pdo->prepare("SELECT nama FROM mahasiswa WHERE id = ?");
-    $stmt = $pdo->prepare('DELETE FROM mahasiswa WHERE id=$34', [$id]);
-    var_dump($stmt);
-    //die();
+    // Ambil data mahasiswa
+    $stmt = $pdo->prepare("SELECT nama, mahasiswa_profile FROM mahasiswa WHERE id = ?");
     $stmt->execute([$id]);
-    $mhs = $stmt->fetch();
-    var_dump($mhs);
-    die();
+    $mhs = $stmt->fetch(PDO::FETCH_ASSOC);
+
     if (!$mhs) {
         $_SESSION['error'] = 'Mahasiswa tidak ditemukan!';
         header('Location: ../pages/anggota-list.php');
         exit();
     }
-    try {
-    qparams('DELETE FROM mahasiswa WHERE id=$1', [$id]);
-    header('Location: index.php');
-    exit;
-    var_dump($mhs);
-    die();
-    
+
+    // Hapus foto jika ada & bukan default
     $upload_dir = '../assets/img/';
-    if ($mhs['mahasiswa_profile'] !== 'default-avatar.png' && 
-        file_exists($upload_dir . $mhs['mahasiswa_profile'])) {
-        unlink($upload_dir . $mhs['mahasiswa_profile']);
+    $profile = $mhs['mahasiswa_profile'] ?? '';
+
+    if (
+        !empty($profile) &&
+        $profile !== 'default-avatar.png' &&
+        is_file($upload_dir . $profile)
+    ) {
+        @unlink($upload_dir . $profile);
     }
 
-    $pdo->prepare("DELETE FROM riset_member WHERE id_mahasiswa = ?")
-        ->execute([$id]);
+    // Hapus data pendukung (FK riset_member)
+    $stmt_rm = $pdo->prepare("DELETE FROM riset_mahasiswa WHERE id_mahasiswa = ?");
+    $stmt_rm->execute([$id]);
 
-    $delete_stmt = $pdo->prepare("DELETE FROM mahasiswa WHERE id = ?");
-    $result = $delete_stmt->execute([$id]);
+    // Hapus data mahasiswa
+    $delete = $pdo->prepare("DELETE FROM mahasiswa WHERE id = ?");
+    $delete->execute([$id]);
 
-    if ($result) {
-        $log_stmt = $pdo->prepare("
-            INSERT INTO logs_lab (admin_id, aksi, detail, ip_address)
-            VALUES (?, 'Hapus Mahasiswa', ?, ?)
-        ");
-        $log_stmt->execute([
-            $_SESSION['admin_id'],
-            "Menghapus mahasiswa: " . $mhs['nama'],
-            $_SERVER['REMOTE_ADDR']
-        //]);
+    // Insert ke logs
+    $log = $pdo->prepare("
+        INSERT INTO logs_lab (admin_id, aksi, detail, ip_address)
+        VALUES (?, 'Hapus Mahasiswa', ?, ?)
+    ");
+    $log->execute([
+        $_SESSION['admin_id'],
+        'Menghapus mahasiswa: ' . $mhs['nama'],
+        $_SERVER['REMOTE_ADDR']
+    ]);
 
-        $_SESSION['success'] = 'Mahasiswa beserta seluruh data pendukung berhasil dihapus!';
-    } else {
-        $_SESSION['error'] = 'Gagal menghapus mahasiswa!';
-    }
+    $_SESSION['success'] = 'Mahasiswa beserta seluruh datanya berhasil dihapus!';
 
 } catch (PDOException $e) {
-    error_log("Error Delete Mahasiswa: " . $e->getMessage());
-    $_SESSION['error'] = 'Terjadi kesalahan sistem. Silakan coba lagi.';
+    die("ERROR: " . $e->getMessage());  
 }
 
 header('Location: ../pages/anggota-list.php');
-//exit();
-?>
+exit();

@@ -26,7 +26,11 @@ $nama = trim($_POST['nama'] ?? '');
 $nim  = trim($_POST['nim'] ?? '');
 $prodi = trim($_POST['prodi'] ?? '');
 $email = trim($_POST['email'] ?? '');
-$tahun_lulus = $_POST['tahun_lulus'] ?? null;
+$tahun_lulus = trim($_POST['tahun_lulus']);
+
+if ($tahun_lulus === "") {
+    $tahun_lulus = null;  
+}
 
 $password = $_POST['password'] ?? '';
 $confirm_password = $_POST['confirm_password'] ?? '';

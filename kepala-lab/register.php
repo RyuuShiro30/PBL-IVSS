@@ -1,43 +1,114 @@
 <?php
-require 'config.php'; // ini membuat $pdo
+require 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     die("Akses tidak valid. Silakan daftar melalui form.");
 }
 
-$nama    = $_POST['nama_new_member'] ?? null;
-$nim     = $_POST['nim_new_member'] ?? null;
-$jurusan = $_POST['jurusan_new_member'] ?? null;
-$prodi   = $_POST['prodi_new_member'] ?? null;
-$email   = $_POST['email_new_member'] ?? null;
-$dosen_id   = $_POST['dosen_id'] ?? null;
-$alasan  = $_POST['alasan_new_member'] ?? null;
+/* =======================
+   AMBIL DATA FORM
+======================= */
+$nama         = $_POST['nama_new_member'] ?? null;
+$nim          = $_POST['nim_new_member'] ?? null;
+$jurusan      = $_POST['jurusan_new_member'] ?? null;
+$prodi        = $_POST['prodi_new_member'] ?? null;
+$email        = $_POST['email_new_member'] ?? null;
+$judul_riset  = $_POST['judul_riset_new_member'] ?? null;
+$dosen_id     = $_POST['dosen_id'] ?? null;
+$alasan       = $_POST['alasan_new_member'] ?? null;
 
-if (!$nama || !$nim || !$jurusan || !$prodi || !$email || !$dosen_id || !$alasan) {
-    die("Semua data harus diisi dengan benar.");
+/* =======================
+   VALIDASI WAJIB
+======================= */
+if (
+    !$nama || !$nim || !$jurusan || !$prodi ||
+    !$email || !$judul_riset || !$dosen_id || !$alasan
+) {
+    die("Semua data wajib diisi dengan benar.");
 }
 
-try {
-    $query = "INSERT INTO new_member
-        (nama_new_member, nim_new_member, jurusan_new_member, prodi_new_member, email_new_member, dosen_id, alasan_new_member, status_new_member, tanggal_daftar_new_member)
-        VALUES (:nama_new_member, :nim_new_member, :jurusan_new_member, :prodi_new_member, :email_new_member, :dosen_id, :alasan_new_member,  'pending', NOW())";
-    
-    $stmt = $pdo->prepare($query);   // gunakan $pdo, bukan $conn
+/* =======================
+   HANDLE FOTO (OPSIONAL)
+======================= */
+$new_member_profile = null;
 
+if (!empty($_FILES['new_member_profile']['name'])) {
+
+    $allowed_ext = ['jpg', 'jpeg', 'png'];
+    $ext = strtolower(pathinfo($_FILES['new_member_profile']['name'], PATHINFO_EXTENSION));
+
+    if (!in_array($ext, $allowed_ext)) {
+        die("Format foto harus JPG atau PNG.");
+    }
+
+    if ($_FILES['new_member_profile']['size'] > 1024 * 1024) {
+        die("Ukuran foto maksimal 1MB.");
+    }
+
+    $upload_dir = 'uploads/new_member/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+
+    $new_member_profile = 'new_member_' . uniqid() . '.' . $ext;
+
+    move_uploaded_file(
+        $_FILES['new_member_profile']['tmp_name'],
+        $upload_dir . $new_member_profile
+    );
+}
+
+/* =======================
+   INSERT DATABASE
+======================= */
+try {
+
+    $query = "
+        INSERT INTO new_member (
+            nama_new_member,
+            nim_new_member,
+            jurusan_new_member,
+            prodi_new_member,
+            email_new_member,
+            judul_riset_new_member,
+            dosen_id,
+            alasan_new_member,
+            new_member_profile,
+            status_new_member,
+            tanggal_daftar_new_member
+        ) VALUES (
+            :nama,
+            :nim,
+            :jurusan,
+            :prodi,
+            :email,
+            :judul_riset,
+            :dosen_id,
+            :alasan,
+            :profile,
+            'pending',
+            NOW()
+        )
+    ";
+
+    $stmt = $pdo->prepare($query);
     $stmt->execute([
-        ':nama_new_member'    => $nama,
-        ':nim_new_member'     => $nim,
-        ':prodi_new_member'   => $prodi,
-        ':jurusan_new_member' => $jurusan,
-        ':email_new_member'   => $email,
-        ':dosen_id'   => $dosen_id,
-        ':alasan_new_member'  => $alasan,
+        ':nama'        => $nama,
+        ':nim'         => $nim,
+        ':jurusan'     => $jurusan,
+        ':prodi'       => $prodi,
+        ':email'       => $email,
+        ':judul_riset' => $judul_riset,
+        ':dosen_id'    => $dosen_id,
+        ':alasan'      => $alasan,
+        ':profile'     => $new_member_profile
     ]);
 
 } catch (PDOException $e) {
     die("Terjadi kesalahan: " . $e->getMessage());
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>

@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../config.php'; // menghasilkan $pdo
+require __DIR__ . '/../config.php';
 session_start();
 
 if (!isset($_SESSION['admin_id'])) {
@@ -10,23 +10,32 @@ if (!isset($_SESSION['admin_id'])) {
 }
 
 try {
-    $query = "
+    $sql = "
         SELECT 
-            nm.*, 
+            nm.id_new_member,
+            nm.nama_new_member,
+            nm.nim_new_member,
+            nm.jurusan_new_member,
+            nm.prodi_new_member,
+            nm.email_new_member,
+            nm.alasan_new_member,
+            nm.judul_riset_new_member,
+            nm.tanggal_daftar_new_member,
+            nm.status_new_member,
             d.nama AS dosen_pengampu
         FROM new_member nm
         LEFT JOIN dosen d ON nm.dosen_id = d.id
-        WHERE LOWER(nm.status_new_member) = 'pending'
+        WHERE nm.status_new_member = 'pending'
         ORDER BY nm.tanggal_daftar_new_member DESC
     ";
 
-    $stmt = $pdo->prepare($query);
+    $stmt = $pdo->prepare($sql);
     $stmt->execute();
 
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     header('Content-Type: application/json');
-    echo json_encode($data ?: []);
+    echo json_encode($data);
 
 } catch (PDOException $e) {
     header('Content-Type: application/json');
@@ -35,4 +44,3 @@ try {
         "error" => $e->getMessage()
     ]);
 }
-?>
