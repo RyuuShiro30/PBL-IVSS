@@ -1,3 +1,56 @@
+<?php
+session_start();
+require __DIR__ . '/../config/database.php';
+
+$id   = $_GET['id']   ?? null;
+$nama = $_GET['nama'] ?? null;
+
+if ($id) {
+    $stmt = $pdo->prepare("SELECT * FROM dosen WHERE id = ?");
+    $stmt->execute([(int)$id]);
+} elseif ($nama) {
+    $stmt = $pdo->prepare("SELECT * FROM dosen WHERE nama = ?");
+    $stmt->execute([$nama]);
+} else {
+    die('Parameter dosen tidak valid');
+}
+
+$dosen = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$dosen) {
+    die('Dosen tidak ditemukan');
+}
+
+// ================= PUBLIKASI =================
+$stmt = $pdo->prepare("SELECT * FROM publikasi_dosen WHERE id_dosen = ? ORDER BY tahun_publikasi DESC");
+$stmt->execute([$id]);
+$publikasi = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+// ================= MAHASISWA BIMBINGAN =================
+$stmt = $pdo->prepare("SELECT nama, nim, prodi FROM mahasiswa WHERE dosen_id = ?");
+$stmt->execute([$id]);
+$bimbingan = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+// ================= PENDIDIKAN =================
+$stmt = $pdo->prepare("SELECT * FROM pendidikan WHERE dosen_id = ? ORDER BY tahun_lulus DESC");
+$stmt->execute([$id]);
+$pendidikan = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+// ================= SERTIFIKAT =================
+$stmt = $pdo->prepare("SELECT * FROM sertifikat WHERE dosen_id = ? ORDER BY tahun DESC");
+$stmt->execute([$id]);
+$sertifikat = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// ================= FOTO DOSEN =================
+$foto_folder = '../../admin-lab/assets/img/logo/'; // folder tempat foto dosen
+$foto_path = (!empty($dosen['dosen_profile']) && file_exists($foto_folder . $dosen['dosen_profile']))
+    ? $foto_folder . $dosen['dosen_profile']
+    : $foto_folder . 'default.png'; // default jika belum ada foto
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -161,94 +214,103 @@ body {
     border-left: 5px solid #0d6efd;
 }
 
-/* FOOTER */
+/* === FOOTER === */
 .footer {
-    width: 100%;
-    background: #0A192F;
-    color: white;
-    padding: 60px 80px 30px;
-}
+        width: 100%;
+        background: #0A192F;
+        color: white;
+        padding: 60px 80px 30px;
+    }
 
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 60px;
-    align-items: start;
-    margin-bottom: 35px;
-}
+    /* GRID 3 KOLOM SIMETRIS */
+    .footer-content {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 60px;
+        align-items: start;
+        margin-bottom: 35px;
+    }
 
-.footer-col:first-child {
-    max-width: 300px;
-}
+    /* KOLOM KIRI AGAR TIDAK MELEBAR */
+    .footer-col:first-child {
+        max-width: 300px;
+    }
 
-.footer-logos {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 15px;
-}
+    /* LOGO-LOGO LAB */
+    .footer-logos {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 15px;
+    }
 
-.footer-logos img {
-    max-height: 65px;
-    width: auto;
-    object-fit: contain;
-}
+    .footer-logos img {
+        max-height: 65px;
+        width: auto;
+        object-fit: contain;
+    }
 
-.footer-col p {
-    font-size: 15px;
-    line-height: 1.7;
-    opacity: 0.9;
-    margin-top: 20px;
-}
+    /* TEKS DI KOLOM KIRI */
+    .footer-col p {
+        font-size: 15px;
+        line-height: 1.7;
+        opacity: 0.9;
+        margin-top: 20px;
+    }
 
-.footer-col h3 {
-    font-size: 18px;
-    margin-bottom: 15px;
-    color: #FF9D00;
-}
+    /* JUDUL KOLOM */
+    .footer-col h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #FF9D00;
+    }
 
-.footer-col a {
-    display: block;
-    color: #dcdcdc;
-    margin-bottom: 8px;
-    text-decoration: none;
-    font-size: 15px;
-    transition: 0.2s;
-}
+    /* LINK */
+    .footer-col a {
+        display: block;
+        color: #dcdcdc;
+        margin-bottom: 8px;
+        text-decoration: none;
+        font-size: 15px;
+        transition: 0.2s;
+    }
 
-.footer-col a:hover {
-    color: #FF9D00;
-}
+    .footer-col a:hover {
+        color: #FF9D00;
+    }
 
-.footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.25);
-    text-align: center;
-    padding: 12px 0;
-    font-size: 14px;
-    opacity: 0.8;
-}
+    /* FOOTER BOTTOM */
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+        text-align: center;
+        padding: 12px 0;
+        font-size: 14px;
+        opacity: 0.8;
+    }
 
-.social-icons {
-    display: flex;
-    gap: 12px;
-    margin-top: 10px;
-}
+    .social-icons {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+    }
 
-.social-icon img {
-    width: 28px;
-    height: 28px;
-    filter: brightness(0) invert(1);
-    transition: 0.2s ease;
-}
+    .social-icon img {
+        width: 28px;
+        height: 28px;
+        filter: brightness(0) invert(1);
+        /* jadi putih */
+        transition: 0.2s ease;
+    }
 
-.social-icon img:hover {
-    transform: scale(1.15);
-    filter: brightness(0) invert(1) drop-shadow(0 0 4px #FF9D00);
-}
+    .social-icon img:hover {
+        transform: scale(1.15);
+        filter: brightness(0) invert(1) drop-shadow(0 0 4px #FF9D00);
+    }
 
-.operating-hours-title {
-    margin-top: 25px;
-}
+    .footer-col .operating-hours-title {
+        margin-top: 25px;
+    }
+
 </style>
 
 </head>
@@ -269,43 +331,54 @@ body {
     </nav>
 </header>
 
+<!-- ================= CONTAINER ================= -->
 <div class="container">
 
-    <!-- FOTO + NAMA (TENGAH) -->
+    <!-- ===== HEADER TENGAH ===== -->
     <div class="center-header">
         <div class="card header-card">
-            <img src="../img-dosen/Ulla-Delfana-Rosiani.jpg" class="photo" alt="Foto Dosen">
-            <h1 class="nama">Ulla Delfana Rosiani ST., MT</h1>
-            <p class="instansi">Sistem Informasi Bisnis • Politeknik Negeri Malang</p>
+            <img src="<?= $foto_path ?>" class="photo" alt="Foto Dosen">
+            <div class="nama"><?= htmlspecialchars($dosen['nama']) ?></div>
+            <div class="role_lab"><?= htmlspecialchars($dosen['role_lab']) ?></div>
         </div>
     </div>
 
-    <!-- IDENTITAS & PROFIL AKADEMIK -->
+    <!-- ===== GRID IDENTITAS + PROFIL ===== -->
     <div class="grid-2">
 
+        <!-- IDENTITAS -->
         <div class="card identitas-card">
             <h2 class="judul-card">Identitas Dosen</h2>
             <div class="data-grid">
-                <p><strong>NIP:</strong> 19780327200312200</p>
-                <p><strong>NIDN:</strong> 4314058001</p>
-                <p><strong>Email:</strong> rosiani@polinema.ac.id</p>
-                <p><strong>Program Studi:</strong> Rekayasa Teknologi Informasi</p>
+                <p><strong>NIP:</strong> <?= $dosen['nip'] ?: '-' ?></p>
+                <p><strong>NIDN:</strong> <?= $dosen['nidn'] ?: '-' ?></p>
+                <p><strong>Email:</strong> <?= $dosen['email'] ?></p>
+                <p><strong>Program Studi:</strong> <?= $dosen['prodi_dosen'] ?></p>
             </div>
         </div>
 
+        <!-- PROFIL AKADEMIK -->
         <div class="card">
             <h2 class="judul-card">Profil Akademik & Profesional</h2>
             <div class="link-list">
-                <a href="#">Google Scholar</a>
-                <a href="#">Sinta</a>
-                <a href="#">LinkedIn</a>
-                <a href="#">Email</a>
+                <?php if ($dosen['google_scholar_dosen']) : ?>
+                    <a href="<?= $dosen['google_scholar_dosen'] ?>" target="_blank">Google Scholar</a>
+                <?php endif; ?>
+                <?php if ($dosen['link_sinta_dosen']) : ?>
+                    <a href="<?= $dosen['link_sinta_dosen'] ?>" target="_blank">Sinta</a>
+                <?php endif; ?>
+                <?php if ($dosen['linkedin_dosen']) : ?>
+                    <a href="<?= $dosen['linkedin_dosen'] ?>" target="_blank">LinkedIn</a>
+                <?php endif; ?>
+                <a href="mailto:<?= $dosen['email'] ?>">Email</a>
             </div>
         </div>
+
     </div>
 
-    <!-- TAB -->
+    <!-- ===== TABS ===== -->
     <div class="tabs-container">
+
         <div class="tabs">
             <button class="tab-button active" onclick="openTab('publikasi')">Publikasi</button>
             <button class="tab-button" onclick="openTab('bimbingan')">Mahasiswa Bimbingan</button>
@@ -313,39 +386,70 @@ body {
             <button class="tab-button" onclick="openTab('sertifikasi')">Sertifikasi</button>
         </div>
 
+        <!-- PUBLIKASI -->
         <div class="tab-content active" id="publikasi">
-            <div class="list-card">Judul Publikasi 1 — 2023</div>
-            <div class="list-card">Judul Publikasi 2 — 2022</div>
-            <div class="list-card">Judul Publikasi 3 — 2021</div>
+            <?php if ($publikasi): foreach ($publikasi as $p): ?>
+                <div class="list-card">
+                    <?= htmlspecialchars($p['nama_publikasi']) ?> —
+                    <a href="<?= $p['link_publikasi'] ?>" target="_blank">Link Publikasi</a>
+                    (<?= $p['tahun_publikasi'] ?>)
+                </div>
+            <?php endforeach; else: ?>
+                <div class="list-card">Belum ada publikasi</div>
+            <?php endif; ?>
         </div>
 
+        <!-- BIMBINGAN -->
         <div class="tab-content" id="bimbingan">
-            <div class="list-card">Mahasiswa 1 — Judul Skripsi</div>
-            <div class="list-card">Mahasiswa 2 — Judul Skripsi</div>
-            <div class="list-card">Mahasiswa 3 — Judul Skripsi</div>
+            <?php if ($bimbingan): foreach ($bimbingan as $m): ?>
+                <div class="list-card">
+                    <?= htmlspecialchars($m['nama']) ?> (<?= $m['nim'] ?>) - <?= $m['prodi'] ?>
+                </div>
+            <?php endforeach; else: ?>
+                <div class="list-card">Belum ada mahasiswa bimbingan</div>
+            <?php endif; ?>
         </div>
 
+        <!-- PENDIDIKAN -->
         <div class="tab-content" id="pendidikan">
-            <div class="list-card">S3 - Doktor</div>
-            <div class="list-card">S2 - Magister Teknik</div>
-            <div class="list-card">S1 - Sarjana Teknik</div>
+            <?php if ($pendidikan): foreach ($pendidikan as $pd): ?>
+                <div class="list-card">
+                    <?= $pd['jenjang'] ?> - <?= $pd['jurusan'] ?> - <?= $pd['universitas'] ?>
+                    (<?= $pd['tahun_lulus'] ?>)
+                </div>
+            <?php endforeach; else: ?>
+                <div class="list-card">Data pendidikan belum tersedia</div>
+            <?php endif; ?>
         </div>
 
+        <!-- SERTIFIKAT -->
         <div class="tab-content" id="sertifikasi">
-            <div class="list-card">-</div>
+            <?php if ($sertifikat): foreach ($sertifikat as $s): ?>
+                <div class="list-card">
+                    <?= $s['nama_sertifikat'] ?> - <?= $s['penyelenggara'] ?>
+                    (<?= $s['tahun'] ?>)
+                </div>
+            <?php endforeach; else: ?>
+                <div class="list-card">Belum ada sertifikasi</div>
+            <?php endif; ?>
         </div>
-    </div>
-</div>
 
-<!-- FOOTER -->
+    </div>
+
+</div>
+<!-- ================= FOOTER SECTION ================= -->
 <footer class="footer">
+
     <div class="footer-content">
+
+        <!-- Logo + Deskripsi -->
         <div class="footer-col">
             <div class="footer-logos">
                 <img src="../img/IVSS.png" class="footer-logo">
                 <img src="../img/polinema.png" class="footer-logo">
                 <img src="../img/jti.webp" class="footer-logo">
             </div>
+
             <p>
                 Intelligent Vision & Smart System Laboratory<br>
                 Politeknik Negeri Malang<br>
@@ -353,6 +457,7 @@ body {
             </p>
         </div>
 
+        <!-- Quick Links -->
         <div class="footer-col">
             <h3>Quick Links</h3>
             <a href="about.php">About</a>
@@ -361,6 +466,7 @@ body {
             <a href="news.php">News</a>
         </div>
 
+        <!-- Contact -->
         <div class="footer-col">
             <h3>Contact</h3>
             <p>Email: ivss@polinema.ac.id</p>
@@ -368,12 +474,13 @@ body {
             <p>Jl. Soekarno-Hatta No. 9, Malang</p>
         </div>
 
+        <!-- Follow Us -->
         <div class="footer-col">
             <h3>Follow Us</h3>
             <div class="social-icons">
-                <a href="#" class="social-icon"><img src="../icon/tiktok.svg"></a>
-                <a href="#" class="social-icon"><img src="../icon/instagram.svg"></a>
-                <a href="#" class="social-icon"><img src="../icon/youtube.svg"></a>
+                <a href="https://www.tiktok.com/@polinema_campus?_r=1&_t=ZS-91qpSTjlNpJ" target="_blank" class="social-icon"><img src="../icon/tiktok.svg" alt="TikTok"></a>
+                <a href="https://www.instagram.com/jtipolinema?igsh=YTFpdGtrdXdqeTZ4" target="_blank" class="social-icon"><img src="../icon/instagram.svg" alt="Instagram"></a>
+                <a href="https://youtube.com/@politekniknegerimalangofficial?si=SyxJ1hhDib9aLjzx" target="_blank" class="social-icon"><img src="../icon/youtube.svg" alt="YouTube"></a>
             </div>
             <h3 class="operating-hours-title">Jam Operasional</h3>
             <p>07.00 - 15.00</p>
@@ -384,4 +491,7 @@ body {
         © 2025 IVSS Laboratory - All Rights Reserved.
     </div>
 </footer>
+
 <script src="../JS/profil_dosen.js"></script>
+</body>
+</html>

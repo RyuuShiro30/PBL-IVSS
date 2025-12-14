@@ -1,3 +1,21 @@
+<?php
+session_start();
+require __DIR__ . '/../config/database.php';
+
+// Ambil semua riset mahasiswa beserta info mahasiswa
+$stmt = $pdo->prepare("
+    SELECT r.id, r.judul, r.link_riset, r.tahun,
+           m.nama AS mahasiswa, d.nama AS dosen_pembimbing
+    FROM riset r
+    JOIN riset_mahasiswa rm ON r.id = rm.id_riset
+    JOIN mahasiswa m ON rm.id_mahasiswa = m.id
+    JOIN dosen d ON m.dosen_id = d.id
+    ORDER BY r.tahun DESC
+");
+$stmt->execute();
+$risets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -33,30 +51,15 @@
 <!-- ===== RESEARCH result ===== -->
 <section class="research-results">
     <div class="results-grid">
-        <div class="result-card">
-            <h3>Real-Time Helmet Detection System</h3>
-            <span class="result-year">2024</span>
-            <p>Successfully deployed AI-based helmet detection for traffic monitoring with 94.5% accuracy.</p>
-            <a href="#" class="link-selengkapnya">Baca Selengkapnya</a>
-        </div>
-
-        <div class="result-card">
-            <h3>AI Navigation for Autonomous Robots</h3>
-            <span class="result-year">2023</span>
-            <p>Developed reinforcement learning navigation improving robotic path efficiency by 36%.</p>
-            <a href="#" class="link-selengkapnya">Baca Selengkapnya</a>
-        </div>
-
-        <div class="result-card">
-            <h3>Deep Learning for Medical Image Segmentation</h3>
-            <span class="result-year">2022</span>
-            <p>Introduced 3D-CNN segmentation for tumor region detection with IoU score 91.2%.</p>
-            <a href="#" class="link-selengkapnya">Baca Selengkapnya</a>
-        </div>
-    </div>
-
-    <div class="load-more-wrapper">
-        <button id="loadMoreBtn">Lihat Riset Lainnya</button>
+        <?php foreach($risets as $r): ?>
+            <div class="result-card">
+                <h3><?= htmlspecialchars($r['judul']) ?></h3>
+                <span class="result-year"><?= $r['tahun'] ?></span>
+                <p><strong>Mahasiswa:</strong> <?= htmlspecialchars($r['mahasiswa']) ?></p>
+                <p><strong>Dosen Pembimbing:</strong> <?= htmlspecialchars($r['dosen_pembimbing']) ?></p>
+                <a href="<?= htmlspecialchars($r['link_riset']) ?>" class="link-selengkapnya" target="_blank">Baca Selengkapnya</a>
+            </div>
+        <?php endforeach; ?>
     </div>
 </section>
 

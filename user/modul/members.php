@@ -3,9 +3,9 @@ require '../config/database.php'; // file ini HARUS menghasilkan $pdo
 
 /* ================= DOSEN ================= */
 $stmt = $pdo->prepare("
-    SELECT nama, dosen_profile
+    SELECT id, nama, dosen_profile, role_lab
     FROM dosen
-    ORDER BY nama ASC
+    ORDER BY id ASC
 ");
 $stmt->execute();
 $dosenList = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -78,14 +78,15 @@ $alumniMembers = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="members-container">
     <?php if (count($dosenList) > 0): ?>
         <?php foreach ($dosenList as $dosen): ?>
-            <a class="member-card" href="../modul/profil_dosen.php?nama=<?= urlencode($dosen['nama']) ?>">
+            <a class="member-card" href="../modul/profil_dosen.php?id=<?= urlencode($dosen['id']) ?>">
                 
                 <img 
                     src="../../admin-lab/assets/img/logo/<?php echo htmlspecialchars($dosen['dosen_profile'] ?? 'default.jpg'); ?>" 
-                    alt="Foto <?= htmlspecialchars($dosen['nama']) ?>"
+                    alt="Foto <?= htmlspecialchars($dosen['id']) ?>"
                 >
 
                 <h3><?= htmlspecialchars($dosen['nama']) ?></h3>
+                <h4><?= htmlspecialchars($dosen['role_lab'] ?? '') ?></h4>
 
             </a>
         <?php endforeach; ?>
@@ -105,7 +106,7 @@ $alumniMembers = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php else: ?>
 
             <?php foreach ($activeMembers as $member): ?>
-                <div class="member-card active-member-card">
+                <a class="member-card active-member-card" href="../modul/mhs-profile.php?id=<?= urlencode($member['id']) ?>">
 
                     <img
                         src="../../admin-lab/assets/img/mahasiswa/<?= htmlspecialchars($member['mahasiswa_profile'] ?? 'default.png') ?>"
@@ -323,7 +324,7 @@ body {
     box-shadow: 0 4px 12px rgba(10, 25, 47, 0.15);
     transition: 0.3s;
     margin-bottom: 20px;
-    margin-top: 0;
+    margin-top: 20px;
     text-decoration: none;
 }
 

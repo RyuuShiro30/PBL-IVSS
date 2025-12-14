@@ -173,14 +173,14 @@ unset($_SESSION['error']);
                                                 Link LinkedIn Dosen
                                             </label>
                                             <input type="url" class="form-control" id="link_linkedin" name="link_linkedin" 
-                                                   placeholder="Masukkan URL LinkedIn (Opsional)" value="<?php echo htmlspecialchars($dosen['link_linkedin'] ?? '');?>">
+                                                   placeholder="Masukkan URL LinkedIn (Opsional)" value="<?php echo htmlspecialchars($dosen['linkedin_dosen'] ?? '');?>">
                                         </div>
                                                                                 <div class="mb-3">
                                             <label for="link_google_scholar" class="form-label">
                                                 Link Google Scholar Dosen
                                             </label>
                                             <input type="url" class="form-control" id="link_google_scholar" name="link_google_scholar" 
-                                                   placeholder="Masukkan URL GOOGLE SCHOLAR (Opsional)" value="<?php echo htmlspecialchars($dosen['link_google_scholar'] ?? '');?>">
+                                                   placeholder="Masukkan URL GOOGLE SCHOLAR (Opsional)" value="<?php echo htmlspecialchars($dosen['google_scholar_dosen'] ?? '');?>">
                                         </div>
                                         
 
