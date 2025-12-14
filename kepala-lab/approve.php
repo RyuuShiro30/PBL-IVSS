@@ -43,6 +43,7 @@ try {
         /* ===== INSERT MAHASISWA ===== */
         $stmtMhs = $pdo->prepare("
             INSERT INTO mahasiswa (
+                dosen_id,
                 nama,
                 nim,
                 prodi,
@@ -53,6 +54,7 @@ try {
                 created_at,
                 updated_at
             ) VALUES (
+                :dosen_id,
                 :nama,
                 :nim,
                 :prodi,
@@ -72,6 +74,7 @@ try {
             ':prodi'   => $member['prodi_new_member'],
             ':email'   => $member['email_new_member'],
             ':jurusan' => $member['jurusan_new_member'],
+            ':dosen_id'=> $member['dosen_id'],
             ':profile' => $member['new_member_profile']
         ]);
 

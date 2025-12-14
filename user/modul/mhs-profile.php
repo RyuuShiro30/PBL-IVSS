@@ -1,3 +1,51 @@
+<?php
+session_start();
+require __DIR__ . '/../config/database.php';
+
+// Ambil parameter id atau nama
+$id   = $_GET['id']   ?? null;
+$nama = $_GET['nama'] ?? null;
+
+if ($id) {
+    $stmt = $pdo->prepare("SELECT * FROM mahasiswa WHERE id = ?");
+    $stmt->execute([(int)$id]);
+} elseif ($nama) {
+    $stmt = $pdo->prepare("SELECT * FROM mahasiswa WHERE nama = ?");
+    $stmt->execute([$nama]);
+} else {
+    die('Parameter mahasiswa tidak valid');
+}
+
+$mahasiswa = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!$mahasiswa) die('Mahasiswa tidak ditemukan');
+
+// ================= FOTO MAHASISWA =================
+$foto_folder = '../../admin-lab/assets/img/mahasiswa/'; 
+$foto_path = (!empty($mahasiswa['mahasiswa_profile']) && file_exists($foto_folder . $mahasiswa['mahasiswa_profile']))
+    ? $foto_folder . $mahasiswa['mahasiswa_profile']
+    : $foto_folder . 'default.png'; // default
+
+// ================= RISET MAHASISWA =================
+$stmt = $pdo->prepare("
+    SELECT r.judul, r.link_riset, r.tahun 
+    FROM riset r 
+    JOIN riset_mahasiswa rm ON r.id = rm.id_riset 
+    WHERE rm.id_mahasiswa = ? 
+    ORDER BY r.tahun DESC
+");
+$stmt->execute([$id]);
+$riset = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// ================= DOSEN PEMBIMBING =================
+$stmt = $pdo->prepare("
+    SELECT nama, prodi_dosen, email 
+    FROM dosen 
+    WHERE id = ?
+");
+$stmt->execute([$mahasiswa['dosen_id']]);
+$dosen = $stmt->fetch(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -270,57 +318,56 @@ body {
 </header>
 
 <div class="container">
-
-    <!-- FOTO + NAMA (TENGAH) -->
+    <!-- FOTO + NAMA -->
     <div class="center-header">
         <div class="card header-card">
-            <img src="../img/ranger-merah.jpg" class="photo" alt="Foto Dosen">
-            <h1 class="nama">Maul</h1>
-            <p class="instansi">Sistem Informasi Bisnis • Politeknik Negeri Malang</p>
+            <img src="<?= $foto_path ?>" class="photo" alt="Foto Mahasiswa">
+            <div class="nama"><?= htmlspecialchars($mahasiswa['nama']) ?></div>
+            <div class="instansi"><?= htmlspecialchars($mahasiswa['prodi']) ?> • Politeknik Negeri Malang</div>
         </div>
     </div>
 
-    <!-- IDENTITAS & PROFIL AKADEMIK -->
+    <!-- IDENTITAS + DOSEN PEMBIMBING -->
     <div class="grid-2">
-
         <div class="card identitas-card">
-            <h2 class="judul-card">Identitas Anggota</h2>
+            <h2 class="judul-card">Identitas Mahasiswa</h2>
             <div class="data-grid">
-                <p><strong>NIM:</strong> 244107060133</p>
-                <p><strong>Email:</strong> maulanahb@gmail.com</p>
-                <p><strong>Program Studi:</strong> Sistem Informasi Bisnis</p>
+                <p><strong>NIM:</strong> <?= htmlspecialchars($mahasiswa['nim']) ?></p>
+                <p><strong>Email:</strong> <?= htmlspecialchars($mahasiswa['email']) ?></p>
+                <p><strong>Program Studi:</strong> <?= htmlspecialchars($mahasiswa['prodi']) ?></p>
+                <p><strong>Jurusan:</strong> <?= htmlspecialchars($mahasiswa['jurusan_mahasiswa']) ?></p>
             </div>
         </div>
 
         <div class="card">
-            <h2 class="judul-card">Profil Akademik & Profesional</h2>
-            <div class="link-list">
-                <a href="#">LinkedIn</a>
-                <a href="#">Email</a>
-            </div>
+            <h2 class="judul-card">Dosen Pembimbing</h2>
+            <?php if($dosen): ?>
+                <div class="data-grid">
+                    <p><strong>Nama:</strong> <?= htmlspecialchars($dosen['nama']) ?></p>
+                    <p><strong>Program Studi:</strong> <?= htmlspecialchars($dosen['prodi_dosen']) ?></p>
+                    <p><strong>Email:</strong> <a href="mailto:<?= htmlspecialchars($dosen['email']) ?>"><?= htmlspecialchars($dosen['email']) ?></a></p>
+                </div>
+            <?php else: ?>
+                <p>Belum ada dosen pembimbing</p>
+            <?php endif; ?>
         </div>
     </div>
 
-    <!-- TAB -->
+    <!-- TAB RISET -->
     <div class="tabs-container">
         <div class="tabs">
-            <button class="tab-button active" onclick="openTab('publikasi')">Publikasi</button>
-            <button class="tab-button" onclick="openTab('pendidikan')">Pendidikan</button>
-            <button class="tab-button" onclick="openTab('sertifikasi')">Sertifikasi</button>
+            <button class="tab-button active" onclick="openTab('riset')">Riset</button>
         </div>
-
-        <div class="tab-content active" id="publikasi">
-            <div class="list-card">Judul Publikasi 1 — 2023</div>
-            <div class="list-card">Judul Publikasi 2 — 2022</div>
-            <div class="list-card">Judul Publikasi 3 — 2021</div>
-        </div>
-
-        <div class="tab-content" id="pendidikan">
-            <div class="list-card">-</div>
-        </div>
-
-        <div class="tab-content" id="sertifikasi">
-            <div class="list-card">Dicoding - Belajar Dasar AI</div>
+        <div class="tab-content active" id="riset">
+            <?php if($riset): foreach($riset as $r): ?>
+                <div class="list-card">
+                    <?= htmlspecialchars($r['judul']) ?> — 
+                    <a href="<?= $r['link_riset'] ?>" target="_blank">Link Riset</a>
+                    (<?= $r['tahun'] ?>)
+                </div>
+            <?php endforeach; else: ?>
+                <div class="list-card">Belum ada riset</div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
