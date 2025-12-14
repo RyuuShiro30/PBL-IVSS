@@ -134,8 +134,8 @@ $mhsList = $queryMhs->fetchAll(PDO::FETCH_ASSOC);
                                         <div class="mb-3">
                                             <label class="form-label">Mahasiswa (Opsional)</label>
                                             <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
-                                                <?php if (!empty($mahasiswaList)): ?>
-                                                    <?php foreach ($mahasiswaList as $m): ?>
+                                                <?php if (!empty($mhsList)): ?>
+                                                    <?php foreach ($mhsList as $m): ?>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox" 
                                                                 name="id_mahasiswa[]" value="<?= $m['id']; ?>"

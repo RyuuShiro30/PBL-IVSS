@@ -76,6 +76,22 @@ try {
         ]);
 
         $id_mahasiswa = $stmtMhs->fetchColumn();
+            /* ===== PINDAHKAN FOTO ===== */
+    if (!empty($member['new_member_profile'])) {
+
+        $sourcePath = __DIR__ . '/../kepala-lab/uploads/new_member/' . $member['new_member_profile'];
+        $targetDir  = __DIR__ . '/../admin-lab/assets/img/mahasiswa/';
+        $targetPath = $targetDir . $member['new_member_profile'];
+
+        if (file_exists($sourcePath)) {
+            if (!is_dir($targetDir)) {
+                mkdir($targetDir, 0755, true);
+            }
+
+            copy($sourcePath, $targetPath);
+            // rename($sourcePath, $targetPath); // kalau mau dipindah total
+        }
+    }
 
         /* ===== INSERT RISET ===== */
         $stmtRiset = $pdo->prepare("
