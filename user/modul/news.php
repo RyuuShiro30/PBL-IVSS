@@ -108,10 +108,11 @@ $rows = $result ? $result->fetchAll() : [];
     
     <?php if (!empty($rows)): ?>
     <div class="load-more-wrapper">
-        <button id="loadMoreBtn">Lihat Berita Lainnya</button>
+        <button id="loadMoreBtn">Lihat Berita Lainnya</ button>
     </div>
     <?php endif; ?>
 </div>
+
 
 <!-- ================= FOOTER SECTION ================= -->
 <footer class="footer">
@@ -269,6 +270,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
+    margin-top: 100px;
 }
 
 .news-card:hover {

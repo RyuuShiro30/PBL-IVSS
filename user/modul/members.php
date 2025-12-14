@@ -1,3 +1,46 @@
+<?php
+require '../config/database.php'; // file ini HARUS menghasilkan $pdo
+
+/* ================= DOSEN ================= */
+$stmt = $pdo->prepare("
+    SELECT nama, dosen_profile
+    FROM dosen
+    ORDER BY nama ASC
+");
+$stmt->execute();
+$dosenList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+/* ================= ACTIVE MEMBERS ================= */
+$stmt = $pdo->prepare("
+    SELECT 
+        id,
+        nama,
+        prodi,
+        mahasiswa_profile
+    FROM mahasiswa
+    WHERE tahun_lulus IS NULL
+    ORDER BY nama ASC
+");
+$stmt->execute();
+$activeMembers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+/* ================= ALUMNI MEMBERS ================= */
+$stmt = $pdo->prepare("
+    SELECT 
+        id,
+        nama,
+        prodi,
+        mahasiswa_profile,
+        tahun_lulus
+    FROM mahasiswa
+    WHERE tahun_lulus IS NOT NULL
+    ORDER BY tahun_lulus DESC, nama ASC
+");
+$stmt->execute();
+$alumniMembers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,108 +75,84 @@
 
 <section class="members-section">
     <h2 class="members-title">Laboratorium Members</h2>    
-    <div class="members-container">
+  <div class="members-container">
+    <?php if (count($dosenList) > 0): ?>
+        <?php foreach ($dosenList as $dosen): ?>
+            <a class="member-card" href="../modul/profil_dosen.php?nama=<?= urlencode($dosen['nama']) ?>">
+                
+                <img 
+                    src="../../admin-lab/assets/img/logo/<?php echo htmlspecialchars($dosen['dosen_profile'] ?? 'default.jpg'); ?>" 
+                    alt="Foto <?= htmlspecialchars($dosen['nama']) ?>"
+                >
 
-        <a class="member-card" href="../modul/profil_dosen.php">
-            <img src="../img-dosen/Ulla-Delfana-Rosiani.jpg" alt="foto bu ulla">
-            <h3>Dr. Ulla Delfana Rosiani, ST., MT.</h3>
-            <p>Kepala Laboratorium</p>
-        </a>
-        <div class="member-card">
-            <img src="../img-dosen/Vivi-Nur-Wijayaningrum.jpg" alt="foto bu vivi">
-            <h3>Vivi Nur Wijayaningrum, S.Kom, M.Kom</h3>
-            <p>Peneliti</p>
-        </div>
+                <h3><?= htmlspecialchars($dosen['nama']) ?></h3>
 
-        <div class="member-card">
-            <img src="../img-dosen/Mungki-Astiningrum.jpg" alt="bu mungki">
-            <h3>Mungki Astiningrum, ST., M.Kom.</h3>
-            <p>Peneliti</p>
-        </div>
-
-        <div class="member-card">
-            <img src="../img-dosen/Ely-Setyo-Astuti.jpg" alt="bu ely">
-            <h3>Dr. Ely Setyo Astuti, ST., MT.</h3>
-            <p>Peneliti</p>
-        </div>
-
-        <div class="member-card">
-            <img src="../img-dosen/Mamluatul-Hani_ah.jpg" alt="bu hani">
-            <h3>Mamluatul Hani'ah, S.Kom., M.Kom</h3>
-            <p>Peneliti</p>
-        </div>
-
-        <div class="member-card">
-            <img src="../img-dosen/Rosa-Andrie-Asmara.jpg" alt="pak rosa">
-            <h3>Prof. Dr. Eng. Rosa Andrie Asmara, ST., MT.</h3>
-            <p>Peneliti</p>
-        </div>
-
-        <div class="member-card">
-            <img src="../img-dosen/Wilda-Imama-Sabilla.jpg" alt="bu wilda">
-            <h3>Wilda Imama Sabilla, S.Kom., M.Kom.</h3>
-            <p>Peneliti</p>
-        </div>
-    </div>
+            </a>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p style="text-align:center;">Belum ada data dosen</p>
+    <?php endif; ?>
+</div>
 </section>
 
 <section class="active-members-section members-section">
-    <h2 class="members-title">Active Members (Mahasiswa/Asisten)</h2>
+    <h2 class="members-title">Active Members</h2>
+
     <div class="members-container active-members-container">
 
-        <a class="member-card active-member-card" href="../modul/members-profile.php">
-            <img src="../img/ranger-biru.jpg" alt="foto member aktif 1">
-            <h3>Maul</h3>
-            <p>Asisten Lab (2025)</p>
-        </a>
+        <?php if (empty($activeMembers)): ?>
+            <p class="text-muted">Belum ada active member.</p>
+        <?php else: ?>
 
-        <div class="member-card active-member-card">
-            <img src="../img/ranger-merah.jpg" alt="foto member aktif 2">
-            <h3>Ega</h3>
-            <p>Asisten Lab (2025)</p>
-        </div>
+            <?php foreach ($activeMembers as $member): ?>
+                <div class="member-card active-member-card">
 
-        <div class="member-card active-member-card">
-            <img src="../img/ranger-pink.jpg" alt="foto member aktif 2">
-            <h3>Pica</h3>
-            <p>Asisten Lab (2025)</p>
-        </div>
+                    <img
+                        src="../../admin-lab/assets/img/mahasiswa/<?= htmlspecialchars($member['mahasiswa_profile'] ?? 'default.png') ?>"
+                        alt="Foto <?= htmlspecialchars($member['nama']) ?>">
 
-        <div class="member-card active-member-card">
-            <img src="../img/ranger-putih.jpg" alt="foto member aktif 2">
-            <h3>Feby</h3>
-            <p>Asisten Lab (2025)</p>
-        </div>
+                    <h3><?= htmlspecialchars($member['nama']) ?></h3>
+                    <p><?= htmlspecialchars($member['prodi']) ?></p>
 
-        <div class="member-card active-member-card">
-            <img src="../img/ranger-kuning.jpg" alt="foto member aktif 2">
-            <h3>Adelia</h3>
-            <p>Asisten Lab (2025)</p>
-        </div>
+                </div>
+            <?php endforeach; ?>
 
+        <?php endif; ?>
 
     </div>
 </section>
 
-<!--ALUMNI -->
 
+<!--ALUMNI -->
 <section class="alumni-section members-section">
     <h2 class="members-title">Alumni Laboratorium</h2>
+
     <div class="members-container alumni-container">
 
-        <div class="member-card alumni-card">
-            <img src="../img/merah.jpg" alt="foto alumni 1">
-            <h3>Prana</h3>
-            <p>Asisten Lab 2020-2022</p>
-        </div>
+        <?php if (empty($alumniMembers)): ?>
+            <p class="empty-state">Belum ada data alumni.</p>
+        <?php else: ?>
 
-        <div class="member-card alumni-card">
-            <img src="../img/biru.jpg" alt="foto alumni 1">
-            <h3>Febri</h3>
-            <p>Asisten Lab 2018-2020</p>
-        </div>
+            <?php foreach ($alumniMembers as $alumni): ?>
+                <div class="member-card alumni-card">
+
+                    <img
+                        src="../../admin-lab/assets/img/mahasiswa/<?= htmlspecialchars($alumni['mahasiswa_profile'] ?? 'default.png') ?>"
+                        alt="Foto <?= htmlspecialchars($alumni['nama']) ?>">
+
+                    <h3><?= htmlspecialchars($alumni['nama']) ?></h3>
+                    <p>
+                        <?= htmlspecialchars($alumni['prodi']) ?><br>
+                        <small>Lulus <?= htmlspecialchars($alumni['tahun_lulus']) ?></small>
+                    </p>
+
+                </div>
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+
     </div>
-        
+
     <div class="load-more-wrapper">
         <button id="loadMoreBtn">Load More</button>
         <h1 class="shiny-title">Daftar Jadi Anggota?</h1>
@@ -288,7 +307,7 @@ body {
     font-size: 2.2rem;
     font-weight: 800;
     color: #0A192F;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 .members-container {
     display: grid;
@@ -304,9 +323,10 @@ body {
     box-shadow: 0 4px 12px rgba(10, 25, 47, 0.15);
     transition: 0.3s;
     margin-bottom: 20px;
-    margin-top: 40px;
+    margin-top: 0;
     text-decoration: none;
 }
+
 
 
 .member-card:hover {
@@ -423,6 +443,13 @@ body {
     color: transparent;
     animation: shineMove 3s linear infinite;
     margin-top: 10px;
+}
+.empty-state {
+    grid-column: 1 / -1; 
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    margin-top: 40px;
 }
 
 @keyframes shineMove {

@@ -1,5 +1,11 @@
 <?php
-include "../modul/datafasilitas.php";
+require '../config/database.php';
+
+$stmt = $pdo->query("SELECT * FROM fasilitas ORDER BY id ASC LIMIT 3");
+$fasilitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stmtGaleri = $pdo->query("SELECT * FROM galeri ORDER BY id DESC");
+$galeri = $stmtGaleri->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -120,12 +126,18 @@ include "../modul/datafasilitas.php";
 
     <div class="gallery-wrapper">
         <div class="gallery-container" id="galleryContainer">
-            <div class="gallery-item"><img src="../img/keg1.jpg"></div>
-            <div class="gallery-item"><img src="../img/keg2.jpg"></div>
-            <div class="gallery-item"><img src="../img/keg3.jpg"></div>
-            <div class="gallery-item"><img src="../img/keg4.jpg"></div>
-            <div class="gallery-item"><img src="../img/keg5.jpg"></div>
-            <div class="gallery-item"><img src="../img/keg6.jpg"></div>
+
+            <?php if (!empty($galeri)): ?>
+                <?php foreach ($galeri as $g): ?>
+                    <div class="gallery-item">
+                        <img src="../../admin-lab/assets/img/galeri/<?= htmlspecialchars($g['gambar_galeri']) ?>"
+                             alt="<?= htmlspecialchars($g['judul'] ?? 'Galeri IVSS') ?>">
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p style="text-align:center;">Belum ada galeri.</p>
+            <?php endif; ?>
+
         </div>
     </div>
 
@@ -146,39 +158,26 @@ include "../modul/datafasilitas.php";
         </a>
     </div>
 
-    <div class="facilities-container">
+<div class="facilities-container">
 
-        <div class="facility-card">
-            <div class="facility-icon">
-                <img src="../icon/ac-furniture-home-svgrepo-com.svg" alt="AC Icon">
-            </div>
-            <div class="facility-box">
-                <span>AC</span>
-                <a href="../modul/facilitydetail.php?id=ac" class="facility-arrow">→</a>
-            </div>
+    <?php foreach ($fasilitas as $f): ?>
+    <div class="facility-card">
+
+        <div class="facility-icon">
+            <img src="../../admin-lab/assets/img/logo/<?= htmlspecialchars($f['logo']) ?>"
+                 alt="<?= htmlspecialchars($f['logo']) ?> logo">
         </div>
 
-        <div class="facility-card">
-            <div class="facility-icon">
-                <img src="../icon/computer-and-monitor-svgrepo-com.svg" alt="Computer Icon">
-            </div>
-            <div class="facility-box">
-                <span>Computer & Monitor</span>
-                <a href="../modul/facilitydetail.php?id=computer" class="facility-arrow">→</a>
-            </div>
-        </div>
-
-        <div class="facility-card">
-            <div class="facility-icon">
-                <img src="../icon/mosque-svgrepo-com.svg" alt="Mushola Icon">
-            </div>
-            <div class="facility-box">
-                <span>Mushola</span>
-                <a href="../modul/facilitydetail.php?id=mushola" class="facility-arrow">→</a>
-            </div>
+        <div class="facility-box">
+            <span><?= htmlspecialchars($f['nama']) ?></span>
+            <a href="../modul/facilitydetail.php?id=<?= htmlspecialchars($f['id']) ?>"
+               class="facility-arrow">→</a>
         </div>
 
     </div>
+    <?php endforeach; ?>
+
+</div>
 </section>
 
 <!-- ================= FOOTER SECTION ================= -->
