@@ -27,11 +27,13 @@ $limit = 10;
 $offset = ($page - 1) * $limit;
 
 // Query Dosen
-$stmtDosen = $pdo->prepare("SELECT * FROM view_dosen_full ORDER BY created_at DESC LIMIT :limit OFFSET :offset");
+$stmtDosen = $pdo->prepare("SELECT * FROM view_dosen_full ORDER BY created_at asc LIMIT :limit OFFSET :offset");
 $stmtDosen->bindValue(':limit', $limit, PDO::PARAM_INT);
 $stmtDosen->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmtDosen->execute();
 $dosen = $stmtDosen->fetchAll();
+
+
 
 // Query Mahasiswa
 $stmtMHS = $pdo->prepare("SELECT * FROM mahasiswa ORDER BY created_at DESC LIMIT :limit OFFSET :offset");
@@ -129,6 +131,8 @@ $total_pages_mhs = ceil($total_mhs / $limit);
                                             <th width="10%">Link Sinta</th>
                                             <th width="10%">Lokasi</th>
                                             <th width="10%">Tanggal</th>
+                                            <th width="10%">Link Google Scholar</th>
+                                            <th width="10%">Link LinkedIn</th>
                                             <th width="10%">Aksi</th>
                                         </tr>
                                     </thead>
@@ -158,12 +162,15 @@ $total_pages_mhs = ceil($total_mhs / $limit);
                                                 <td><?php echo htmlspecialchars($dosen['sertifikat'] ?? ''); ?></td>
                                                 <td><?php echo htmlspecialchars($dosen['link_sinta_dosen'] ?? ''); ?></td>
                                                 <td><?php echo htmlspecialchars($dosen['lokasi_dosen'] ?? ''); ?></td>
+
                                                 <td>
                                                     <small>
                                                         <?php echo date('d/m/Y', strtotime($dosen['created_at'])); ?><br>
                                                         <?php echo date('H:i', strtotime($dosen['created_at'])); ?>
                                                     </small>
                                                 </td>
+                                                <td><?= htmlspecialchars($dosen['google_scholar_dosen'] ?? '') ?></td>
+                                                <td><?= htmlspecialchars($dosen['linkedin_dosen'] ?? '') ?></td>
                                                 <td>
                                                     <a href="dosen-edit.php?id=<?php echo $dosen['id']; ?>" 
                                                        class="btn btn-sm btn-warning" title="Edit">

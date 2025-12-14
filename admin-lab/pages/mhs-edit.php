@@ -105,11 +105,14 @@ unset($_SESSION['error']);
                                     <div class="mb-3">
                                         <label class="form-label">Foto Profil Saat Ini</label>
                                         <div class="mb-2">
-                                            <img src="../assets/img/<?php echo htmlspecialchars($mahasiswa['mahasiswa_profile'] ?? ''); ?>" 
-                                                class="rounded-circle" 
-                                                style="width: 150px; height: 150px; object-fit: cover;"
+                                            <img src="../assets/img/<?= htmlspecialchars($mhs['mahasiswa_profile'] ?? 'default-avatar.png') ?>"
+                                                class="rounded-circle"
+                                                style="width:150px;height:150px;object-fit:cover;"
                                                 onerror="this.src='../assets/img/default-avatar.png'">
                                         </div>
+
+                                        <!-- Ini penting! -->
+                                        <input type="hidden" name="old_foto" value="<?= htmlspecialchars($mhs['mahasiswa_profile']) ?>">
                                     </div>
 
                                     <div class="mb-3">
@@ -126,20 +129,7 @@ unset($_SESSION['error']);
                                     </div>
 
 
-                                    <h6 class="text-primary mt-4">Ganti Password (Opsional)</h6>
-                                    <small class="text-muted">Biarkan kosong jika tidak ingin mengubah password.</small>
 
-                                    <div class="row mt-2">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">Password Baru</label>
-                                            <input type="password" id="password" name="password" class="form-control">
-                                        </div>
-
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label">Konfirmasi Password</label>
-                                            <input type="password" id="confirm_password" name="confirm_password" class="form-control">
-                                        </div>
-                                    </div>
 
                                     <div class="border-top pt-3">
                                         <button type="submit" class="btn btn-primary">

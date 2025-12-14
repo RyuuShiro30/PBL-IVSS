@@ -224,6 +224,7 @@ include $root . "../components/header.php";
                                 <th>NIM</th>
                                 <th>Jurusan</th>
                                 <th>Prodi</th>
+                                <th>Judul Riset</th>
                                 <th>Email</th>
                                 <th>Tanggal Daftar</th>
                                 <th>Alasan</th>
@@ -260,6 +261,7 @@ include $root . "../components/header.php";
                                 <th>NIM</th>
                                 <th>Jurusan</th>
                                 <th>Prodi</th>
+                                <th>Judul Riset</th>
                                 <th>Email</th>
                                 <th>Tanggal Daftar</th>
                                 <th>Alasan</th>
@@ -344,6 +346,7 @@ include $root . "../components/header.php";
                                 <td>${d.nim_new_member || '-'}</td>
                                 <td>${d.jurusan_new_member || '-'}</td>
                                 <td>${d.prodi_new_member || '-'}</td>
+                                <td>${d.judul_riset_new_member || '-'}</td>
                                 <td>${d.email_new_member || '-'}</td>
                                 <td>${d.tanggal_daftar_new_member || '-'}</td>
                                 <td>${d.alasan_new_member || '-'}</td>
@@ -408,6 +411,7 @@ include $root . "../components/header.php";
                                 <td>${d.nim_new_member || '-'}</td>
                                 <td>${d.jurusan_new_member || '-'}</td>
                                 <td>${d.prodi_new_member || '-'}</td>
+                                <td>${d.judul_riset_new_member || '-'}</td>
                                 <td>${d.email_new_member || '-'}</td>
                                 <td>${d.tanggal_daftar_new_member || '-'}</td>
                                 <td>${d.alasan_new_member || '-'}</td>

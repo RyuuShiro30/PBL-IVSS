@@ -96,6 +96,20 @@ unset($_SESSION['error']);
                                             <input type="url" class="form-control" id="link_sinta" name="link_sinta" 
                                                    placeholder="Masukkan URL SINTA (Opsional)">
                                         </div>
+                                                                                                                        <div class="mb-3">
+                                            <label for="link_linkedin" class="form-label">
+                                                Link LinkedIn Dosen
+                                            </label>
+                                            <input type="url" class="form-control" id="link_linkedin" name="link_linkedin" 
+                                                   placeholder="Masukkan URL LinkedIn (Opsional)" value="<?php echo htmlspecialchars($dosen['link_linkedin'] ?? '');?>">
+                                        </div>
+                                                                                <div class="mb-3">
+                                            <label for="link_google_scholar" class="form-label">
+                                                Link Google Scholar Dosen
+                                            </label>
+                                            <input type="url" class="form-control" id="link_google_scholar" name="link_google_scholar" 
+                                                   placeholder="Masukkan URL GOOGLE SCHOLAR (Opsional)" value="<?php echo htmlspecialchars($dosen['link_google_scholar'] ?? '');?>">
+                                        </div>
                                         
                                         <div class="mb-3">
                                             <label for="biografi" class="form-label">
@@ -114,7 +128,7 @@ unset($_SESSION['error']);
                                                 
                                                 <div class="col-md-2">
                                                     <label class="form-label">Jenjang <span class="text-danger">*</span></label>
-                                                    <select class="form-select" name="jenjang[]" required>
+                                                    <select class="form-select" name="jenjang[]">
                                                         <option value="">Pilih Jenjang</option>
                                                         <option value="S1">S1/D4</option>
                                                         <option value="S2">S2</option>
@@ -125,17 +139,17 @@ unset($_SESSION['error']);
 
                                                 <div class="col-md-3">
                                                     <label class="form-label">Jurusan <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" name="jurusan[]" required placeholder="Contoh: Teknik Informatika">
+                                                    <input type="text" class="form-control" name="jurusan[]" placeholder="Contoh: Teknik Informatika">
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <label class="form-label">Universitas <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" name="universitas[]" required placeholder="Contoh: Universitas Indonesia">
+                                                    <input type="text" class="form-control" name="universitas[]" placeholder="Contoh: Universitas Indonesia">
                                                 </div>
 
                                                 <div class="col-md-2">
                                                     <label class="form-label">Tahun Lulus <span class="text-danger">*</span></label>
-                                                    <input type="number" class="form-control" name="tahun_lulus[]" required placeholder="Tahun">
+                                                    <input type="number" class="form-control" name="tahun_lulus[]" placeholder="Tahun">
                                                 </div>
 
                                                 <div class="col-md-1 d-flex align-items-end justify-content-end">
@@ -173,29 +187,6 @@ unset($_SESSION['error']);
                                             <i class="fas fa-plus me-2"></i>Tambah Sertifikasi
                                         </button>
                                         
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="password" class="form-label">
-                                                    Password <span class="text-danger">*</span>
-                                                </label>
-                                                <div class="input-group">
-                                                    <input type="password" class="form-control" id="password" name="password" 
-                                                           placeholder="Minimal 6 karakter" required>
-                                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label for="confirm_password" class="form-label">
-                                                    Konfirmasi Password <span class="text-danger">*</span>
-                                                </label>
-                                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
-                                                       placeholder="Ulangi password" required>
-                                            </div>
-                                        </div>
-
                                         <div class="mb-3">
                                             <label for="foto" class="form-label">
                                                 Foto Profil
@@ -284,17 +275,20 @@ unset($_SESSION['error']);
         const password = document.getElementById('password').value;
         const confirm = document.getElementById('confirm_password').value;
 
-        if (password.length < 6) {
-            e.preventDefault();
-            alert('Password minimal 6 karakter!');
-            return false;
-        }
+if (password !== "" || confirm !== "") {
 
-        if (password !== confirm) {
-            e.preventDefault();
-            alert('Password dan konfirmasi password tidak sama!');
-            return false;
-        }
+    if (password.length < 6) {
+        e.preventDefault();
+        alert('Password minimal 6 karakter!');
+        return false;
+    }
+
+    if (password !== confirm) {
+        e.preventDefault();
+        alert('Password dan konfirmasi password tidak sama!');
+        return false;
+    }
+}
 
         const submitBtn = this.querySelector('button[type="submit"]');
         submitBtn.disabled = true;

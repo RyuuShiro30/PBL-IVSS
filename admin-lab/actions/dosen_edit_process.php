@@ -1,198 +1,150 @@
 <?php
 /**
- * Proses Edit Anggota Dosen
+ * Proses Edit Anggota Dosen (Tanpa Password)
  * File: actions/dosen_edit_process.php
  */
 
 session_start();
 require_once '../config/database.php';
 
-// Pastikan request adalah POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../pages/dosen-edit.php');
+    header('Location: ../pages/anggota-list.php');
     exit();
 }
 
-// Ambil ID dosen
-$id_dosen = $_POST['id'] ?? '';
-if (empty($id_dosen)) {
-    $_SESSION['error'] = 'ID dosen tidak ditemukan!';
-    header('Location: ../pages/dosen-list.php');
+$id_dosen = $_POST['id'] ?? null;
+if (!$id_dosen) {
+    $_SESSION['error'] = 'ID dosen tidak valid!';
+    header('Location: ../pages/anggota-list.php');
     exit();
 }
 
-// Ambil data form
-$nama_lengkap = trim($_POST['nama_lengkap'] ?? '');
-$email = trim($_POST['email'] ?? '');
-$lokasi_dosen = trim($_POST['lokasi_dosen'] ?? '');
-$link_sinta = trim($_POST['link_sinta'] ?? '');
-$biografi = trim($_POST['biografi_dosen'] ?? '');
-
-$password = $_POST['password'] ?? '';
-$confirm_password = $_POST['confirm_password'] ?? '';
-
-// Validasi wajib
-if (empty($nama_lengkap) || empty($email)) {
-    $_SESSION['error'] = 'Nama lengkap dan email wajib diisi!';
-    header("Location: ../pages/dosen-edit.php?id=$id_dosen");
-    exit();
-}
-
-// Validasi email
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $_SESSION['error'] = 'Format email tidak valid!';
-    header("Location: ../pages/dosen-edit.php?id=$id_dosen");
-    exit();
-}
+$pdo = getDBConnection();
 
 try {
-    $pdo = getDBConnection();
+    $pdo->beginTransaction();
 
-    // Cek email apakah digunakan dosen lain
-    $check_stmt = $pdo->prepare("
-        SELECT COUNT(*) AS total
-        FROM dosen
-        WHERE email = ? AND id != ?
+    /* =========================
+     * AMBIL DATA DOSEN LAMA
+     * ========================= */
+    $stmtOld = $pdo->prepare("
+        SELECT dosen_profile, linkedin_dosen, google_scholar_dosen
+        FROM dosen WHERE id = ?
     ");
-    $check_stmt->execute([$email, $id_dosen]);
+    $stmtOld->execute([$id_dosen]);
+    $old = $stmtOld->fetch(PDO::FETCH_ASSOC);
 
-    if ($check_stmt->fetch()['total'] > 0) {
-        $_SESSION['error'] = 'Email sudah digunakan oleh dosen lain!';
-        header("Location: ../pages/dosen-edit.php?id=$id_dosen");
-        exit();
+    if (!$old) {
+        throw new Exception('Data dosen tidak ditemukan');
     }
 
-    // Ambil data foto lama
-    $old_stmt = $pdo->prepare("SELECT dosen_profile FROM dosen WHERE id = ?");
-    $old_stmt->execute([$id_dosen]);
-    $old_foto = $old_stmt->fetchColumn();
+    /* =========================
+     * DATA FORM
+     * ========================= */
+    $nama   = trim($_POST['nama_lengkap'] ?? '');
+    $email  = trim($_POST['email'] ?? '');
+    $lokasi = trim($_POST['lokasi_dosen'] ?? '');
+    $sinta  = trim($_POST['link_sinta'] ?? '');
+    $bio    = trim($_POST['biografi_dosen'] ?? '');
 
-    // ============================
-    //  HANDLE UPLOAD FOTO BARU
-    // ============================
-    $foto = $old_foto;
+    // ⬇️ PENTING: JANGAN TIMPA DENGAN STRING KOSONG
+    $linkedin = !empty($_POST['link_linkedin'])
+        ? trim($_POST['link_linkedin'])
+        : $old['linkedin_dosen'];
 
-    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = '../assets/img/logo/';
+    $scholar = !empty($_POST['link_google_scholar'])
+        ? trim($_POST['link_google_scholar'])
+        : $old['google_scholar_dosen'];
 
-        if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0755, true);
-        }
-
-        $file_tmp = $_FILES['foto']['tmp_name'];
-        $file_name = $_FILES['foto']['name'];
-        $file_size = $_FILES['foto']['size'];
-        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-
-        $allowed_ext = ['jpg','jpeg','png'];
-
-        if (!in_array($file_ext, $allowed_ext)) {
-            $_SESSION['error'] = 'Format foto hanya boleh JPG atau PNG!';
-            header("Location: ../pages/dosen-edit.php?id=$id_dosen");
-            exit();
-        }
-
-        if ($file_size > 1 * 1024 * 1024) {
-            $_SESSION['error'] = 'Ukuran foto maksimal 1MB!';
-            header("Location: ../pages/dosen-edit.php?id=$id_dosen");
-            exit();
-        }
-
-        $new_file_name = 'dosen_' . time() . '_' . uniqid() . '.' . $file_ext;
-        $upload_path = $upload_dir . $new_file_name;
-
-        if (move_uploaded_file($file_tmp, $upload_path)) {
-            $foto = $new_file_name;
-
-            // Hapus foto lama jika bukan default
-            if ($old_foto !== 'default-avatar.png' && file_exists($upload_dir . $old_foto)) {
-                unlink($upload_dir . $old_foto);
-            }
-        } else {
-            $_SESSION['error'] = 'Gagal mengupload foto baru!';
-            header("Location: ../pages/dosen-edit.php?id=$id_dosen");
-            exit();
-        }
+    if (empty($nama) || empty($email)) {
+        throw new Exception('Nama dan email wajib diisi');
     }
 
-    // ============================
-    //  HANDLE PASSWORD (Opsional)
-    // ============================
-    $password_sql = '';
-    $password_param = [];
-
-    if (!empty($password)) {
-        if (strlen($password) < 6) {
-            $_SESSION['error'] = 'Password minimal 6 karakter!';
-            header("Location: ../pages/dosen-edit.php?id=$id_dosen");
-            exit();
-        }
-
-        if ($password !== $confirm_password) {
-            $_SESSION['error'] = 'Konfirmasi password tidak sama!';
-            header("Location: ../pages/dosen-edit.php?id=$id_dosen");
-            exit();
-        }
-
-        $password_sql = ", password = ?";
-        $password_param[] = password_hash($password, PASSWORD_DEFAULT);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        throw new Exception('Format email tidak valid');
     }
 
-    // ============================
-    //  UPDATE TABEL DOSEN
-    // ============================
+    /* =========================
+     * CEK EMAIL DUPLIKAT
+     * ========================= */
+    $stmtCheck = $pdo->prepare("
+        SELECT COUNT(*) FROM dosen
+        WHERE email = ? AND id <> ?
+    ");
+    $stmtCheck->execute([$email, $id_dosen]);
+    if ($stmtCheck->fetchColumn() > 0) {
+        throw new Exception('Email sudah digunakan dosen lain');
+    }
+
+    /* =========================
+     * HANDLE FOTO
+     * ========================= */
+    $foto = $old['dosen_profile'];
+
+    if (!empty($_FILES['foto']['name'])) {
+        $allowed = ['jpg', 'jpeg', 'png'];
+        $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+
+        if (!in_array($ext, $allowed)) {
+            throw new Exception('Format foto tidak valid');
+        }
+
+        if ($_FILES['foto']['size'] > 1024 * 1024) {
+            throw new Exception('Ukuran foto maksimal 1MB');
+        }
+
+        $dir = '../assets/img/logo/';
+        if (!is_dir($dir)) mkdir($dir, 0755, true);
+
+        $newName = 'dosen_' . uniqid() . '.' . $ext;
+
+        if (!move_uploaded_file($_FILES['foto']['tmp_name'], $dir . $newName)) {
+            throw new Exception('Upload foto gagal');
+        }
+
+        if ($foto && file_exists($dir . $foto)) {
+            unlink($dir . $foto);
+        }
+
+        $foto = $newName;
+    }
+
+    /* =========================
+     * UPDATE DOSEN
+     * ========================= */
     $sql = "
-        UPDATE dosen
-        SET nama = ?, email = ?, lokasi_dosen = ?, link_sinta_dosen = ?, 
-            biografi_dosen = ?, dosen_profile = ?, updated_at = NOW()
-            $password_sql
+        UPDATE dosen SET
+            nama = ?,
+            email = ?,
+            lokasi_dosen = ?,
+            link_sinta_dosen = ?,
+            biografi_dosen = ?,
+            linkedin_dosen = ?,
+            google_scholar_dosen = ?,
+            dosen_profile = ?,
+            updated_at = NOW()
         WHERE id = ?
     ";
 
     $params = [
-        $nama_lengkap, $email, $lokasi_dosen, $link_sinta,
-        $biografi, $foto
+        $nama,
+        $email,
+        $lokasi,
+        $sinta,
+        $bio,
+        $linkedin,
+        $scholar,
+        $foto,
+        $id_dosen
     ];
 
-    $params = array_merge($params, $password_param);
-    $params[] = $id_dosen;
+    $pdo->prepare($sql)->execute($params);
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
-
-    // ============================
-    //  UPDATE PENDIDIKAN
-    // ============================
-    $pdo->prepare("DELETE FROM pendidikan WHERE dosen_id = ?")->execute([$id_dosen]);
-
-    $jenjang = $_POST['jenjang'] ?? [];
-    $jurusan = $_POST['jurusan'] ?? [];
-    $universitas = $_POST['universitas'] ?? [];
-    $tahun_lulus = $_POST['tahun_lulus'] ?? [];
-
-    $stmtEdu = $pdo->prepare("
-        INSERT INTO pendidikan (dosen_id, jenjang, jurusan, universitas, tahun_lulus)
-        VALUES (?, ?, ?, ?, ?)
-    ");
-
-    for ($i = 0; $i < count($jenjang); $i++) {
-        if (!empty($jenjang[$i]) && !empty($jurusan[$i]) &&
-            !empty($universitas[$i]) && !empty($tahun_lulus[$i])) {
-
-            $stmtEdu->execute([
-                $id_dosen,
-                $jenjang[$i],
-                $jurusan[$i],
-                $universitas[$i],
-                $tahun_lulus[$i]
-            ]);
-        }
-    }
-
-    // ============================
-    //  UPDATE SERTIFIKAT
-    // ============================
-    $pdo->prepare("DELETE FROM sertifikat WHERE dosen_id = ?")->execute([$id_dosen]);
+    /* =========================
+     * UPDATE SERTIFIKAT (AMAN)
+     * ========================= */
+    $pdo->prepare("DELETE FROM sertifikat WHERE dosen_id = ?")
+        ->execute([$id_dosen]);
 
     $nama_sertifikat = $_POST['nama_sertifikat'] ?? [];
     $tahun = $_POST['tahun'] ?? [];
@@ -203,44 +155,29 @@ try {
         VALUES (?, ?, ?, ?)
     ");
 
-for ($i = 0; $i < count($nama_sertifikat); $i++) {
-
-    // Skip kalau nama sertifikat kosong
-    if (empty($nama_sertifikat[$i])) {
-        continue;
+    for ($i = 0; $i < count($nama_sertifikat); $i++) {
+        if (!empty(trim($nama_sertifikat[$i]))) {
+            $stmtCert->execute([
+                $id_dosen,
+                $nama_sertifikat[$i],
+                $tahun[$i] ?? null,
+                $penyelenggara[$i] ?? null
+            ]);
+        }
     }
 
-    $stmtCert->execute([
-        $id_dosen,
-        $nama_sertifikat[$i],
-        $tahun[$i] ?? null,
-        $penyelenggara[$i] ?? null,
-    ]);
-}
+    $pdo->commit();
 
-    // ============================
-    //  WRITE LOG
-    // ============================
-    if (isset($_SESSION['admin_id'])) {
-        $log_stmt = $pdo->prepare("
-            INSERT INTO logs_lab (admin_id, aksi, detail, ip_address)
-            VALUES (?, 'Edit Dosen', ?, ?)
-        ");
-        $log_stmt->execute([
-            $_SESSION['admin_id'],
-            "Mengedit data dosen: " . $nama_lengkap,
-            $_SERVER['REMOTE_ADDR']
-        ]);
-    }
-
-    $_SESSION['success'] = 'Data dosen berhasil diperbarui!';
+    $_SESSION['success'] = 'Data dosen berhasil diperbarui';
     header('Location: ../pages/anggota-list.php');
     exit();
 
-} catch (PDOException $e) {
-    error_log("Error Edit Dosen: " . $e->getMessage());
-    $_SESSION['error'] = 'Terjadi kesalahan sistem!';
+} catch (Exception $e) {
+
+    $pdo->rollBack();
+    error_log('Edit Dosen Error: ' . $e->getMessage());
+
+    $_SESSION['error'] = $e->getMessage();
     header("Location: ../pages/dosen-edit.php?id=$id_dosen");
     exit();
 }
-?>

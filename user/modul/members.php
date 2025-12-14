@@ -137,7 +137,7 @@
     <div class="load-more-wrapper">
         <button id="loadMoreBtn">Load More</button>
         <h1 class="shiny-title">Daftar Jadi Anggota?</h1>
-        <a href="../../kepala-lab/" class="join-link">Daftar Sekarang</a>
+        <a href="../../kepala-lab/" class="join-link" target="_blank">Daftar Sekarang</a>
     </div>
 </section>
 

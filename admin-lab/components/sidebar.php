@@ -17,7 +17,7 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 1050;
-    background: linear-gradient(180deg, #5a67d8 0%, #4c51bf 100%) !important;
+    background: linear-gradient(180deg, #0a192f 0%, #0a192f 100%) !important;
     box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
@@ -61,6 +61,7 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     font-weight: 700;
     color: #ffffff;
     letter-spacing: 0.5px;
+    text-decoration: none;
 }
 
 /* Sidebar divider */
@@ -97,7 +98,7 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
 
 .sidebar .nav-item .nav-link:hover {
     background: rgba(255, 255, 255, 0.15);
-    color: #000000ff;
+    color: #ff900d;
     transform: translateX(3px);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
@@ -136,7 +137,7 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
 
 .sidebar-footer .nav-link:hover {
     background: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
+    color: #ff900d;
     transform: translateX(3px);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
@@ -301,6 +302,7 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
         display: none;
     }
     
+    
     .sidebar.toggled .nav-item .nav-link {
         text-align: center;
         padding: 0.75rem;
@@ -420,6 +422,45 @@ body {
             </div>
         </div>
     </li> 
+<?php
+$publikasi_pages = [
+    'publikasi-list.php',
+    'publikasi-add.php',
+    'publikasi-edit.php'
+];
+?>
+
+<li class="nav-item <?php echo in_array($current_page, $publikasi_pages) ? 'active' : ''; ?>">
+    <a class="nav-link collapsed" href="#"
+       data-bs-toggle="collapse"
+       data-bs-target="#collapsePublikasi"
+       aria-expanded="true"
+       aria-controls="collapsePublikasi">
+        <i class="fas fa-book-open"></i>
+        <span>Kelola Publikasi</span>
+    </a>
+
+    <div id="collapsePublikasi"
+         class="collapse <?php echo in_array($current_page, $publikasi_pages) ? 'show' : ''; ?>"
+         data-bs-parent="#accordionSidebar">
+
+        <div class="collapse-inner">
+            <h6 class="collapse-header">Menu Publikasi</h6>
+
+            <a class="collapse-item <?php echo $current_page === 'publikasi-list.php' ? 'active' : ''; ?>"
+               href="publikasi-list.php">
+                <i class="fas fa-list"></i>
+                Daftar Publikasi
+            </a>
+
+            <a class="collapse-item <?php echo $current_page === 'publikasi-add.php' ? 'active' : ''; ?>"
+               href="publikasi-add.php">
+                <i class="fas fa-plus"></i>
+                Tambah Publikasi
+            </a>
+        </div>
+    </div>
+</li>
 
     <?php
     $anggota_pages = [

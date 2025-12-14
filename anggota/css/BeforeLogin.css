@@ -1,8 +1,9 @@
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .before-login {
@@ -39,6 +40,13 @@ body, html {
     margin-bottom: 10px;
 }
 
+.text-wrapper-2:hover {
+    background-color: #ff900d;
+}
+.text-wrapper-3:hover {
+    background-color: #ff900d;
+}
+
 .div {
     font-family: Inter;
     font-size: 24px;
@@ -51,7 +59,8 @@ body, html {
     gap: 30px;
 }
 
-.login, .login-2 {
+.login,
+.login-2 {
     display: flex;
     width: 220px;
     height: 60px;
@@ -69,7 +78,7 @@ body, html {
     font-size: 22px;
 }
 
-.before-login > .text-wrapper-2,
-.before-login > .text-wrapper-3 {
+.before-login>.text-wrapper-2,
+.before-login>.text-wrapper-3 {
     display: none;
 }
