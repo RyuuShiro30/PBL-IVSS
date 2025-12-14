@@ -1,6 +1,6 @@
 <?php
 /**
- * Proses Edit Anggota Dosen (Tanpa Password)
+ * Proses Edit Anggota Dosen
  * File: actions/dosen_edit_process.php
  */
 
@@ -24,13 +24,8 @@ $pdo = getDBConnection();
 try {
     $pdo->beginTransaction();
 
-    /* =========================
-     * AMBIL DATA DOSEN LAMA
-     * ========================= */
-    $stmtOld = $pdo->prepare("
-        SELECT dosen_profile, linkedin_dosen, google_scholar_dosen
-        FROM dosen WHERE id = ?
-    ");
+    /* ================= AMBIL DATA LAMA ================= */
+    $stmtOld = $pdo->prepare("SELECT dosen_profile FROM dosen WHERE id = ?");
     $stmtOld->execute([$id_dosen]);
     $old = $stmtOld->fetch(PDO::FETCH_ASSOC);
 
@@ -38,57 +33,43 @@ try {
         throw new Exception('Data dosen tidak ditemukan');
     }
 
-    /* =========================
-     * DATA FORM
-     * ========================= */
-    $nama   = trim($_POST['nama_lengkap'] ?? '');
-    $email  = trim($_POST['email'] ?? '');
+    /* ================= DATA FORM ================= */
+    $nama   = trim($_POST['nama_lengkap']);
+    $email  = trim($_POST['email']);
+    $nip    = trim($_POST['nip'] ?? '');
+    $nidn   = trim($_POST['nidn'] ?? '');
+    $role   = trim($_POST['role_lab']);
+    $prodi  = trim($_POST['prodi_dosen'] ?? '');
     $lokasi = trim($_POST['lokasi_dosen'] ?? '');
     $sinta  = trim($_POST['link_sinta'] ?? '');
-    $bio    = trim($_POST['biografi_dosen'] ?? '');
+    $linkedin = trim($_POST['link_linkedin'] ?? '');
+    $scholar  = trim($_POST['link_google_scholar'] ?? '');
 
-    // ⬇️ PENTING: JANGAN TIMPA DENGAN STRING KOSONG
-    $linkedin = !empty($_POST['link_linkedin'])
-        ? trim($_POST['link_linkedin'])
-        : $old['linkedin_dosen'];
-
-    $scholar = !empty($_POST['link_google_scholar'])
-        ? trim($_POST['link_google_scholar'])
-        : $old['google_scholar_dosen'];
-
-    if (empty($nama) || empty($email)) {
-        throw new Exception('Nama dan email wajib diisi');
+    if (!$nama || !$email || !$role) {
+        throw new Exception('Nama, Email, dan Role wajib diisi');
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         throw new Exception('Format email tidak valid');
     }
 
-    /* =========================
-     * CEK EMAIL DUPLIKAT
-     * ========================= */
-    $stmtCheck = $pdo->prepare("
+    /* ================= CEK EMAIL DUPLIKAT ================= */
+    $check = $pdo->prepare("
         SELECT COUNT(*) FROM dosen
         WHERE email = ? AND id <> ?
     ");
-    $stmtCheck->execute([$email, $id_dosen]);
-    if ($stmtCheck->fetchColumn() > 0) {
+    $check->execute([$email, $id_dosen]);
+    if ($check->fetchColumn() > 0) {
         throw new Exception('Email sudah digunakan dosen lain');
     }
 
-    /* =========================
-     * HANDLE FOTO
-     * ========================= */
+    /* ================= FOTO ================= */
     $foto = $old['dosen_profile'];
-
     if (!empty($_FILES['foto']['name'])) {
-        $allowed = ['jpg', 'jpeg', 'png'];
         $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
-
-        if (!in_array($ext, $allowed)) {
+        if (!in_array($ext, ['jpg','jpeg','png'])) {
             throw new Exception('Format foto tidak valid');
         }
-
         if ($_FILES['foto']['size'] > 1024 * 1024) {
             throw new Exception('Ukuran foto maksimal 1MB');
         }
@@ -97,52 +78,56 @@ try {
         if (!is_dir($dir)) mkdir($dir, 0755, true);
 
         $newName = 'dosen_' . uniqid() . '.' . $ext;
-
-        if (!move_uploaded_file($_FILES['foto']['tmp_name'], $dir . $newName)) {
-            throw new Exception('Upload foto gagal');
-        }
+        move_uploaded_file($_FILES['foto']['tmp_name'], $dir . $newName);
 
         if ($foto && file_exists($dir . $foto)) {
             unlink($dir . $foto);
         }
-
         $foto = $newName;
     }
 
-    /* =========================
-     * UPDATE DOSEN
-     * ========================= */
-    $sql = "
+    /* ================= UPDATE DOSEN ================= */
+    $pdo->prepare("
         UPDATE dosen SET
-            nama = ?,
-            email = ?,
-            lokasi_dosen = ?,
-            link_sinta_dosen = ?,
-            biografi_dosen = ?,
-            linkedin_dosen = ?,
-            google_scholar_dosen = ?,
-            dosen_profile = ?,
-            updated_at = NOW()
+            nama = ?, email = ?, nip = ?, nidn = ?, role_lab = ?,
+            prodi_dosen = ?, lokasi_dosen = ?, link_sinta_dosen = ?,
+            linkedin_dosen = ?, google_scholar_dosen = ?,
+            dosen_profile = ?, updated_at = NOW()
         WHERE id = ?
-    ";
+    ")->execute([
+        $nama, $email, $nip, $nidn, $role,
+        $prodi, $lokasi, $sinta,
+        $linkedin, $scholar,
+        $foto, $id_dosen
+    ]);
 
-    $params = [
-        $nama,
-        $email,
-        $lokasi,
-        $sinta,
-        $bio,
-        $linkedin,
-        $scholar,
-        $foto,
-        $id_dosen
-    ];
+    /* ================= PENDIDIKAN ================= */
+    $pdo->prepare("DELETE FROM pendidikan WHERE dosen_id = ?")
+        ->execute([$id_dosen]);
 
-    $pdo->prepare($sql)->execute($params);
+    $jenjang = $_POST['jenjang'] ?? [];
+    $jurusan = $_POST['jurusan'] ?? [];
+    $universitas = $_POST['universitas'] ?? [];
+    $tahun = $_POST['tahun_lulus'] ?? [];
 
-    /* =========================
-     * UPDATE SERTIFIKAT (AMAN)
-     * ========================= */
+    $stmtEdu = $pdo->prepare("
+        INSERT INTO pendidikan (dosen_id, jenjang, jurusan, universitas, tahun_lulus)
+        VALUES (?, ?, ?, ?, ?)
+    ");
+
+    for ($i = 0; $i < count($jenjang); $i++) {
+        if (!empty($jenjang[$i])) {
+            $stmtEdu->execute([
+                $id_dosen,
+                $jenjang[$i],
+                $jurusan[$i],
+                $universitas[$i],
+                $tahun[$i]
+            ]);
+        }
+    }
+
+    /* ================= SERTIFIKAT ================= */
     $pdo->prepare("DELETE FROM sertifikat WHERE dosen_id = ?")
         ->execute([$id_dosen]);
 
@@ -156,7 +141,7 @@ try {
     ");
 
     for ($i = 0; $i < count($nama_sertifikat); $i++) {
-        if (!empty(trim($nama_sertifikat[$i]))) {
+        if (!empty($nama_sertifikat[$i])) {
             $stmtCert->execute([
                 $id_dosen,
                 $nama_sertifikat[$i],
@@ -173,10 +158,7 @@ try {
     exit();
 
 } catch (Exception $e) {
-
     $pdo->rollBack();
-    error_log('Edit Dosen Error: ' . $e->getMessage());
-
     $_SESSION['error'] = $e->getMessage();
     header("Location: ../pages/dosen-edit.php?id=$id_dosen");
     exit();

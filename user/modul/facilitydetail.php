@@ -1,18 +1,22 @@
 <?php
-// Import data fasilitas
-include '../modul/datafasilitas.php';
+require '../config/database.php';
 
-// Ambil ID dari URL ?id=computer
 $id = $_GET['id'] ?? null;
 
-// Validasi
-if (!$id || !isset($facilities[$id])) {
+if (!$id || !is_numeric($id)) {
     die("<h2 style='text-align:center;margin-top:40px;'>Fasilitas tidak ditemukan.</h2>");
 }
 
-// Ambil data
-$data = $facilities[$id];
+$stmt = $pdo->prepare("SELECT * FROM fasilitas WHERE id = :id LIMIT 1");
+$stmt->execute(['id' => $id]);
+$data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$data) {
+    die("<h2 style='text-align:center;margin-top:40px;'>Fasilitas tidak ditemukan.</h2>");
+}
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -77,14 +81,14 @@ $data = $facilities[$id];
     <div class="facility-content">
 
         <div class="facility-image">
-            <img src="<?= $data['images'][0] ?>" alt="<?= $data['name']; ?>">
+            <img src="../../admin-lab/assets/img/fasilitas/<?= $data['gambar_fasilitas'] ?>" alt="<?= $data['nama']; ?>">
         </div>
 
         <div class="facility-info">
-            <h3><?= $data['name']; ?></h3>
+            <h3><?= $data['nama']; ?></h3>
 
             <p>
-                <?= $data['description']; ?>
+                <p><?= $data['deskripsi_fasilitas']; ?></p>
             </p>
         </div>
     </div>
