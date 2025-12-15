@@ -2,48 +2,72 @@
 session_start();
 require __DIR__ . '/../config/database.php';
 
-// Ambil semua riset mahasiswa beserta info mahasiswa
-$stmt = $pdo->prepare("
-    (
-        SELECT 
-            r.id,
-            r.judul,
-            r.link_riset,
-            r.tahun,
-            'mahasiswa' AS tipe,
-            m.nama AS peneliti,
-            d.nama AS pembimbing
-        FROM riset r
-        JOIN riset_mahasiswa rm ON r.id = rm.id_riset
-        JOIN mahasiswa m ON rm.id_mahasiswa = m.id
-        JOIN dosen d ON m.dosen_id = d.id
-    )
+$search = trim($_GET['search'] ?? '');
+$page   = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 
-    UNION ALL
+$limit  = 6;
+$offset = ($page - 1) * $limit;
 
-    (
-        SELECT 
-            r.id,
-            r.judul,
-            r.link_riset,
-            r.tahun,
-            'dosen' AS tipe,
-            string_agg(d.nama, '||') AS peneliti,
-            NULL AS pembimbing
-        FROM riset r
-        JOIN riset_dosen rd ON rd.id_riset = r.id
-        JOIN dosen d ON rd.id_dosen = d.id
-        GROUP BY r.id, r.judul, r.link_riset, r.tahun
-    )
+/* ================= MAIN QUERY ================= */
+$sql = "
+SELECT 
+    r.id,
+    r.judul,
+    r.link_riset,
+    r.tahun,
+    string_agg(DISTINCT m.nama, ', ') AS mahasiswa,
+    string_agg(DISTINCT d.nama, ', ') AS dosen
+FROM riset r
+LEFT JOIN riset_mahasiswa rm ON rm.id_riset = r.id
+LEFT JOIN mahasiswa m ON m.id = rm.id_mahasiswa
+LEFT JOIN riset_dosen rd ON rd.id_riset = r.id
+LEFT JOIN dosen d ON d.id = rd.id_dosen
+WHERE 1=1
+";
 
-    ORDER BY tahun DESC
-    LIMIT 6
-");
+if ($search !== '') {
+    $sql .= " AND r.judul ILIKE :search";
+}
+
+$sql .= "
+GROUP BY r.id, r.judul, r.link_riset, r.tahun
+ORDER BY r.tahun DESC
+LIMIT :limit OFFSET :offset
+";
+
+$stmt = $pdo->prepare($sql);
+
+if ($search !== '') {
+    $stmt->bindValue(':search', "%$search%", PDO::PARAM_STR);
+}
+
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 
 $stmt->execute();
 $risets = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
 
+/* ================= COUNT QUERY ================= */
+$countSql = "
+SELECT COUNT(DISTINCT r.id)
+FROM riset r
+WHERE 1=1
+";
+
+if ($search !== '') {
+    $countSql .= " AND r.judul ILIKE :search";
+}
+
+$countStmt = $pdo->prepare($countSql);
+
+if ($search !== '') {
+    $countStmt->bindValue(':search', "%$search%", PDO::PARAM_STR);
+}
+
+$countStmt->execute();
+$totalData  = $countStmt->fetchColumn();
+$totalPages = ceil($totalData / $limit);
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -75,40 +99,62 @@ $risets = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </svg>
     </div>
 </div>
-
-<!-- ===== RESEARCH result ===== -->
-<section class="research-results">
-<h2 class="section-title">Riset Terbaru</h2>
-
-<div class="results-grid">
-<?php foreach ($risets as $r): ?>
-    <div class="result-card">
-        <h3><?= htmlspecialchars($r['judul']) ?></h3>
-        <span class="result-year"><?= $r['tahun'] ?></span>
-
-        <?php if ($r['tipe'] === 'mahasiswa'): ?>
-            <p><strong>Mahasiswa:</strong> <?= htmlspecialchars($r['peneliti']) ?></p>
-            <p><strong>Dosen Pembimbing:</strong> <?= htmlspecialchars($r['pembimbing']) ?></p>
-        <?php else: ?>
-            <p><strong>Dosen Peneliti:</strong></p>
-            <ul style="margin-left:20px;">
-                <?php foreach (explode('||', $r['peneliti']) as $dosen): ?>
-                    <li><?= htmlspecialchars($dosen) ?></li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
-
-        <a href="<?= htmlspecialchars($r['link_riset']) ?>" target="_blank" class="link-selengkapnya">
-            Baca Selengkapnya
-        </a>
-    </div>
-<?php endforeach; ?>
+<div class="breadcrumb">
+    <a href="index.php">Home</a>
+    <span class="dot"></span>
+    <a class="active" href="news.php">News</a>
+    <span class="dot"></span>
+    <a href="#">Newsroom</a>
 </div>
 
-    <div class="load-more-wrapper">
-        <a href="researchroom.php" class="load-more-btn">Lihat Semua Riset →</a>
+
+<!-- ===== SEARCH ===== -->
+<div class="search-wrapper">
+    <form method="GET" class="search-form">
+        <input type="text" name="search" placeholder="Cari judul riset..." value="<?= htmlspecialchars($search); ?>">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<!-- ===== RESEARCH LIST ===== -->
+<section class="research-results">
+    <div class="results-grid">
+        <?php if (!empty($risets)): ?>
+            <?php foreach ($risets as $r): ?>
+                <div class="result-card">
+                    <h3><?= htmlspecialchars($r['judul']) ?></h3>
+                    <span class="result-year"><?= $r['tahun'] ?></span>
+
+                    <?php if (!empty($r['mahasiswa'])): ?>
+                        <p><strong>Mahasiswa:</strong> <?= htmlspecialchars($r['mahasiswa']) ?></p>
+                    <?php endif; ?>
+
+                    <?php if (!empty($r['dosen'])): ?>
+                        <p><strong>Dosen Peneliti:</strong> <?= htmlspecialchars($r['dosen']) ?></p>
+                    <?php endif; ?>
+
+                    <a href="<?= htmlspecialchars($r['link_riset']) ?>" target="_blank" class="link-selengkapnya">
+                        Baca Selengkapnya
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p style="text-align:center;">Riset tidak ditemukan.</p>
+        <?php endif; ?>
     </div>
 </section>
+
+<!-- ===== PAGINATION ===== -->
+<?php if ($totalPages > 1): ?>
+<div class="pagination-wrapper">
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a href="?page=<?= $i ?>&search=<?= urlencode($search) ?>"
+           class="pagination-link <?= ($i == $page) ? 'active' : '' ?>">
+            <?= $i ?>
+        </a>
+    <?php endfor; ?>
+</div>
+<?php endif; ?>
 
 <!-- ================= FOOTER SECTION ================= -->
 <footer class="footer">
@@ -242,6 +288,86 @@ body {
     100% {
         transform: translateX(-50%);
     }
+}
+
+/* ===== SEARCH STYLE ===== */
+.search-wrapper {
+    margin: 40px 140px 0;
+    margin-left: 50px;
+}
+
+.search-form {
+    display: flex;
+    max-width: 1500px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.search-form input {
+    flex: 1;
+    padding: 14px 16px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+}
+
+.search-form button {
+    padding: 0 26px;
+    background: #FF9D00;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.search-form button:hover {
+    background: #0A192F;
+}
+
+@media (max-width: 768px) {
+    .search-wrapper {
+        margin: 30px 20px 0;
+    }
+
+    .search-form {
+        max-width: 100%;
+    }
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    margin-top: 100px;
+    margin-left: 60px;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #1d4c8b;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .active {
+    font-weight: 600;
+    color: #022e6e;
+}
+
+.breadcrumb .dot {
+    width: 7px;
+    height: 7px;
+    background: #c4c4c4;
+    border-radius: 50%;
+    display: inline-block;
 }
 
 /* ===== RESEARCH RESULTS SECTION ===== */
@@ -414,6 +540,34 @@ body {
 
 .load-more-btn:active {
     transform: translateY(0);
+}
+
+/* ===== PAGINATION ===== */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 40px 0 60px;
+}
+
+.pagination-link {
+    padding: 10px 16px;
+    border-radius: 6px;
+    background: #f2f2f2;
+    color: #0A192F;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+.pagination-link:hover {
+    background: #FF9D00;
+    color: #fff;
+}
+
+.pagination-link.active {
+    background: #0A192F;
+    color: #fff;
 }
 
 /* === FOOTER === */

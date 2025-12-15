@@ -1,26 +1,85 @@
 <?php
 require '../../admin-berita/config/database.php';
 
-// Ambil berita yang sudah publish
-$sql = "SELECT b.*,
+$tahun  = $_GET['tahun'] ?? 'all';
+$search = trim($_GET['search'] ?? '');
+$page   = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+
+$limit  = 6;
+$offset = ($page - 1) * $limit;
+
+/* ================= MAIN QUERY ================= */
+$sql = "
+    SELECT 
+        b.*, 
         a.nama_lengkap AS author_name
-        FROM berita b
-        LEFT JOIN admin_berita a ON a.id = b.author_id
-        WHERE b.status = 'published'
-        ORDER BY b.created_at DESC limit 6";
+    FROM berita b
+    LEFT JOIN admin_berita a ON a.id = b.author_id
+    WHERE b.status = 'published'
+";
 
-// Jalankan query menggunakan executeQuery() bawaan PDO
-$result = executeQuery($sql);
+if ($tahun !== 'all') {
+    $sql .= " AND EXTRACT(YEAR FROM b.created_at) = :tahun";
+}
 
-// Ambil semua data
-$rows = $result ? $result->fetchAll() : [];
+if ($search !== '') {
+    $sql .= " AND b.judul ILIKE :search";
+}
+
+$sql .= " ORDER BY b.created_at DESC LIMIT :limit OFFSET :offset";
+
+$stmt = getDBConnection()->prepare($sql);
+
+if ($tahun !== 'all') {
+    $stmt->bindValue(':tahun', (int)$tahun, PDO::PARAM_INT);
+}
+
+if ($search !== '') {
+    $stmt->bindValue(':search', "%$search%", PDO::PARAM_STR);
+}
+
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+$stmt->execute();
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+/* ================= COUNT QUERY ================= */
+$countSql = "
+    SELECT COUNT(*) 
+    FROM berita b 
+    WHERE b.status = 'published'
+";
+
+if ($tahun !== 'all') {
+    $countSql .= " AND EXTRACT(YEAR FROM b.created_at) = :tahun";
+}
+
+if ($search !== '') {
+    $countSql .= " AND b.judul ILIKE :search";
+}
+
+$countStmt = getDBConnection()->prepare($countSql);
+
+if ($tahun !== 'all') {
+    $countStmt->bindValue(':tahun', (int)$tahun, PDO::PARAM_INT);
+}
+
+if ($search !== '') {
+    $countStmt->bindValue(':search', "%$search%", PDO::PARAM_STR);
+}
+
+$countStmt->execute();
+$totalData  = $countStmt->fetchColumn();
+$totalPages = ceil($totalData / $limit);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News - IVSS</title>
+    <title>Newsroom - IVSS</title>
     <link rel="stylesheet" href="../style/navbar.css">
     <link rel="stylesheet" href="../style/news.css">
 </head>
@@ -50,39 +109,54 @@ $rows = $result ? $result->fetchAll() : [];
     </div>
 
     <div class="custom-shape-divider-bottom-1764076735">
-        <svg data-name="Layer 1"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none">
-            <path d="M0,100 C150,150 450,50 600,100 C750,150 1050,50 1200,100 V120 H0 Z"
-                class="shape-fill"></path>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,100 C150,150 450,50 600,100 C750,150 1050,50 1200,100 V120 H0 Z" class="shape-fill"></path>
         </svg>
     </div>
 </div>
 
+<div class="breadcrumb">
+    <a href="index.php">Home</a>
+    <span class="dot"></span>
+    <a class="active" href="news.php">News</a>
+    <span class="dot"></span>
+    <a href="#">Newsroom</a>
+</div>
+
+<!-- ================= SEARCH BERITA ================= -->
+<div class="search-wrapper">
+    <form method="GET" class="search-form">
+        <?php if ($tahun !== 'all'): ?>
+            <input type="hidden" name="tahun" value="<?= htmlspecialchars($tahun); ?>">
+        <?php endif; ?>
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Cari berita..."
+            value="<?= htmlspecialchars($search); ?>"
+        >
+        <button type="submit">Search</button>
+    </form>
+</div>
+
 <div class="news-section">
     <div class="news-container">
-    
         <?php if (!empty($rows)): ?>
             <?php foreach ($rows as $row): ?>
-
                 <div class="news-card hidden-card">
                     <div class="card-image">
-                        <img src="../../admin-berita/assets/img/thumbnails/<?= htmlspecialchars($row['thumbnail']); ?>" alt="<?= htmlspecialchars($row['judul']); ?>">
+                        <img src="../../admin-berita/assets/img/thumbnails/<?= htmlspecialchars($row['thumbnail']); ?>"
+                             alt="<?= htmlspecialchars($row['judul']); ?>">
                     </div>
 
                     <div class="card-content">
-
-                        <p class="card-date">
-                            <?= date("M d, Y", strtotime($row['created_at'])); ?>
-                        </p>
+                        <p class="card-date"><?= date("M d, Y", strtotime($row['created_at'])); ?></p>
 
                         <h3 class="card-title"><?= htmlspecialchars($row['judul']); ?></h3>
 
                         <div class="card-description">
-                            <a href="<?= htmlspecialchars($row['link_berita']); ?>" 
-                            target="_blank"
-                            class="card-link">
+                            <a href="<?= htmlspecialchars($row['link_berita']); ?>" target="_blank" class="card-link">
                                 Baca Selengkapnya →
                             </a>
                         </div>
@@ -92,34 +166,32 @@ $rows = $result ? $result->fetchAll() : [];
                             <span class="separator">•</span>
                             <span class="category">ARTIKEL, BERITA</span>
                         </p>
-
                     </div>
                 </div>
-
             <?php endforeach; ?>
-
         <?php else: ?>
             <div class="empty-state">
-                <p>Belum ada berita untuk ditampilkan.</p>
+                <p>Berita tidak ditemukan.</p>
             </div>
         <?php endif; ?>
-
     </div>
-    
-    <?php if (!empty($rows)): ?>
-    <div class="load-more-wrapper">
-        <a href="newsroom.php" class="load-more-btn">Lihat Semua Berita →</a>
-    </div>
-    <?php endif; ?>
 </div>
 
+<?php if ($totalPages > 1): ?>
+<div class="pagination-wrapper">
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a 
+            href="?page=<?= $i; ?>&tahun=<?= htmlspecialchars($tahun); ?>&search=<?= htmlspecialchars($search); ?>"
+            class="pagination-link <?= ($i == $page) ? 'active' : ''; ?>"
+        >
+            <?= $i; ?>
+        </a>
+    <?php endfor; ?>
+</div>
+<?php endif; ?>
 
-<!-- ================= FOOTER SECTION ================= -->
 <footer class="footer">
-
     <div class="footer-content">
-
-        <!-- Logo + Deskripsi -->
         <div class="footer-col">
             <div class="footer-logos">
                 <img src="../img/IVSS.png" class="footer-logo">
@@ -134,7 +206,6 @@ $rows = $result ? $result->fetchAll() : [];
             </p>
         </div>
 
-        <!-- Quick Links -->
         <div class="footer-col">
             <h3>Quick Links</h3>
             <a href="about.php">About</a>
@@ -143,7 +214,6 @@ $rows = $result ? $result->fetchAll() : [];
             <a href="news.php">News</a>
         </div>
 
-        <!-- Contact -->
         <div class="footer-col">
             <h3>Contact</h3>
             <p>Email: ivss@polinema.ac.id</p>
@@ -151,29 +221,25 @@ $rows = $result ? $result->fetchAll() : [];
             <p>Jl. Soekarno-Hatta No. 9, Malang</p>
         </div>
 
-        <!-- Follow Us -->
         <div class="footer-col">
             <h3>Follow Us</h3>
             <div class="social-icons">
-                <a href="https://www.tiktok.com/@polinema_campus?_r=1&_t=ZS-91qpSTjlNpJ" target="_blank" class="social-icon"><img src="../icon/tiktok.svg" alt="TikTok"></a>
-                <a href="https://www.instagram.com/jtipolinema?igsh=YTFpdGtrdXdqeTZ4" target="_blank" class="social-icon"><img src="../icon/instagram.svg" alt="Instagram"></a>
-                <a href="https://youtube.com/@politekniknegerimalangofficial?si=SyxJ1hhDib9aLjzx" target="_blank" class="social-icon"><img src="../icon/youtube.svg" alt="YouTube"></a>
+                <a href="#" class="social-icon"><img src="../icon/tiktok.svg"></a>
+                <a href="#" class="social-icon"><img src="../icon/instagram.svg"></a>
+                <a href="#" class="social-icon"><img src="../icon/youtube.svg"></a>
             </div>
-            <h3 class="operating-hours-title">Jam Operasional</h3>
-            <p>07.00 - 15.00</p>
         </div>
     </div>
 
-    <div class="footer-bottom">
-        © 2025 IVSS Laboratory - All Rights Reserved.
-    </div>
-
+    <div class="footer-bottom">© 2025 IVSS Laboratory - All Rights Reserved.</div>
 </footer>
 
-<script src="../JS/news.js"></script>
 
+
+<script src="../JS/news.js"></script>
 </body>
 </html>
+
 <style>
 * {
     margin: 0;
@@ -246,6 +312,86 @@ body {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
 }
+/* ===== SEARCH STYLE ===== */
+.search-wrapper {
+    margin: 40px 140px 0;
+    margin-left: 50px;
+}
+
+.search-form {
+    display: flex;
+    max-width: 1500px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.search-form input {
+    flex: 1;
+    padding: 14px 16px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+}
+
+.search-form button {
+    padding: 0 26px;
+    background: #FF9D00;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.search-form button:hover {
+    background: #0A192F;
+}
+
+@media (max-width: 768px) {
+    .search-wrapper {
+        margin: 30px 20px 0;
+    }
+
+    .search-form {
+        max-width: 100%;
+    }
+}
+
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    margin-top: 100px;
+    margin-left: 60px;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #1d4c8b;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .active {
+    font-weight: 600;
+    color: #022e6e;
+}
+
+.breadcrumb .dot {
+    width: 7px;
+    height: 7px;
+    background: #c4c4c4;
+    border-radius: 50%;
+    display: inline-block;
+}
 
 /* =============== NEWS SECTION =============== */
 .news-section {
@@ -271,7 +417,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    margin-top: 100px;
+    margin-top: 20px;
 }
 
 .news-card:hover {
@@ -398,7 +544,7 @@ body {
     margin: 40px 0 80px;
 }
 
-.load-more-btn {
+#loadMoreBtn {
     padding: 14px 40px;
     background-color: #FF9D00;
     color: #FFFFFF;
@@ -409,17 +555,15 @@ body {
     font-weight: 600;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(255, 157, 0, 0.3);
-    text-decoration: none;
-    margin-top: 100px;
 }
 
-.load-more-btn:hover {
+#loadMoreBtn:hover {
     background-color: #0A192F;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(10, 25, 47, 0.4);
 }
 
-.load-more-btn:active {
+#loadMoreBtn:active {
     transform: translateY(0);
 }
 
@@ -495,12 +639,42 @@ body {
         font-size: 0.95rem;
     }
 }
+
+
+/* ===== PAGINATION ===== */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 40px 0 60px;
+}
+
+.pagination-link {
+    padding: 10px 16px;
+    border-radius: 6px;
+    background: #f2f2f2;
+    color: #0A192F;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+.pagination-link:hover {
+    background: #FF9D00;
+    color: #fff;
+}
+
+.pagination-link.active {
+    background: #0A192F;
+    color: #fff;
+}
 /* === FOOTER === */
 .footer {
         width: 100%;
         background: #0A192F;
         color: white;
         padding: 60px 80px 30px;
+        margin-top: 20px;
     }
 
     /* GRID 3 KOLOM SIMETRIS */
@@ -591,5 +765,6 @@ body {
     .footer-col .operating-hours-title {
         margin-top: 25px;
     }
+
 
 </style>

@@ -73,85 +73,57 @@ $alumniMembers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 </div>
 
+<!-- DOSEN -->
 <section class="members-section">
     <h2 class="members-title">Laboratorium Members</h2>    
-  <div class="members-container">
-    <?php if (count($dosenList) > 0): ?>
-        <?php foreach ($dosenList as $dosen): ?>
-            <a class="member-card" href="../modul/profil_dosen.php?id=<?= urlencode($dosen['id']) ?>">
-                
-                <img 
-                    src="../../admin-lab/assets/img/logo/<?php echo htmlspecialchars($dosen['dosen_profile'] ?? 'default.jpg'); ?>" 
-                    alt="Foto <?= htmlspecialchars($dosen['id']) ?>"
-                >
-
-                <h3><?= htmlspecialchars($dosen['nama']) ?></h3>
-                <h4><?= htmlspecialchars($dosen['role_lab'] ?? '') ?></h4>
-
-            </a>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p style="text-align:center;">Belum ada data dosen</p>
-    <?php endif; ?>
-</div>
-</section>
-
-<section class="active-members-section members-section">
-    <h2 class="members-title">Active Members</h2>
-
-    <div class="members-container active-members-container">
-
-        <?php if (empty($activeMembers)): ?>
-            <p class="text-muted">Belum ada active member.</p>
-        <?php else: ?>
-
-            <?php foreach ($activeMembers as $member): ?>
-                <a class="member-card active-member-card" href="../modul/mhs-profile.php?id=<?= urlencode($member['id']) ?>">
-
-                    <img
-                        src="../../admin-lab/assets/img/mahasiswa/<?= htmlspecialchars($member['mahasiswa_profile'] ?? 'default.png') ?>"
-                        alt="Foto <?= htmlspecialchars($member['nama']) ?>">
-
-                    <h3><?= htmlspecialchars($member['nama']) ?></h3>
-                    <p><?= htmlspecialchars($member['prodi']) ?></p>
-
-                </div>
+    <div class="members-container">
+        <?php if ($dosenList): ?>
+            <?php foreach ($dosenList as $dosen): ?>
+                <a class="member-card" href="../modul/profil_dosen.php?id=<?= urlencode($dosen['id']) ?>">
+                    <img src="../../admin-lab/assets/img/logo/<?= htmlspecialchars($dosen['dosen_profile'] ?? 'default.jpg'); ?>" alt="Foto <?= htmlspecialchars($dosen['id']) ?>">
+                    <h3><?= htmlspecialchars($dosen['nama']) ?></h3>
+                    <h4><?= htmlspecialchars($dosen['role_lab'] ?? '') ?></h4>
+                </a>
             <?php endforeach; ?>
-
+        <?php else: ?>
+            <p style="text-align:center;">Belum ada data dosen</p>
         <?php endif; ?>
-
     </div>
 </section>
 
+<!-- ACTIVE MEMBERS -->
+<section class="active-members-section members-section">
+    <h2 class="members-title">Active Members</h2>
+    <div class="members-container active-members-container">
+        <?php if ($activeMembers): ?>
+            <?php foreach ($activeMembers as $member): ?>
+                <a class="member-card active-member-card" href="../modul/mhs-profile.php?id=<?= urlencode($member['id']) ?>">
+                    <img src="../../admin-lab/assets/img/mahasiswa/<?= htmlspecialchars($member['mahasiswa_profile'] ?? 'default.png') ?>" alt="Foto <?= htmlspecialchars($member['nama']) ?>">
+                    <h3><?= htmlspecialchars($member['nama']) ?></h3>
+                    <p><?= htmlspecialchars($member['prodi']) ?></p>
+                </a>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p class="empty-state">Belum ada active member.</p>
+        <?php endif; ?>
+    </div>
+</section>
 
-<!--ALUMNI -->
+<!-- ALUMNI -->
 <section class="alumni-section members-section">
     <h2 class="members-title">Alumni Laboratorium</h2>
-
     <div class="members-container alumni-container">
-
-        <?php if (empty($alumniMembers)): ?>
-            <p class="empty-state">Belum ada data alumni.</p>
-        <?php else: ?>
-
+        <?php if ($alumniMembers): ?>
             <?php foreach ($alumniMembers as $alumni): ?>
                 <div class="member-card alumni-card">
-
-                    <img
-                        src="../../admin-lab/assets/img/mahasiswa/<?= htmlspecialchars($alumni['mahasiswa_profile'] ?? 'default.png') ?>"
-                        alt="Foto <?= htmlspecialchars($alumni['nama']) ?>">
-
+                    <img src="../../admin-lab/assets/img/mahasiswa/<?= htmlspecialchars($alumni['mahasiswa_profile'] ?? 'default.png') ?>" alt="Foto <?= htmlspecialchars($alumni['nama']) ?>">
                     <h3><?= htmlspecialchars($alumni['nama']) ?></h3>
-                    <p>
-                        <?= htmlspecialchars($alumni['prodi']) ?><br>
-                        <small>Lulus <?= htmlspecialchars($alumni['tahun_lulus']) ?></small>
-                    </p>
-
+                    <p><?= htmlspecialchars($alumni['prodi']) ?><br><small>Lulus <?= htmlspecialchars($alumni['tahun_lulus']) ?></small></p>
                 </div>
             <?php endforeach; ?>
-
+        <?php else: ?>
+            <p class="empty-state">Belum ada data alumni.</p>
         <?php endif; ?>
-
     </div>
 
     <div class="load-more-wrapper">
