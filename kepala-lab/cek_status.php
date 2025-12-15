@@ -355,10 +355,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <?php endif; ?>
 
-            <!-- Back Button -->
-            <a href="#" class="btn-back">
-                <i class="fas fa-home me-2"></i>Login
-            </a>
             <a href="index.php" class="btn-back">
                 <i class="fas fa-home me-2"></i>Kembali ke Beranda
             </a>
