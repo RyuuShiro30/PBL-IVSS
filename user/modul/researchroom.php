@@ -91,7 +91,7 @@ $totalPages = ceil($totalData / $limit);
 <div class="hero">
     <img src="../img/about.jpg" alt="gambar gedung lab">
     <div class="header-text">
-        <h1>Research</h1>
+        <h1>Researchroom</h1>
     </div>
     <div class="custom-shape-divider-bottom-1764076735">
         <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -102,9 +102,9 @@ $totalPages = ceil($totalData / $limit);
 <div class="breadcrumb">
     <a href="index.php">Home</a>
     <span class="dot"></span>
-    <a class="active" href="news.php">News</a>
+    <a class="active" href="news.php">Research</a>
     <span class="dot"></span>
-    <a href="#">Newsroom</a>
+    <a href="#">Researchroom</a>
 </div>
 
 
