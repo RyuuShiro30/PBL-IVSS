@@ -144,7 +144,7 @@ $admin_foto = $_SESSION['foto'] ?? 'default-avatar.png';
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle p-0" href="#" id="userDropdown" role="button"
+            <a class="nav-link " href="#" id="userDropdown" role="button"
                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="user-info-wrapper">
                     <div class="user-text-info d-none d-lg-flex">
@@ -152,19 +152,18 @@ $admin_foto = $_SESSION['foto'] ?? 'default-avatar.png';
                             <?php echo htmlspecialchars($admin_name); ?>
                         </span>
                         <span class="user-role">
-                            <?php echo htmlspecialchars($_SESSION['role']);?>
+                            Administrator
                         </span>
                     </div>
-                    <img class="img-profile rounded-circle" 
-                         src="../assets/img/<?php echo htmlspecialchars($admin_foto); ?>"
-                         onerror="this.src='../assets/img/default-avatar.png'"
-                         alt="Profile">
+                    <img class="img-profile rounded-circle"
+                        src="../assets/img/<?php echo htmlspecialchars($admin_foto); ?>"
+                        onerror="this.src='../assets/img/default-avatar.png'"
+                        alt="Profile">
                 </div>
             </a>
             
             <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow-lg animated--grow-in"
-                aria-labelledby="userDropdown">
+            <div class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="profile.php">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-primary"></i>
                     Profil Saya
