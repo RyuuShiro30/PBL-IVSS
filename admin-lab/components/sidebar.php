@@ -61,7 +61,6 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     font-weight: 700;
     color: #ffffff;
     letter-spacing: 0.5px;
-    text-decoration: none;
 }
 
 /* Sidebar divider */
@@ -97,14 +96,14 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
 }
 
 .sidebar .nav-item .nav-link:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #ff900d;
+    background: rgba(255, 255, 255, 1);
+    color: #000000ff;
     transform: translateX(3px);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar .nav-item.active .nav-link {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 1);
     color: #000000ff;
     font-weight: 600;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
@@ -136,8 +135,8 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
 }
 
 .sidebar-footer .nav-link:hover {
-    background: rgba(255, 255, 255, 0.15);
-    color: #ff900d;
+    background: rgba(255, 255, 255, 1);
+    color: #000000ff;
     transform: translateX(3px);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
@@ -301,7 +300,6 @@ $is_superadmin = ($_SESSION['role'] ?? '') === 'superadmin';
     .sidebar.toggled .nav-item .nav-link span {
         display: none;
     }
-    
     
     .sidebar.toggled .nav-item .nav-link {
         text-align: center;
