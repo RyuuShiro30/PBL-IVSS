@@ -36,6 +36,37 @@ $stmt = $pdo->prepare("
 $stmt->execute([$id]);
 $riset = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// ================= PAGINATION =================
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$limit = 3;
+$offset = ($page - 1) * $limit;
+
+// Total riset
+$stmtCount = $pdo->prepare("
+    SELECT COUNT(*) as total 
+    FROM riset r
+    JOIN riset_mahasiswa rm ON r.id = rm.id_riset
+    WHERE rm.id_mahasiswa = :id_mahasiswa
+");
+$stmtCount->execute([':id_mahasiswa' => $mahasiswa['id']]);
+$totalRiset = $stmtCount->fetchColumn();
+$totalPages = ceil($totalRiset / $limit);
+
+// Ambil riset untuk page saat ini
+$stmt = $pdo->prepare("
+    SELECT r.judul, r.link_riset, r.tahun 
+    FROM riset r
+    JOIN riset_mahasiswa rm ON r.id = rm.id_riset
+    WHERE rm.id_mahasiswa = :id_mahasiswa
+    ORDER BY r.tahun DESC
+    LIMIT :limit OFFSET :offset
+");
+$stmt->bindValue(':id_mahasiswa', $mahasiswa['id'], PDO::PARAM_INT);
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$riset = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 // ================= DOSEN PEMBIMBING =================
 $stmt = $pdo->prepare("
     SELECT nama, prodi_dosen, email 
@@ -188,7 +219,7 @@ body {
 }
 
 .tab-button.active {
-    background: #FF9D00;
+    background: #0A192F;
     color: white;
 }
 
@@ -207,6 +238,28 @@ body {
     border-radius: 10px;
     margin-bottom: 12px;
     border-left: 5px solid #0d6efd;
+}
+
+/* ================= PAGINATION ================= */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 2px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    background: #FF9D00;
+    color: #ffffff;
+    transition: 0.2s ease;
+}
+
+.page-link:hover {
+    background: #0A192F;
 }
 
 /* FOOTER */
@@ -354,20 +407,35 @@ body {
     </div>
 
     <!-- TAB RISET -->
-    <div class="tabs-container">
-        <div class="tabs">
-            <button class="tab-button active" onclick="openTab('riset')">Riset</button>
-        </div>
-        <div class="tab-content active" id="riset">
-            <?php if($riset): foreach($riset as $r): ?>
-                <div class="list-card">
-                    <?= htmlspecialchars($r['judul']) ?> — 
-                    <a href="<?= $r['link_riset'] ?>" target="_blank">Link Riset</a>
-                    (<?= $r['tahun'] ?>)
-                </div>
-            <?php endforeach; else: ?>
-                <div class="list-card">Belum ada riset</div>
-            <?php endif; ?>
+<div class="tabs-container">
+    <div class="tabs">
+        <button class="tab-button active">Riset</button>
+    </div>
+
+    <div class="tab-content active" id="riset">
+        <?php if($riset): foreach($riset as $r): ?>
+            <div class="list-card">
+                <?= htmlspecialchars($r['judul']) ?> —
+                <a href="<?= $r['link_riset'] ?>" target="_blank">Link Riset</a>
+                (<?= $r['tahun'] ?>)
+            </div>
+        <?php endforeach; else: ?>
+            <div class="list-card">Belum ada riset</div>
+        <?php endif; ?>
+
+        <!-- ✅ PAGINATION MASUK KE SINI -->
+        <?php if ($totalPages > 1): ?>
+            <div class="pagination">
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <a
+                        href="?id=<?= $mahasiswa['id'] ?>&page=<?= $i ?>"
+                        class="page-link <?= ($i == $page) ? 'active' : '' ?>"
+                    >
+                        <?= $i ?>
+                    </a>
+                <?php endfor; ?>
+            </div>
+        <?php endif; ?>
         </div>
     </div>
 </div>
