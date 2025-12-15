@@ -21,8 +21,24 @@ if (!$dosen) {
     die('Dosen tidak ditemukan');
 }
 
+// ================= PAGINATION PUBLIKASI =================
+$limitPublikasi = 3;
+$pagePublikasi  = isset($_GET['page_publikasi']) ? max(1, (int)$_GET['page_publikasi']) : 1;
+$offsetPublikasi = ($pagePublikasi - 1) * $limitPublikasi;
+
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM publikasi_dosen WHERE id_dosen = ?");
+$stmt->execute([$id]);
+$totalPublikasi = (int)$stmt->fetchColumn();
+
+$totalPagePublikasi = ceil($totalPublikasi / $limitPublikasi);
+
 // ================= PUBLIKASI =================
-$stmt = $pdo->prepare("SELECT * FROM publikasi_dosen WHERE id_dosen = ? ORDER BY tahun_publikasi DESC");
+$stmt = $pdo->prepare("
+    SELECT * FROM publikasi_dosen
+    WHERE id_dosen = ?
+    ORDER BY tahun_publikasi DESC
+    LIMIT $limitPublikasi OFFSET $offsetPublikasi
+");
 $stmt->execute([$id]);
 $publikasi = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -121,6 +137,28 @@ body {
 .instansi {
     font-size: 15px;
     color: #595959;
+}
+
+/* ================= PAGINATION ================= */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 2px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    background: #FF9D00;
+    color: #ffffff;
+    transition: 0.2s ease;
+}
+
+.page-link:hover {
+    background: #0A192F;
 }
 
 /* GRID IDENTITAS + PROFIL */
@@ -397,7 +435,21 @@ body {
             <?php endforeach; else: ?>
                 <div class="list-card">Belum ada publikasi</div>
             <?php endif; ?>
+                <!-- PAGINATION -->    
+            <?php if ($totalPagePublikasi > 1): ?>
+                <div class="pagination">
+                    <?php for ($i = 1; $i <= $totalPagePublikasi; $i++): ?>
+                        <a
+                            href="?id=<?= $id ?>&page_publikasi=<?= $i ?>"
+                            class="page-link <?= ($i == $pagePublikasi) ? 'active' : '' ?>"
+                        >
+                            <?= $i ?>
+                        </a>
+                    <?php endfor; ?>
+                </div>
+            <?php endif; ?>
         </div>
+
 
         <!-- BIMBINGAN -->
         <div class="tab-content" id="bimbingan">
@@ -433,10 +485,10 @@ body {
                 <div class="list-card">Belum ada sertifikasi</div>
             <?php endif; ?>
         </div>
-
     </div>
 
 </div>
+
 <!-- ================= FOOTER SECTION ================= -->
 <footer class="footer">
 

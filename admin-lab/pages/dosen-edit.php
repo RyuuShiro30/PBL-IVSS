@@ -221,6 +221,12 @@ unset($_SESSION['error']);
                                                     <input type="number" class="form-control" name="tahun_lulus[]" required
                                                         value="<?= htmlspecialchars($p['tahun_lulus']) ?>">
                                                 </div>
+                                                <div class="col-md-2 d-flex align-items-end">
+                                                    <button type="button"
+                                                            class="btn btn-danger remove-pendidikan w-100">
+                                                        Hapus
+                                                    </button>
+                                                </div>
 
                                             </div>
                                             <?php endforeach; ?>
@@ -234,42 +240,42 @@ unset($_SESSION['error']);
                                             <i class="fas fa-certificate me-2"></i>Sertifikasi Dosen
                                         </h5>
 
-<div id="sertifikasiContainer">
-    <?php foreach ($sertifikat_list as $s): ?>
-    <div class="row g-2 mb-2 p-2 border rounded sertifikat-item">
+                                        <div id="sertifikasiContainer">
+                                            <?php foreach ($sertifikat_list as $s): ?>
+                                            <div class="row g-2 mb-2 p-2 border rounded sertifikat-item">
 
-        <div class="col-md-4">
-            <label class="form-label">Nama Sertifikasi</label>
-            <input type="text" class="form-control"
-                   name="nama_sertifikat[]"
-                   value="<?= htmlspecialchars($s['nama_sertifikat']) ?>">
-        </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label">Nama Sertifikasi</label>
+                                                    <input type="text" class="form-control"
+                                                        name="nama_sertifikat[]"
+                                                        value="<?= htmlspecialchars($s['nama_sertifikat']) ?>">
+                                                </div>
 
-        <div class="col-md-3">
-            <label class="form-label">Tahun Perolehan</label>
-            <input type="number" class="form-control"
-                   name="tahun[]"
-                   value="<?= htmlspecialchars($s['tahun']) ?>">
-        </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Tahun Perolehan</label>
+                                                    <input type="number" class="form-control"
+                                                        name="tahun[]"
+                                                        value="<?= htmlspecialchars($s['tahun']) ?>">
+                                                </div>
 
-        <div class="col-md-3">
-            <label class="form-label">Penerbit</label>
-            <input type="text" class="form-control"
-                   name="penyelenggara[]"
-                   value="<?= htmlspecialchars($s['penyelenggara']) ?>">
-        </div>
+                                                <div class="col-md-3">
+                                                    <label class="form-label">Penerbit</label>
+                                                    <input type="text" class="form-control"
+                                                        name="penyelenggara[]"
+                                                        value="<?= htmlspecialchars($s['penyelenggara']) ?>">
+                                                </div>
 
-        <!-- SLOT TOMBOL (WAJIB ADA BIAR LURUS) -->
-        <div class="col-md-2 d-flex align-items-end">
-            <button type="button"
-                    class="btn btn-danger remove-sertifikat w-100">
-                Hapus
-            </button>
-        </div>
+                                                <!-- SLOT TOMBOL (WAJIB ADA BIAR LURUS) -->
+                                                <div class="col-md-2 d-flex align-items-end">
+                                                    <button type="button"
+                                                            class="btn btn-danger remove-sertifikat w-100">
+                                                        Hapus
+                                                    </button>
+                                                </div>
 
-    </div>
-    <?php endforeach; ?>
-</div>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
 
                                         <button type="button" class="btn btn-success btn-sm mb-4" id="addSertifikasi">
                                             <i class="fas fa-plus me-2"></i>Tambah Sertifikasi
