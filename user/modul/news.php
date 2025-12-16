@@ -88,8 +88,6 @@ $rows = $result ? $result->fetchAll() : [];
                         </div>
 
                         <p class="card-meta">
-                            <span class="author">oleh <?= htmlspecialchars($row['author_name'] ?? 'Admin'); ?></span>
-                            <span class="separator">•</span>
                             <span class="category">ARTIKEL, BERITA</span>
                         </p>
 
