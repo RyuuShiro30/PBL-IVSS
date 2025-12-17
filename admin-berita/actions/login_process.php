@@ -1,8 +1,5 @@
 <?php
-/**
- * Proses Login Admin
- * File: actions/login_process.php
- */
+
 
 session_start();
 require_once '../config/database.php';

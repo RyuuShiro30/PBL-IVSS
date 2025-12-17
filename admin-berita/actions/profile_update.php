@@ -1,8 +1,5 @@
 <?php
-/**
- * Proses Update Profil
- * File: actions/profile_update.php
- */
+
 
 session_start();
 require_once '../config/database.php';

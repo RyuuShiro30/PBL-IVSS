@@ -350,6 +350,162 @@ body {
 .operating-hours-title {
     margin-top: 25px;
 }
+/* ================= RESPONSIVE ================= */
+
+/* TABLET (≤ 992px) */
+@media (max-width: 1024px) {
+
+    .container {
+        width: 94%;
+        padding-top: 90px;
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .header-card {
+        padding: 32px 26px;
+    }
+
+    .nama {
+        font-size: 26px;
+    }
+
+    .photo {
+        width: 130px;
+        height: 130px;
+    }
+
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+}
+
+/* MOBILE (≤ 768px) */
+@media (max-width: 768px) {
+
+    /* NAVBAR */
+    .navbar {
+        flex-direction: column;
+        padding: 14px 20px;
+        gap: 12px;
+    }
+
+    .menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 14px;
+    }
+
+    /* CONTAINER */
+    .container {
+        width: 95%;
+        padding-top: 120px;
+        gap: 28px;
+    }
+
+    /* HEADER CARD */
+    .header-card {
+        padding: 28px 22px;
+    }
+
+    .photo {
+        width: 115px;
+        height: 115px;
+    }
+
+    .nama {
+        font-size: 22px;
+    }
+
+    .instansi {
+        font-size: 14px;
+    }
+
+    /* CARD */
+    .card {
+        padding: 22px 20px;
+    }
+
+    .judul-card {
+        font-size: 18px;
+    }
+
+    .data-grid p {
+        font-size: 14px;
+    }
+
+    /* TAB */
+    .tab-button {
+        font-size: 15px;
+        padding: 12px;
+    }
+
+    .tab-content {
+        padding: 20px;
+    }
+
+    .list-card {
+        font-size: 14px;
+    }
+
+    /* PAGINATION */
+    .page-link {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+
+    /* FOOTER */
+    .footer {
+        padding: 50px 30px 25px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 35px;
+        text-align: center;
+    }
+
+    .footer-logos {
+        justify-content: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+}
+
+/* SMALL MOBILE (≤ 480px) */
+@media (max-width: 480px) {
+
+    .photo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .nama {
+        font-size: 20px;
+    }
+
+    .instansi {
+        font-size: 13px;
+    }
+
+    .judul-card {
+        font-size: 17px;
+    }
+
+    .page-link {
+        margin: 3px 2px;
+        padding: 5px 9px;
+        font-size: 13px;
+    }
+}
+
 </style>
 
 </head>
@@ -474,9 +630,9 @@ body {
         <div class="footer-col">
             <h3>Follow Us</h3>
             <div class="social-icons">
-                <a href="#" class="social-icon"><img src="../icon/tiktok.svg"></a>
-                <a href="#" class="social-icon"><img src="../icon/instagram.svg"></a>
-                <a href="#" class="social-icon"><img src="../icon/youtube.svg"></a>
+                <a href="https://www.tiktok.com/@polinema_campus?_r=1&_t=ZS-91qpSTjlNpJ" target="_blank" class="social-icon"><img src="../icon/tiktok.svg" alt="TikTok"></a>
+                <a href="https://www.instagram.com/jtipolinema?igsh=YTFpdGtrdXdqeTZ4" target="_blank" class="social-icon"><img src="../icon/instagram.svg" alt="Instagram"></a>
+                <a href="https://youtube.com/@politekniknegerimalangofficial?si=SyxJ1hhDib9aLjzx" target="_blank" class="social-icon"><img src="../icon/youtube.svg" alt="YouTube"></a>
             </div>
             <h3 class="operating-hours-title">Jam Operasional</h3>
             <p>07.00 - 15.00</p>

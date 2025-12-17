@@ -557,5 +557,92 @@ body {
     .footer-col .operating-hours-title {
         margin-top: 25px;
     }
+/* ================= RESPONSIVE GLOBAL ================= */
 
+/* ===== TABLET ===== */
+@media (max-width: 1024px) {
+
+    /* FOOTER */
+    .footer {
+        padding: 50px 40px 25px;
+    }
+
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+
+    .footer-col:first-child {
+        max-width: 100%;
+    }
+
+    /* GRID CONTENT (FACILITY / MEMBERS) */
+    .facilities-container,
+    .members-container,
+    .active-members-container,
+    .alumni-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+    /* FOOTER */
+    .footer {
+        padding: 40px 25px 20px;
+        text-align: center;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    .footer-logos {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .footer-col p,
+    .footer-col a {
+        font-size: 14px;
+    }
+
+    /* GRID CONTENT */
+    .facilities-container,
+    .members-container,
+    .active-members-container,
+    .alumni-container {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    /* MEMBER / FACILITY CARD */
+    .member-card,
+    .facility-card {
+        margin: auto;
+    }
+}
+
+/* ===== SMALL MOBILE ===== */
+@media (max-width: 480px) {
+
+    .footer-col h3 {
+        font-size: 16px;
+    }
+
+    .footer-bottom {
+        font-size: 13px;
+    }
+
+    .members-title {
+        font-size: 1.8rem;
+    }
+}
 </style>

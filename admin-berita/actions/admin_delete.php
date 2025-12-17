@@ -1,8 +1,4 @@
 <?php
-/**
- * Proses Hapus Admin (Khusus Super Admin)
- * File: actions/admin_delete.php
- */
 
 session_start();
 require_once '../config/database.php';

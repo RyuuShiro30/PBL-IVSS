@@ -1,8 +1,5 @@
 <?php
-/**
- * Proses Edit Berita
- * File: actions/berita_edit_process.php
- */
+
 
 session_start();
 require_once '../config/database.php';

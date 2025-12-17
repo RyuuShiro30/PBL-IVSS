@@ -1,8 +1,5 @@
 <?php
-/**
- * Proses Hapus Berita
- * File: actions/berita_delete.php
- */
+
 
 session_start();
 require_once '../config/database.php';

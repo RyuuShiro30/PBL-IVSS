@@ -1,8 +1,5 @@
 <?php
-/**
- * Proses Tambah Admin (Khusus Super Admin)
- * File: actions/admin_add_process.php
- */
+
 
 session_start();
 require_once '../config/database.php';

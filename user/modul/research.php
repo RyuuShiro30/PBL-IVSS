@@ -511,4 +511,110 @@ body {
     .footer-col .operating-hours-title {
         margin-top: 25px;
     }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .hero {
+        height: 55vh;
+    }
+
+    .header-text {
+        left: 24px;
+        bottom: 110px;
+        margin-left: 0;
+    }
+
+    .header-text h1 {
+        font-size: 2.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        height: 45vh;
+    }
+
+    .header-text {
+        left: 16px;
+        bottom: 90px;
+    }
+
+    .header-text h1 {
+        font-size: 2.1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .research-results {
+        padding: 60px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .research-results {
+        padding: 40px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .result-card {
+        padding: 22px 20px;
+    }
+
+    .result-card h3 {
+        font-size: 18px;
+    }
+
+    .result-card p {
+        font-size: 15px;
+    }
+
+    .link-selengkapnya {
+        width: 100%;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .load-more-btn {
+        width: 100%;
+        max-width: 320px;
+        padding: 14px;
+        margin-top: 40px;
+    }
+}
+
+/* ===== FOOTER RESPONSIVE ===== */
+@media (max-width: 1024px) {
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer {
+        padding: 40px 24px 20px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .footer-col:first-child {
+        max-width: 100%;
+    }
+
+    .footer-logos {
+        justify-content: flex-start;
+    }
+
+    .social-icons {
+        justify-content: flex-start;
+    }
+}
+
 </style>

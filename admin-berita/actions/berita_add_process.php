@@ -1,8 +1,4 @@
 <?php
-/**
- * Proses Tambah Berita
- * File: actions/berita_add_process.php
- */
 
 session_start();
 require_once '../config/database.php';

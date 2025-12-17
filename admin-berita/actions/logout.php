@@ -1,8 +1,5 @@
 <?php
-/**
- * Proses Logout Admin
- * File: actions/logout.php
- */
+
 
 session_start();
 require_once '../config/database.php';

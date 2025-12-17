@@ -1,8 +1,5 @@
 <?php
-/**
- * Proses Edit Admin (Khusus Super Admin)
- * File: actions/admin_edit_process.php
- */
+
 
 session_start();
 require_once '../config/database.php';
