@@ -1,7 +1,3 @@
-/**
- * Admin Panel JavaScript
- * File: assets/js/admin.js
- */
 
 // ===== SIDEBAR TOGGLE FUNCTIONALITY (Vanilla JS) =====
 

@@ -756,6 +756,183 @@ $galeri = $stmtGaleri->fetchAll(PDO::FETCH_ASSOC);
         margin-top: 25px;
     }
 
+/* ================= RESPONSIVE ================= */
+
+/* ===== TABLET ===== */
+@media (max-width: 1024px) {
+
+    .header-text {
+        left: 20px;
+        bottom: 120px;
+        margin-left: 0;
+    }
+
+    .header-text h1 {
+        font-size: 3em;
+    }
+
+    .profil {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profil-img {
+        width: 380px;
+    }
+
+    .riset-container {
+        gap: 20px;
+    }
+
+    .facilities-container {
+        grid-template-columns: repeat(2, 300px);
+        gap: 60px;
+    }
+
+    .find-more-btn {
+        position: static;
+        transform: none;
+        margin-left: auto;
+    }
+
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+    /* NAVBAR */
+    .navbar {
+        flex-direction: column;
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .menu {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    /* HERO */
+    .hero {
+        height: 50vh;
+    }
+
+    .header-text h1 {
+        font-size: 2.4em;
+    }
+
+    /* PROFIL */
+    .profil-lab {
+        padding: 60px 20px;
+    }
+
+    .profil-img {
+        width: 280px;
+    }
+
+    .profil-text h1 {
+        font-size: 28px;
+    }
+
+    .profil-text p {
+        font-size: 15px;
+    }
+
+    /* VISI */
+    .visi-banner h1 {
+        font-size: 34px;
+    }
+
+    .visi-banner p {
+        font-size: 16px;
+    }
+
+    /* MISI */
+    .misi-title {
+        font-size: 30px;
+    }
+
+    .misi-card {
+        padding: 25px;
+    }
+
+    /* FOKUS RISET */
+    .riset-card {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    /* GALERI */
+    .gallery-item {
+        flex: 0 0 100%;
+    }
+
+    .gallery-item img {
+        height: 220px;
+    }
+
+    /* FACILITIES */
+    .facilities-header-wrapper {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .facilities-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .facility-card,
+    .facility-icon {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    /* FOOTER */
+    .footer {
+        padding: 50px 30px 25px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-logos {
+        justify-content: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+}
+
+/* ===== SMALL MOBILE ===== */
+@media (max-width: 480px) {
+
+    .header-text h1 {
+        font-size: 2em;
+    }
+
+    .visi-banner h1 {
+        font-size: 28px;
+    }
+
+    .facilities-title {
+        font-size: 26px;
+    }
+
+    .footer-col p,
+    .footer-col a {
+        font-size: 14px;
+    }
+}
 
 </style>
 

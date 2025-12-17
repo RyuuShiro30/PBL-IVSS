@@ -224,9 +224,9 @@ $totalPages = ceil($totalData / $limit);
         <div class="footer-col">
             <h3>Follow Us</h3>
             <div class="social-icons">
-                <a href="#" class="social-icon"><img src="../icon/tiktok.svg"></a>
-                <a href="#" class="social-icon"><img src="../icon/instagram.svg"></a>
-                <a href="#" class="social-icon"><img src="../icon/youtube.svg"></a>
+                <a href="https://www.tiktok.com/@polinema_campus?_r=1&_t=ZS-91qpSTjlNpJ" target="_blank" class="social-icon"><img src="../icon/tiktok.svg" alt="TikTok"></a>
+                <a href="https://www.instagram.com/jtipolinema?igsh=YTFpdGtrdXdqeTZ4" target="_blank" class="social-icon"><img src="../icon/instagram.svg" alt="Instagram"></a>
+                <a href="https://youtube.com/@politekniknegerimalangofficial?si=SyxJ1hhDib9aLjzx" target="_blank" class="social-icon"><img src="../icon/youtube.svg" alt="YouTube"></a>
             </div>
         </div>
     </div>
@@ -765,6 +765,163 @@ body {
     .footer-col .operating-hours-title {
         margin-top: 25px;
     }
+/* ================= GLOBAL MOBILE FIX ================= */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+}
 
+/* ================= HERO FIX ================= */
+@media (max-width: 768px) {
+    .hero {
+        height: 45vh;
+    }
+
+    .header-text {
+        left: 20px;
+        bottom: 90px;
+    }
+
+    .header-text h1 {
+        font-size: 2.3em;
+    }
+
+    .custom-shape-divider-bottom-1764076735 svg {
+        height: 260px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        height: 40vh;
+    }
+
+    .header-text {
+        left: 16px;
+        bottom: 75px;
+    }
+
+    .header-text h1 {
+        font-size: 1.9em;
+    }
+}
+
+/* ================= BREADCRUMB ================= */
+@media (max-width: 768px) {
+    .breadcrumb {
+        margin: 70px 16px 0;
+        flex-wrap: wrap;
+        font-size: 14px;
+        gap: 8px;
+    }
+
+    .breadcrumb a {
+        font-size: 14px;
+    }
+}
+
+/* ================= SEARCH BAR ================= */
+@media (max-width: 768px) {
+    .search-wrapper {
+        margin: 25px 16px 0;
+    }
+
+    .search-form {
+        flex-direction: row;
+        border-radius: 8px;
+    }
+
+    .search-form input {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+
+    .search-form button {
+        padding: 0 18px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-form input {
+        border-bottom: 1px solid #eee;
+    }
+
+    .search-form button {
+        width: 100%;
+        padding: 12px 0;
+    }
+}
+
+/* ================= NEWS CARD ================= */
+@media (max-width: 768px) {
+    .news-card {
+        margin-top: 0;
+    }
+
+    .card-image {
+        height: 190px;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-meta {
+        font-size: 0.8rem;
+    }
+}
+
+/* ================= PAGINATION ================= */
+@media (max-width: 768px) {
+    .pagination-wrapper {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 50px;
+    }
+
+    .pagination-link {
+        padding: 8px 12px;
+        font-size: 14px;
+        min-width: 38px;
+        text-align: center;
+    }
+}
+
+/* ================= FOOTER ================= */
+@media (max-width: 992px) {
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+}
+
+@media (max-width: 576px) {
+    .footer {
+        padding: 45px 24px 25px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-logos {
+        justify-content: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .footer-col:first-child {
+        max-width: 100%;
+    }
+}
 
 </style>

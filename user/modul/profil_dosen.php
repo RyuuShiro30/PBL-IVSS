@@ -349,6 +349,157 @@ body {
         margin-top: 25px;
     }
 
+/* ================= GLOBAL SAFETY ================= */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+}
+
+/* ================= CONTAINER ================= */
+@media (max-width: 992px) {
+    .container {
+        width: 94%;
+        padding-top: 90px;
+        gap: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding-top: 120px;
+        gap: 25px;
+    }
+}
+
+/* ================= HEADER CARD ================= */
+@media (max-width: 768px) {
+    .header-card {
+        padding: 28px 22px;
+    }
+
+    .photo {
+        width: 120px;
+        height: 120px;
+    }
+
+    .nama {
+        font-size: 22px;
+    }
+
+    .role_lab {
+        font-size: 14px;
+        color: #666;
+    }
+}
+
+@media (max-width: 480px) {
+    .photo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .nama {
+        font-size: 20px;
+    }
+}
+
+/* ================= GRID IDENTITAS ================= */
+@media (max-width: 992px) {
+    .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+}
+
+/* ================= CARD ================= */
+@media (max-width: 768px) {
+    .card {
+        padding: 22px 20px;
+    }
+
+    .judul-card {
+        font-size: 18px;
+    }
+
+    .data-grid p {
+        font-size: 14px;
+    }
+}
+
+/* ================= TAB ================= */
+@media (max-width: 768px) {
+    .tabs {
+        flex-wrap: wrap;
+    }
+
+    .tab-button {
+        flex: 1 1 50%;
+        font-size: 15px;
+        padding: 12px;
+    }
+
+    .tab-content {
+        padding: 20px;
+    }
+
+    .list-card {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tab-button {
+        flex: 1 1 100%;
+    }
+}
+
+/* ================= PAGINATION ================= */
+@media (max-width: 768px) {
+    .pagination {
+        margin-top: 16px;
+    }
+
+    .page-link {
+        padding: 6px 10px;
+        font-size: 14px;
+        margin: 3px 2px;
+    }
+}
+
+
+/* ================= FOOTER ================= */
+@media (max-width: 992px) {
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+}
+
+@media (max-width: 576px) {
+    .footer {
+        padding: 45px 24px 25px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-logos {
+        justify-content: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .footer-col:first-child {
+        max-width: 100%;
+    }
+}
+
 </style>
 
 </head>

@@ -469,4 +469,105 @@ body {
 .footer-col .operating-hours-title {
     margin-top: 25px;
 }
+
+/* RESPONSIVE */
+/*TABLET*/
+@media (max-width: 1024px) {
+
+    /* FACILITIES GRID */
+    .facilities-container {
+        grid-template-columns: repeat(2, 300px);
+        gap: 70px;
+    }
+
+    /* FOOTER */
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+
+    .footer {
+        padding: 50px 50px 25px;
+    }
+}
+
+/*MOBILE*/
+@media (max-width: 768px) {
+
+    /* HERO */
+    .hero {
+        height: 50vh;
+    }
+
+    .header-text {
+        left: 20px;
+        bottom: 100px;
+        margin-left: 0;
+    }
+
+    .header-text h1 {
+        font-size: 2.4em;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+        margin: 40px 20px;
+        flex-wrap: wrap;
+        font-size: 14px;
+    }
+
+    /* FACILITIES GRID */
+    .facilities-container {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+
+    .facility-card,
+    .facility-icon {
+        width: 100%;
+        max-width: 320px;
+        margin: auto;
+    }
+
+    /* FOOTER */
+    .footer {
+        padding: 45px 30px 20px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-col:first-child {
+        max-width: 100%;
+    }
+
+    .footer-logos {
+        justify-content: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+}
+
+/*SMALL MOBILE*/
+@media (max-width: 480px) {
+
+    .header-text h1 {
+        font-size: 2em;
+    }
+
+    .facility-box span {
+        font-size: 16px;
+    }
+
+    .footer-col p,
+    .footer-col a {
+        font-size: 14px;
+    }
+}
+
+
 </style>

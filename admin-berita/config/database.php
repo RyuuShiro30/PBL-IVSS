@@ -1,8 +1,5 @@
 <?php
-/**
- * Konfigurasi Database PostgreSQL
- * Menggunakan PDO untuk koneksi database yang aman
- */
+
 
 // Konfigurasi database
 define('DB_HOST', 'localhost');

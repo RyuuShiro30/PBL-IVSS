@@ -427,4 +427,154 @@ body {
 .footer-col .operating-hours-title {
     margin-top: 25px;
 }
+
+/* ================= RESPONSIVE ================= */
+
+/* ===== TABLET ===== */
+@media (max-width: 1024px) {
+
+    /* HERO */
+    .header-text {
+        left: 20px;
+        bottom: 120px;
+        margin-left: 0;
+    }
+
+    .header-text h1 {
+        font-size: 3em;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+        margin-left: 40px;
+        margin-top: 80px;
+        flex-wrap: wrap;
+    }
+
+    /* FACILITY DETAIL */
+    .facility-content {
+        gap: 40px;
+    }
+
+    .facility-image img {
+        margin-left: 0;
+        width: 320px;
+        height: 220px;
+    }
+
+    .facility-info h3,
+    .facility-info p {
+        margin-left: 0;
+    }
+
+    /* FOOTER */
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+    }
+
+    .footer {
+        padding: 50px 50px 25px;
+    }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+
+    /* HERO */
+    .hero {
+        height: 50vh;
+    }
+
+    .header-text h1 {
+        font-size: 2.4em;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+        margin: 40px 20px;
+        font-size: 14px;
+    }
+
+    /* FACILITY DETAIL */
+    .facility-detail {
+        padding: 20px;
+    }
+
+    .facility-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .facility-image img {
+        width: 100%;
+        max-width: 340px;
+        height: auto;
+    }
+
+    .facility-info {
+        max-width: 100%;
+    }
+
+    .facility-info h3 {
+        font-size: 20px;
+        margin-top: 15px;
+    }
+
+    .facility-info p {
+        font-size: 15px;
+    }
+
+    /* FOOTER */
+    .footer {
+        padding: 45px 30px 20px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-col:first-child {
+        max-width: 100%;
+    }
+
+    .footer-logos {
+        justify-content: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+}
+
+/* ===== SMALL MOBILE ===== */
+@media (max-width: 480px) {
+
+    .header-text h1 {
+        font-size: 2em;
+    }
+
+    .facility-info h3 {
+        font-size: 18px;
+    }
+
+    .facility-info p {
+        font-size: 14px;
+    }
+
+    .breadcrumb {
+        font-size: 13px;
+        gap: 8px;
+    }
+
+    .footer-col p,
+    .footer-col a {
+        font-size: 14px;
+    }
+}
+
+
 </style>
