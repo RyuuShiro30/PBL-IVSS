@@ -324,7 +324,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <span class="status-badge status-pending">
                                 <i class="fas fa-clock me-1"></i>MENUNGGU PERSETUJUAN
                             </span>
-                        <?php elseif ($data['status_new_member'] === 'approved'): ?>
+                        <?php elseif ($data['status_new_member'] === 'diterima'): ?>
                             <span class="status-badge status-approved">
                                 <i class="fas fa-check-circle me-1"></i>DITERIMA
                             </span>
