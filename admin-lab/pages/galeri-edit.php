@@ -192,7 +192,6 @@ unset($_SESSION['error']);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JS -->
-    <script src="../assets/js/admin.js"></script>
     
     <script>
     // preview image
@@ -218,21 +217,20 @@ unset($_SESSION['error']);
         }
     }
     // Form validation
-    document.getElementById('formGaleri').addEventListener('submit', function(e) {
-        const gambar_galeri = document.getElementById('gambar_galeri').value.trim();
-        const deskripsi_galeri = document.getElementById('deskripsi_galeri').value.trim();
+document.getElementById('formGaleri').addEventListener('submit', function(e) {
+    const deskripsi_galeri = document.getElementById('deskripsi_galeri').value.trim();
 
-        if (!gambar_galeri || !deskripsi_fasilitas) {
-            e.preventDefault();
-            alert('Harap isi semua field yang wajib diisi!');
-            return false;
-        }
+    if (!deskripsi_galeri) {
+        e.preventDefault();
+        alert('Harap isi deskripsi galeri!');
+        return false;
+    }
 
-        // Disable button to prevent double submit
-        const submitBtn = this.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...';
-    });
+    // Disable button to prevent double submit
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menyimpan...';
+});
     </script>
 </body>
 </html>
